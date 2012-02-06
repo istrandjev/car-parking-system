@@ -2,6 +2,7 @@
 #include "glut_utils.h"
 #include "scene.h"
 
+#include <AntTweakBar.h>
 #include <cstdlib>
 #include <fstream>
 #include <glut.h>
