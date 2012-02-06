@@ -48,6 +48,9 @@ public:
 
   static void TransformDrawingPane();
 
+  static double wi;
+  static double hi;
+
 private:
   // Sets the current drawing color according to the polygon index. Tries to 
   // choose as differentiable colors as possible.
