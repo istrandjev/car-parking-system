@@ -19,7 +19,7 @@ void ReadInput() {
   in >> width >> length >> max_steering_angle;
   max_steering_angle = geometry::GeometryUtils
       ::DegreesToRadians(max_steering_angle);
-  visualize::Scene::AddCar(width, length, max_steering_angle);
+  visualize::Scene::ResetCar(width, length, max_steering_angle);
 }
 
 int main(int argc, char ** argv)

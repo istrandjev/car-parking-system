@@ -48,6 +48,9 @@
     <ClCompile Include="car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="user_input_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="delay.h">
@@ -78,6 +81,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="car.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="user_input_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scoped_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

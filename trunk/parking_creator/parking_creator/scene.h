@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "car.h"
+#include "scoped_ptr.h"
 
 #include <vector>
 
@@ -17,18 +18,19 @@ namespace visualize {
 class Scene {
 public:
   // Draws a polygon.
-  static void DrawCar(unsigned index);
+  static void DrawCar();
   
   // Draws all the polygons in the scene.
   static void Draw();
 
-  static void ResetCar(unsigned index);
-  static void AddCar(double width, double length, double max_steering_angle);
+  static void ResetCar(double width, double length, double max_steering_angle);
+  static void ResetCarPosition();
 
-  static void TurnCarLeft(unsigned index);
-  static void TurnCarRight(unsigned index);
+  static void TurnCarLeft();
+  static void TurnCarRight();
 
-  static void Move(bool forward);
+  static void MoveForward();
+  static void MoveBackward();
 
   // Functions to translate the scene.
   static void TranslateLeft();
@@ -56,7 +58,7 @@ private:
   // choose as differentiable colors as possible.
   static void SetColorForPolygon(unsigned index);
 
-  static std::vector<simulation::Car> cars_;
+  static scoped_ptr<simulation::Car> car_;
 
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;
