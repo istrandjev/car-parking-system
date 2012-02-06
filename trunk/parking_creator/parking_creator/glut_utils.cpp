@@ -2,6 +2,7 @@
 
 #include "delay.h"
 #include "scene.h"
+#include "user_input_handler.h"
 
 #include <AntTweakBar.h>
 #include <cstdlib>
@@ -34,8 +35,6 @@ void TW_CALL ResetSize(void * /*clientData*/)
 }
 
 void initGlut(int argc, char** argv) {
-  memset(regular_keys, 0, sizeof(regular_keys));
-  memset(special_keys, 0, sizeof(special_keys));
 
 	//Initialize GLUT
 	glutInit(&argc, argv);
@@ -107,52 +106,26 @@ void display()
 
 void keyPressed(unsigned char c, int x, int y) {
   if (!TwEventKeyboardGLUT(c, x , y)) {
-    regular_keys[c] = true;
-	  /*switch(c) {
-    case 'a': Scene::TranslateLeft(); break;
-    case 'd': Scene::TranslateRight(); break;
-    case 'w': Scene::TranslateUp(); break;
-    case 's': Scene::TranslateDown(); break;
-    case ' ': Scene::ResetCar(0); break;
-	  }*/
+    utils::UserInputHandler::PressRegularKey(c);
   }
 }
 
 void keyReleased(unsigned char c, int x, int y) {
   if (!TwEventKeyboardGLUT(c, x , y)) {
-    regular_keys[c] = false;
-	  /*switch(c) {
-    case 'a': Scene::TranslateLeft(); break;
-    case 'd': Scene::TranslateRight(); break;
-    case 'w': Scene::TranslateUp(); break;
-    case 's': Scene::TranslateDown(); break;
-    case ' ': Scene::ResetCar(0); break;
-	  }*/
+    utils::UserInputHandler::ReleaseRegularKey(c);
   }
 }
 
 
 void specialKeyPressed(int c, int x, int y) {
   if (!TwEventSpecialGLUT(c, x, y)) {
-    special_keys[c] = true;
-	  /*switch(c) {
-    case GLUT_KEY_LEFT: Scene::TurnCarLeft(0); break;
-    case GLUT_KEY_RIGHT: Scene::TurnCarRight(0); break;
-    case GLUT_KEY_UP: Scene::Move(true); break;
-    case GLUT_KEY_DOWN: Scene::Move(false); break;
-	  }*/
+    utils::UserInputHandler::PressSpecialKey(c);
   }
 }
 
 void specialKeyReleased(int c, int x, int y) {
   if (!TwEventSpecialGLUT(c, x, y)) {
-    special_keys[c] = false;
-	  /*switch(c) {
-    case GLUT_KEY_LEFT: Scene::TurnCarLeft(0); break;
-    case GLUT_KEY_RIGHT: Scene::TurnCarRight(0); break;
-    case GLUT_KEY_UP: Scene::Move(true); break;
-    case GLUT_KEY_DOWN: Scene::Move(false); break;
-	  }*/
+    utils::UserInputHandler::ReleaseSpecialKey(c);
   }
 }
 
@@ -169,31 +142,31 @@ void mouseFunc(int button, int state, int x, int y) {
 }
 
 void HandleKeyboardEvents() {
-  if (special_keys[GLUT_KEY_LEFT]) {
+  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_LEFT)) {
     Scene::TurnCarLeft();
   }
-  if (special_keys[GLUT_KEY_RIGHT]) {
+  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_RIGHT)) {
     Scene::TurnCarRight();
   }
-  if (special_keys[GLUT_KEY_UP]) {
+  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_UP)) {
     Scene::MoveForward();
   }
-  if (special_keys[GLUT_KEY_DOWN]) {
+  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
     Scene::MoveBackward();
   }
-  if (regular_keys['a']) {
+  if (utils::UserInputHandler::IsRegularKeyPressed('a')) {
     Scene::TranslateLeft();
   }
-  if (regular_keys['d']) {
+  if (utils::UserInputHandler::IsRegularKeyPressed('d')) {
     Scene::TranslateRight();
   }
-  if (regular_keys['w']) {
+  if (utils::UserInputHandler::IsRegularKeyPressed('w')) {
     Scene::TranslateUp();
   }
-  if (regular_keys['s']) {
+  if (utils::UserInputHandler::IsRegularKeyPressed('s')) {
     Scene::TranslateDown();
   }
-  if (regular_keys[' ']) {
+  if (utils::UserInputHandler::IsRegularKeyPressed(' ')) {
     Scene::ResetCarPosition();
   }
 }
