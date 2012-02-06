@@ -170,16 +170,16 @@ void mouseFunc(int button, int state, int x, int y) {
 
 void HandleKeyboardEvents() {
   if (special_keys[GLUT_KEY_LEFT]) {
-    Scene::TurnCarLeft(0);
+    Scene::TurnCarLeft();
   }
   if (special_keys[GLUT_KEY_RIGHT]) {
-    Scene::TurnCarRight(0);
+    Scene::TurnCarRight();
   }
   if (special_keys[GLUT_KEY_UP]) {
-    Scene::Move(true);
+    Scene::MoveForward();
   }
   if (special_keys[GLUT_KEY_DOWN]) {
-    Scene::Move(false);
+    Scene::MoveBackward();
   }
   if (regular_keys['a']) {
     Scene::TranslateLeft();
@@ -194,7 +194,7 @@ void HandleKeyboardEvents() {
     Scene::TranslateDown();
   }
   if (regular_keys[' ']) {
-    Scene::ResetCar(0);
+    Scene::ResetCarPosition();
   }
 }
 void idle() {
