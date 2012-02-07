@@ -60,6 +60,11 @@ double Vector::SquaredLength() const {
   return this->DotProduct(*this);
 }
 
+double Vector::Length() const {
+  return sqrt(SquaredLength());
+}
+
+
 bool Vector::Parallel(const Vector& other) const {
   return DoubleIsZero(CrossProduct(other));
 }
