@@ -153,7 +153,7 @@ void Scene::DrawCar() {
 
 // static
 void Scene::DrawSegment() {
-  glColor3f(1.0, 0.0, 0.0);
+  glColor4f(1.0, 0.8, 0.6, 0.5);
   DrawPolygon(segment_->GetBounds());
 }
 
