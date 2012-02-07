@@ -23,6 +23,7 @@ class Vector {
   double DotProduct(const Vector& other) const;
   double CrossProduct(const Vector& other) const;
   double SquaredLength() const;
+  double Length() const;
 
   bool Parallel(const Vector& other) const;
 
