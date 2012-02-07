@@ -1,6 +1,8 @@
 #include "scene.h"
 
+#include "car.h"
 #include "polygon.h"
+#include "road_segment.h"
 
 #include <cassert>
 #include <glut.h>
@@ -19,6 +21,8 @@ static const double SCALE_FACTOR = 10;
 
 // static declarations
 scoped_ptr<simulation::Car> Scene::car_;
+scoped_ptr<geometry::RoadSegment> Scene::segment_;
+
 int Scene::width_ = DEFAULT_WIDTH;
 int Scene::height_ = DEFAULT_HEIGHT;
 double Scene::wi = 0.0;
@@ -28,6 +32,15 @@ double Scene::xTranslation = 0.0;
 double Scene::yTranslation = 0.0;
 double Scene::zTranslation = 0.0;
 double Scene::xRotate = 0.0;
+
+void DrawPolygon(const geometry::Polygon& polygon) {
+  glBegin(GL_POLYGON);
+  for (unsigned vindex = 0; vindex < polygon.NumberOfVertices(); ++vindex) {
+    const geometry::Point& vertex = polygon.GetPoint(vindex);
+    glVertex2f(vertex.x, vertex.y);
+  }
+  glEnd();   // GL_POLYGON
+}
 
 // static 
 void Scene::TranslateLeft() {
@@ -100,6 +113,10 @@ void Scene::Draw() {
     DrawCar();
   }
 
+  if (segment_.get() != NULL) {
+    DrawSegment();
+  }
+
   glColor3f(0.5, 0.5, 0.0);
   glBegin(GL_POLYGON); 
     glVertex2f(-wi, -hi );
@@ -122,30 +139,22 @@ void Scene::TransformDrawingPane() {
 
 // static
 void Scene::DrawCar() {
-  geometry::Polygon bounds = car_->GetBounds();
   glColor3f(0.5, 0.5, 0.5);
-  glBegin(GL_POLYGON);
-    for (unsigned vertex_index = 0; 
-        vertex_index < bounds.NumberOfVertices(); ++vertex_index) {
-      const geometry::Point& vertex = bounds.GetPoint(vertex_index);
-      glVertex2f(vertex.x, vertex.y);
-    }
-  glEnd();   // GL_POLYGON
-
+  DrawPolygon(car_->GetBounds());
+  
   std::vector<geometry::Polygon> wheels = car_->GetWheels();
   glColor3f(0, 0, 0);
 
   for (unsigned wheel_index = 0; wheel_index < wheels.size(); 
       ++wheel_index) {
-    const geometry::Polygon& wheel = wheels[wheel_index];
-    glBegin(GL_POLYGON);
-      for (unsigned vertex_index = 0; 
-          vertex_index < bounds.NumberOfVertices(); ++vertex_index) {
-        const geometry::Point& vertex = wheel.GetPoint(vertex_index);
-        glVertex2f(vertex.x, vertex.y);
-      }
-    glEnd();   // GL_POLYGON
+    DrawPolygon(wheels[wheel_index]);
   }
+}
+
+// static
+void Scene::DrawSegment() {
+  glColor3f(1.0, 0.0, 0.0);
+  DrawPolygon(segment_->GetBounds());
 }
 
 // static
@@ -170,6 +179,20 @@ void Scene::MoveForward() {
 void Scene::MoveBackward() {
   assert(car_.get() != NULL);
   car_->Move(-METERS_PER_STEP);
+}
+
+// static
+void Scene::ResetSegment(int fx, int fy, int tx, int ty) {
+  geometry::Point from(fx / SCALE_FACTOR, fy / SCALE_FACTOR);
+  geometry::Point to(tx / SCALE_FACTOR, ty / SCALE_FACTOR);
+  segment_.reset(new geometry::RoadSegment(from, to));
+}
+
+// static
+void Scene::DoubleLineWidth() {
+  if (segment_.get() != NULL) {
+    segment_->SetWidth(segment_->GetWidth() * 2.0);
+  }
 }
 
 }  // namespace visualize

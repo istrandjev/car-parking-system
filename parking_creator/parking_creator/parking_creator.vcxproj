@@ -72,6 +72,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="point.cpp" />
     <ClCompile Include="polygon.cpp" />
+    <ClCompile Include="road_segment.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="user_input_handler.cpp" />
     <ClCompile Include="vector.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="line.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="polygon.h" />
+    <ClInclude Include="road_segment.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scoped_ptr.h" />
     <ClInclude Include="user_input_handler.h" />
