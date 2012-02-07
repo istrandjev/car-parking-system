@@ -1,6 +1,8 @@
 #ifndef SCOPED_PTR_H
 #define SCOPED_PTR_H
 
+#include <cstddef>
+
 template<class T>
 class scoped_ptr {
  public:

@@ -34,14 +34,25 @@ void TW_CALL ResetSize(void * /*clientData*/)
   Scene::wi = Scene::hi =  5.0;
 }
 
+void handleMouseClick(double x, double y) {
+  Scene::DoubleLineWidth();
+}
+
+void handleMouseDrag(double fx, double fy, double tx, double ty) {
+  Scene::ResetSegment(fx, fy, tx, ty);
+}
+
 void initGlut(int argc, char** argv) {
 
 	//Initialize GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  glEnable(GL_DEPTH);
 	glutInitWindowSize(Scene::Width(), Scene::Height());
 	glutCreateWindow("Car simulation");
-	
+	utils::UserInputHandler::SetLeftMouseClickHandler(handleMouseClick);
+	utils::UserInputHandler::SetLeftMouseDragHandler(handleMouseDrag);
+
   Scene::TransformDrawingPane();
 
 	// Background color.
@@ -106,7 +117,7 @@ void display()
 
 void keyPressed(unsigned char c, int x, int y) {
   if (!TwEventKeyboardGLUT(c, x , y)) {
-    utils::UserInputHandler::PressRegularKey(c);
+    utils::UserInputHandler::PressRegularKey(c, x, y);
   }
 }
 
@@ -119,7 +130,7 @@ void keyReleased(unsigned char c, int x, int y) {
 
 void specialKeyPressed(int c, int x, int y) {
   if (!TwEventSpecialGLUT(c, x, y)) {
-    utils::UserInputHandler::PressSpecialKey(c);
+    utils::UserInputHandler::PressSpecialKey(c, x, y);
   }
 }
 
@@ -133,11 +144,17 @@ void mouseFunc(int button, int state, int x, int y) {
   if (!TwEventMouseButtonGLUT(button, state, x, y) ) {
 	  if (state == GLUT_DOWN) {
 		  if (button == GLUT_LEFT_BUTTON) {
-			  Scene::RotateXPositive();
-		  } else if (button == GLUT_RIGHT_BUTTON) {
-			  Scene::RotateXNegative();
-		  }
-	  }
+        utils::UserInputHandler::PressLeftMouse(x, y);
+      } else {
+        utils::UserInputHandler::PressRightMouse(x, y);
+      }
+	  } else if (state = GLUT_UP) {
+      if (button == GLUT_LEFT_BUTTON) {
+        utils::UserInputHandler::ReleaseLeftMouse(x, y);
+      } else {
+        utils::UserInputHandler::ReleaseRightMouse(x, y);
+      }
+    }
   }
 }
 

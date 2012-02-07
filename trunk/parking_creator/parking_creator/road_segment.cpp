@@ -3,14 +3,15 @@
 #include "double_utils.h"
 #include "geometry_utils.h"
 #include "point.h"
+#include "polygon.h"
 #include "vector.h"
 
 namespace geometry {
 
-static const double DEAULT_WIDTH = 2.0;
+static const double DEFAULT_WIDTH = 2.0;
 
 RoadSegment::RoadSegment(const Point& from, const Point& to) 
-    : from_(from), to_(to){}
+    : from_(from), to_(to), width_(DEFAULT_WIDTH){}
 
 RoadSegment::RoadSegment(const Point& from, const Point& to, double width)
     : from_(from), to_(to), width_(width) {}
@@ -58,6 +59,17 @@ bool RoadSegment::ContainsPoint(const Point& p) const {
 
   return DoubleIsGreaterOrEqual(width_ * segment.Length(),
       segment.CrossProduct(from_p));
+}
+
+Polygon RoadSegment::GetBounds() const {
+  Vector segment(from_, to_);
+  Vector shift = segment.GetOrthogonal().Unit() * width_ * 0.5;
+  Polygon result;
+  result.AddPointDropDuplicates(from_ + shift);
+  result.AddPointDropDuplicates(from_ - shift);
+  result.AddPointDropDuplicates(to_ - shift);
+  result.AddPointDropDuplicates(to_ + shift);
+  return result;
 }
 
 }  // namespace geometry

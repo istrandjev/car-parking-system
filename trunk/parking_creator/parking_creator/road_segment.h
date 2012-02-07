@@ -5,6 +5,8 @@
 
 namespace geometry {
 
+class Polygon;
+
 class RoadSegment {
  public:
   RoadSegment(const Point& from, const Point& to);
@@ -21,7 +23,9 @@ class RoadSegment {
   void SetWidth(double width);
 
   void ReverseDirection();
-  
+
+  Polygon GetBounds() const;
+    
  private:
   Point from_, to_;
   double width_;

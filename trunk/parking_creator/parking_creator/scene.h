@@ -1,14 +1,19 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "car.h"
 #include "scoped_ptr.h"
 
 #include <vector>
 
 namespace geometry {
+class Point;
 class Polygon;
+class RoadSegment;
 }  // namespace geometry
+
+namespace simulation {
+  class Car;
+}  // namespace simulation
 
 namespace visualize {
 
@@ -19,12 +24,16 @@ class Scene {
 public:
   // Draws a polygon.
   static void DrawCar();
-  
+  static void DrawSegment();
+
   // Draws all the polygons in the scene.
   static void Draw();
 
   static void ResetCar(double width, double length, double max_steering_angle);
   static void ResetCarPosition();
+
+  static void ResetSegment(int fx, int fy, int tx, int ty);
+  static void DoubleLineWidth();
 
   static void TurnCarLeft();
   static void TurnCarRight();
@@ -54,11 +63,9 @@ public:
   static double hi;
 
 private:
-  // Sets the current drawing color according to the polygon index. Tries to 
-  // choose as differentiable colors as possible.
-  static void SetColorForPolygon(unsigned index);
 
   static scoped_ptr<simulation::Car> car_;
+  static scoped_ptr<geometry::RoadSegment> segment_;
 
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;
