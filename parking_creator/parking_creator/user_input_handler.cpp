@@ -106,7 +106,24 @@ void UserInputHandler::MoveMouse(int x, int y) {
   }
   geometry::Point mousePosition;
   UnprojectCoordinates(x, y, &mousePosition);
-  bool rightMouseClicked = rightMousePressed && false;
+
+  if (leftMouseDragHandler != NULL) {
+      bool leftMouseDragged = leftMousePressed && 
+          !IsClick(mousePosition, leftMousePress);
+      if (leftMouseDragged) {
+        (*leftMouseDragHandler)(leftMousePress.x, leftMousePress.y, 
+          mousePosition.x, mousePosition.y);
+      }
+  }
+
+  if (rightMouseDragHandler != NULL) {
+      bool rightMouseDragged = rightMousePressed && 
+          !IsClick(mousePosition, rightMousePress);
+      if (rightMouseDragged) {
+        (*rightMouseDragHandler)(rightMousePress.x, rightMousePress.y, 
+          mousePosition.x, mousePosition.y);
+      }
+  }
 }
 
 // static
