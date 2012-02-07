@@ -24,7 +24,8 @@ void keyPressed(unsigned char c, int x, int y);
 void keyReleased(unsigned char c, int x, int y);
 void specialKeyPressed(int c, int x, int y);
 void specialKeyReleased(int c, int x, int y);
-void mouseFunc(int button, int state, int x, int y); 
+void mousePressFunc(int button, int state, int x, int y); 
+void mouseMoveFunc(int x, int y); 
 void idle();
 
 void HandleKeyboardEvents();
@@ -66,7 +67,8 @@ void initGlut(int argc, char** argv) {
 	glutKeyboardUpFunc(keyReleased);
 	glutSpecialUpFunc(specialKeyReleased);
 	glutSpecialFunc(specialKeyPressed);
-	glutMouseFunc(mouseFunc);
+	glutMouseFunc(mousePressFunc);
+  glutMotionFunc(mouseMoveFunc);
   glutIdleFunc(idle);
 
   TwGLUTModifiersFunc(glutGetModifiers);
@@ -140,7 +142,7 @@ void specialKeyReleased(int c, int x, int y) {
   }
 }
 
-void mouseFunc(int button, int state, int x, int y) {
+void mousePressFunc(int button, int state, int x, int y) {
   if (!TwEventMouseButtonGLUT(button, state, x, y) ) {
 	  if (state == GLUT_DOWN) {
 		  if (button == GLUT_LEFT_BUTTON) {
@@ -155,6 +157,12 @@ void mouseFunc(int button, int state, int x, int y) {
         utils::UserInputHandler::ReleaseRightMouse(x, y);
       }
     }
+  }
+}
+
+void mouseMoveFunc(int x, int y) {
+  if (!TwEventMouseMotionGLUT(x, y) ) {
+    utils::UserInputHandler::MoveMouse(x, y);
   }
 }
 
