@@ -1,6 +1,8 @@
 #ifndef USER_INPUT_HANDLER_H
 #define USER_INPUT_HANDLER_H
 
+#include "point.h"
+
 #include <vector>
 
 namespace utils {
@@ -20,6 +22,7 @@ class UserInputHandler {
   static void ReleaseLeftMouse(int x, int y);
   static void PressRightMouse(int x, int y);
   static void ReleaseRightMouse(int x, int y);
+  static void MoveMouse(int x, int y);
 
   static bool IsRegularKeyPressed(unsigned char key);
   static bool IsSpecialKeyPressed(unsigned char key);
@@ -34,15 +37,16 @@ class UserInputHandler {
   static void SetSpecialKeyPressHandler(SpecialKeyPressHandler handler);
 
 private:
-  static void UnprojectCoordinates(int x, int y, double& xf, double& yf);
+  static void UnprojectCoordinates(int x, int y, geometry::Point* point);
+  static bool IsClick(const geometry::Point& from, const geometry::Point& to);
 
 private:
   static std::vector<bool> regularKeysPressed;
   static std::vector<bool> specialKeysPressed;
   static bool leftMousePressed;
-  static double leftMousePressX, leftMousePressY;
+  static geometry::Point leftMousePress;
   static bool rightMousePressed;
-  static double rightMousePressX, rightMousePressY;
+  static geometry::Point rightMousePress;
 
   // Event handlers
   static MouseClickHandler leftMouseClickHandler;

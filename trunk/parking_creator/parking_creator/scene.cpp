@@ -183,8 +183,8 @@ void Scene::MoveBackward() {
 
 // static
 void Scene::ResetSegment(int fx, int fy, int tx, int ty) {
-  geometry::Point from(fx / SCALE_FACTOR, fy / SCALE_FACTOR);
-  geometry::Point to(tx / SCALE_FACTOR, ty / SCALE_FACTOR);
+  geometry::Point from(fx, fy);
+  geometry::Point to(tx, ty);
   segment_.reset(new geometry::RoadSegment(from, to));
 }
 
