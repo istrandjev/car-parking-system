@@ -120,9 +120,7 @@ void Scene::Draw() {
     DrawCar();
   }
 
-  if (segment_.get() != NULL) {
-    DrawSegment();
-  }
+  DrawObjects();
 
   glColor3f(0.5, 0.5, 0.0);
   glBegin(GL_POLYGON); 
@@ -159,9 +157,49 @@ void Scene::DrawCar() {
 }
 
 // static
-void Scene::DrawSegment() {
+void Scene::DrawObjects() {
   glColor4f(1.0, 0.8, 0.6, 0.5);
-  DrawPolygon(segment_->GetBounds());
+  const utils::RectangleObjectContainer& road_segments = 
+      objectHolder_.GetRoadSegments();
+  for (unsigned index = 0; index < road_segments.size(); ++index) {
+    DrawPolygon(road_segments[index]->GetBounds());  
+  }
+  glColor3f(0.5, 0.5, 0.5);
+  const utils::RectangleObjectContainer& parking_lots = 
+      objectHolder_.GetParkingLots();
+  for (unsigned index = 0; index < parking_lots.size(); ++index) {
+    DrawPolygon(parking_lots[index]->GetBounds());  
+  }
+  glColor3f(0.0, 0.0, 0.0);
+  const utils::RectangleObjectContainer& obstacles = 
+      objectHolder_.GetParkingLots();
+  for (unsigned index = 0; index < obstacles.size(); ++index) {
+    DrawPolygon(obstacles[index]->GetBounds());  
+  }
+  if (objectHolder_.HasSelected()) {
+    DrawSelected(objectHolder_.GetSelected()->GetBounds());
+  }
+}
+
+// static
+void Scene::DrawSelected(const geometry::Polygon& polygon) {
+  const double SELECTION_LENGTH = 0.4;
+  glLineStipple(0.1, 0xf88f);
+  glEnable(GL_LINE_STIPPLE);
+  glColor3f(0.0, 0.0, 0.8);
+
+  glBegin(GL_LINE_STRIP);
+  for (unsigned index = 0; index <= polygon.NumberOfVertices(); ++index) {
+    const geometry::Point& prev = polygon.GetPointCyclic(index - 1);
+    const geometry::Point& cur = polygon.GetPointCyclic(index);
+    const geometry::Point& next = polygon.GetPointCyclic(index + 1);
+    geometry::Point point = cur;
+    point += (geometry::Vector(prev, cur).Unit() * SELECTION_LENGTH);
+    point += (geometry::Vector(next, cur).Unit() * SELECTION_LENGTH);
+    glVertex2f(point.x, point.y);
+  }
+  glEnd();
+  glDisable(GL_LINE_STIPPLE);
 }
 
 // static

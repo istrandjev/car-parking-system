@@ -20,6 +20,10 @@ class scoped_ptr {
     return ptr_;
   }
 
+  const T* operator->() const {
+    return ptr_;
+  }
+
   T* get() {
     return ptr_;
   }

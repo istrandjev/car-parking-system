@@ -22,8 +22,6 @@ void handleResize(int w, int h);
 void display();
 void idle();
 
-void HandleKeyboardEvents();
-
 void TW_CALL ResetSize(void * /*clientData*/)
 { 
   Scene::wi = Scene::hi =  5.0;
