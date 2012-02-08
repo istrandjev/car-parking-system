@@ -17,8 +17,12 @@ geometry::Point UserInputHandler::leftMousePress;
 bool UserInputHandler::rightMousePressed = false;
 geometry::Point UserInputHandler::rightMousePress; 
 MouseClickHandler UserInputHandler::leftMouseClickHandler = NULL;
+MousePressHandler UserInputHandler::leftMousePressHandler = NULL;
+MouseReleaseHandler UserInputHandler::leftMouseReleaseHandler = NULL;
 MouseDragHandler UserInputHandler::leftMouseDragHandler = NULL;
 MouseClickHandler UserInputHandler::rightMouseClickHandler = NULL;
+MousePressHandler UserInputHandler::rightMousePressHandler = NULL;
+MouseReleaseHandler UserInputHandler::rightMouseReleaseHandler = NULL;
 MouseDragHandler UserInputHandler::rightMouseDragHandler = NULL;
 KeyPressHandler UserInputHandler::keyPressHandler = NULL;
 SpecialKeyPressHandler UserInputHandler::specialKeyPressHandler = NULL;
@@ -54,6 +58,9 @@ void UserInputHandler::ReleaseSpecialKey(int key) {
 void UserInputHandler::PressLeftMouse(int x, int y) {
   leftMousePressed = true;
   UnprojectCoordinates(x, y, &leftMousePress);
+  if (leftMousePressHandler != NULL) {
+    (*leftMousePressHandler)(leftMousePress.x, leftMousePress.y);
+  }
 }
 
 // static
@@ -66,11 +73,9 @@ void UserInputHandler::ReleaseLeftMouse(int x, int y) {
     if (leftMouseClickHandler != NULL) {
       (*leftMouseClickHandler)(leftMousePress.x, leftMousePress.y);
     }
-  } else {
-    if (leftMouseDragHandler != NULL) {
-      (*leftMouseDragHandler)(leftMousePress.x, leftMousePress.y, 
-          leftMouseRelease.x, leftMouseRelease.y);
-    }
+  }
+  if (leftMouseReleaseHandler != NULL) {
+    (*leftMouseReleaseHandler)(leftMouseRelease.x, leftMouseRelease.y);
   }
 }
 
@@ -78,6 +83,9 @@ void UserInputHandler::ReleaseLeftMouse(int x, int y) {
 void UserInputHandler::PressRightMouse(int x, int y) {
   rightMousePressed = true;
   UnprojectCoordinates(x, y, &rightMousePress);
+  if (rightMousePressHandler != NULL) {
+    (*rightMousePressHandler)(rightMousePress.x, rightMousePress.y);
+  }
 }
   
 // static
@@ -91,11 +99,9 @@ void UserInputHandler::ReleaseRightMouse(int x, int y) {
     if (rightMouseClickHandler != NULL) {
       (*rightMouseClickHandler)(rightMousePress.x, rightMousePress.y);
     }
-  } else {
-    if (rightMouseDragHandler != NULL) {
-      (*rightMouseDragHandler)(rightMousePress.x, rightMousePress.y, 
-          rightMouseRelease.x, rightMouseRelease.y);
-    }
+  } 
+  if (rightMouseReleaseHandler != NULL) {
+    (*rightMouseReleaseHandler)(rightMouseRelease.x, rightMouseRelease.y);
   }
 }
 
@@ -142,6 +148,16 @@ void UserInputHandler::SetLeftMouseClickHandler(MouseClickHandler handler) {
   leftMouseClickHandler = handler;
 }
 
+// static 
+void UserInputHandler::SetLeftMousePressHandler(MousePressHandler handler) {
+  leftMousePressHandler = handler;
+}
+
+// static 
+void UserInputHandler::SetLeftMouseReleaseHandler(MouseReleaseHandler handler) {
+  leftMouseReleaseHandler = handler;
+}
+
 // static
 void UserInputHandler::SetLeftMouseDragHandler(MouseDragHandler handler) {
   leftMouseDragHandler = handler;  
@@ -150,6 +166,16 @@ void UserInputHandler::SetLeftMouseDragHandler(MouseDragHandler handler) {
 // static
 void UserInputHandler::SetRightMouseClickHandler(MouseClickHandler handler) {
   rightMouseClickHandler = handler;  
+}
+
+// static
+void UserInputHandler::SetRightMousePressHandler(MousePressHandler handler) {
+  rightMousePressHandler = handler;  
+}
+
+// static
+void UserInputHandler::SetRightMouseReleaseHandler(MouseReleaseHandler handler) {
+  rightMouseReleaseHandler = handler;  
 }
 
 // static

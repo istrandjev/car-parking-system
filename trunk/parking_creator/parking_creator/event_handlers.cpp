@@ -1,5 +1,6 @@
 #include "event_handlers.h"
 
+#include "current_state.h"
 #include "object_holder.h"
 #include "point.h"
 #include "rectangle_object.h"
@@ -13,38 +14,74 @@
 namespace utils {
 
 bool Near(const geometry::Point& a, const geometry::Point& b) {
-  return fabs(a.x - b.x) + fabs(a.y - b.y) < 10.0; 
+  return fabs(a.x - b.x) + fabs(a.y - b.y) < 1.0; 
 }
 
 void HandleMouseClick(double x, double y);
+void HandleMousePress(double x, double y);
+void HandleMouseRelease(double x, double y);
 void HandleMouseDrag(double fx, double fy, double tx, double ty);
 
 void InitializeHandlers() {
 	UserInputHandler::SetLeftMouseClickHandler(HandleMouseClick);
 	UserInputHandler::SetLeftMouseDragHandler(HandleMouseDrag);
+	UserInputHandler::SetLeftMouseReleaseHandler(HandleMouseRelease);
+  UserInputHandler::SetLeftMousePressHandler(HandleMousePress);
 }
 
 void HandleMouseClick(double x, double y) {
   visualize::Scene::GetObjectHolder()->Select(geometry::Point(x, y));
 }
 
+void HandleMousePress(double x, double y) {
+  geometry::Point point(x, y);
+  ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+  if (obj_holder->HasSelected()) {
+    if (!obj_holder->IsSelectedFinalized()) {
+     return;
+    }
+    
+    geometry::RectangleObject* object = obj_holder->GetSelected();
+    if (Near(object->GetFrom(), point)) {
+      CurrentState::movingFrom = true;
+    } else if(Near(object->GetTo(), point)) {
+      CurrentState::movingTo = true;
+    } else if (!obj_holder->GetSelected()->ContainsPoint(point)) {
+      CurrentState::addingNewLine = true;
+    }
+  }
+}
+
+void HandleMouseRelease(double x, double y) {
+  ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+  if (obj_holder->HasSelected()) {
+    obj_holder->FinalizeSelected();
+  }
+  CurrentState::movingFrom = false;
+  CurrentState::movingTo = false;
+  CurrentState::addingNewLine = false;
+}
+
 void HandleMouseDrag(double fx, double fy, double tx, double ty) {
   ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
   geometry::Point from(fx, fy);
   geometry::Point to(tx, ty);
+
   if (obj_holder->HasSelected()) {
     geometry::RectangleObject* object = obj_holder->GetSelected();
-    if (Near(from, object->GetFrom())) {
-      object->SetTo(to);
-    } else if (Near(from, object->GetTo())) {
+    if (CurrentState::movingFrom) {
       object->SetFrom(to);
-    } else if (!object->ContainsPoint(from)) {
-      obj_holder->AddRoadSegment(from, to);
+      return;
+    } else if (CurrentState::movingTo || CurrentState::addingNewLine) {
+      object->SetTo(to);
+      return; 
+    } else {
+      object->SetTo(to);
     }
+
   } else {
     obj_holder->AddRoadSegment(from, to);
   }
-  // visualize::Scene::ResetSegment(fx, fy, tx, ty);
 }
 
 void KeyPressed(unsigned char c, int x, int y) {
