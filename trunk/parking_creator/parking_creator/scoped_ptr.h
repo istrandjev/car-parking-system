@@ -7,7 +7,7 @@ template<class T>
 class scoped_ptr {
  public:
   scoped_ptr() : ptr_(NULL) {}
-  scoped_ptr(T* ptr) : ptr(ptr_) {}
+  scoped_ptr(T* ptr) : ptr_(ptr) {}
   ~scoped_ptr() {
     delete ptr_;
   }

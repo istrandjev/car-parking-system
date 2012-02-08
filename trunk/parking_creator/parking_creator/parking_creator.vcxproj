@@ -66,14 +66,16 @@
     <ClCompile Include="car.cpp" />
     <ClCompile Include="delay.cpp" />
     <ClCompile Include="double_utils.cpp" />
+    <ClCompile Include="event_handlers.cpp" />
     <ClCompile Include="geometry_utils.cpp" />
     <ClCompile Include="glut_utils.cpp" />
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="point.cpp" />
     <ClCompile Include="polygon.cpp" />
-    <ClCompile Include="road_segment.cpp" />
+    <ClCompile Include="rectangle_object.cpp" />
     <ClCompile Include="scene.cpp" />
+    <ClCompile Include="object_holder.cpp" />
     <ClCompile Include="user_input_handler.cpp" />
     <ClCompile Include="vector.cpp" />
   </ItemGroup>
@@ -81,13 +83,15 @@
     <ClInclude Include="car.h" />
     <ClInclude Include="delay.h" />
     <ClInclude Include="double_utils.h" />
+    <ClInclude Include="event_handlers.h" />
     <ClInclude Include="geometry_utils.h" />
     <ClInclude Include="glut_utils.h" />
     <ClInclude Include="line.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="polygon.h" />
-    <ClInclude Include="road_segment.h" />
+    <ClInclude Include="rectangle_object.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="object_holder.h" />
     <ClInclude Include="scoped_ptr.h" />
     <ClInclude Include="user_input_handler.h" />
     <ClInclude Include="vector.h" />

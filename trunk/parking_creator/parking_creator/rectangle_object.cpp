@@ -1,4 +1,4 @@
-#include "road_segment.h"
+#include "rectangle_object.h"
 
 #include "double_utils.h"
 #include "geometry_utils.h"
@@ -10,41 +10,41 @@ namespace geometry {
 
 static const double DEFAULT_WIDTH = 2.0;
 
-RoadSegment::RoadSegment(const Point& from, const Point& to) 
+RectangleObject::RectangleObject(const Point& from, const Point& to) 
     : from_(from), to_(to), width_(DEFAULT_WIDTH){}
 
-RoadSegment::RoadSegment(const Point& from, const Point& to, double width)
+RectangleObject::RectangleObject(const Point& from, const Point& to, double width)
     : from_(from), to_(to), width_(width) {}
 
-const Point& RoadSegment::GetFrom() const {
+const Point& RectangleObject::GetFrom() const {
   return from_;
 }
 
-void RoadSegment::SetFrom(const Point& point) {
+void RectangleObject::SetFrom(const Point& point) {
   from_ = point;
 }
   
-const Point& RoadSegment::GetTo() const {
+const Point& RectangleObject::GetTo() const {
   return to_;
 }
 
-void RoadSegment::SetTo(const Point& point) {
+void RectangleObject::SetTo(const Point& point) {
   to_ = point;
 }
 
-double RoadSegment::GetWidth() const {
+double RectangleObject::GetWidth() const {
   return width_;
 }
 
-void RoadSegment::SetWidth(double width) {
+void RectangleObject::SetWidth(double width) {
   width_ = width;
 }
 
-void RoadSegment::ReverseDirection() {
+void RectangleObject::ReverseDirection() {
   std::swap(from_, to_);
 }
 
-bool RoadSegment::ContainsPoint(const Point& p) const {
+bool RectangleObject::ContainsPoint(const Point& p) const {
   Vector segment(from_, to_);
 
   Vector from_p(from_, p);
@@ -61,7 +61,7 @@ bool RoadSegment::ContainsPoint(const Point& p) const {
       segment.CrossProduct(from_p));
 }
 
-Polygon RoadSegment::GetBounds() const {
+Polygon RectangleObject::GetBounds() const {
   Vector segment(from_, to_);
   Vector shift = segment.GetOrthogonal().Unit() * width_ * 0.5;
   Polygon result;
