@@ -8,6 +8,8 @@
 namespace utils {
 
 typedef void (*MouseClickHandler)(double, double);
+typedef void (*MousePressHandler)(double, double);
+typedef void (*MouseReleaseHandler)(double, double);
 typedef void (*MouseDragHandler)(double, double, double, double);
 typedef void (*KeyPressHandler)(unsigned char, double, double);
 typedef void (*SpecialKeyPressHandler)(int, double, double);
@@ -28,9 +30,13 @@ class UserInputHandler {
   static bool IsSpecialKeyPressed(unsigned char key);
 
   static void SetLeftMouseClickHandler(MouseClickHandler handler);
+  static void SetLeftMousePressHandler(MousePressHandler handler);
+  static void SetLeftMouseReleaseHandler(MouseReleaseHandler handler);
   static void SetLeftMouseDragHandler(MouseDragHandler handler);
 
   static void SetRightMouseClickHandler(MouseClickHandler handler);
+  static void SetRightMousePressHandler(MousePressHandler handler);
+  static void SetRightMouseReleaseHandler(MouseReleaseHandler handler);
   static void SetRightMouseDragHandler(MouseDragHandler handler);
 
   static void SetKeyPressHandler(KeyPressHandler handler);
@@ -50,8 +56,12 @@ private:
 
   // Event handlers
   static MouseClickHandler leftMouseClickHandler;
+  static MousePressHandler leftMousePressHandler;
+  static MouseReleaseHandler leftMouseReleaseHandler;
   static MouseDragHandler leftMouseDragHandler;
   static MouseClickHandler rightMouseClickHandler;
+  static MousePressHandler rightMousePressHandler;
+  static MouseReleaseHandler rightMouseReleaseHandler;
   static MouseDragHandler rightMouseDragHandler;
   static KeyPressHandler keyPressHandler;
   static SpecialKeyPressHandler specialKeyPressHandler;

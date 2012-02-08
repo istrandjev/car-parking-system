@@ -53,7 +53,7 @@ bool RectangleObject::ContainsPoint(const Point& p) const {
   }
 
   Vector to_p(to_, p);
-  if (DoubleIsGreater(0.0, segment.DotProduct(to_p))) {
+  if (DoubleIsGreater(segment.DotProduct(to_p), 0.0)) {
     return false;
   }
 

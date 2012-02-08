@@ -9,6 +9,8 @@ namespace utils {
 
 static const double DEFAULT_WIDTH = 1.0;
 
+ObjectHolder::ObjectHolder() : selectedIsFianlized_(false) {}
+
 ObjectHolder::~ObjectHolder() {
   for (unsigned index = 0; index < roadSegments_.size(); ++index) {
     delete roadSegments_[index];
@@ -71,6 +73,14 @@ void ObjectHolder::SelectPrevious() {
     return;
   }
   selectedIndex_ = (selectedIndex_ + selected_.size() - 1) % selected_.size();
+}
+
+void ObjectHolder::FinalizeSelected() {
+  selectedIsFianlized_ = true;
+}
+ 
+bool ObjectHolder::IsSelectedFinalized() const {
+  return selectedIsFianlized_;
 }
 
 geometry::RectangleObject* ObjectHolder::GetSelected() {
