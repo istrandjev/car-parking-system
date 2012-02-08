@@ -1,5 +1,8 @@
 #include "event_handlers.h"
 
+#include "object_holder.h"
+#include "point.h"
+#include "rectangle_object.h"
 #include "scene.h"
 #include "user_input_handler.h"
 
@@ -9,6 +12,9 @@
 
 namespace utils {
 
+bool Near(const geometry::Point& a, const geometry::Point& b) {
+  return fabs(a.x - b.x) + fabs(a.y - b.y) < 10.0; 
+}
 
 void HandleMouseClick(double x, double y);
 void HandleMouseDrag(double fx, double fy, double tx, double ty);
@@ -19,35 +25,49 @@ void InitializeHandlers() {
 }
 
 void HandleMouseClick(double x, double y) {
-  visualize::Scene::DoubleLineWidth();
+  visualize::Scene::GetObjectHolder()->Select(geometry::Point(x, y));
 }
 
 void HandleMouseDrag(double fx, double fy, double tx, double ty) {
-  visualize::Scene::ResetSegment(fx, fy, tx, ty);
+  ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+  geometry::Point from(fx, fy);
+  geometry::Point to(tx, ty);
+  if (obj_holder->HasSelected()) {
+    geometry::RectangleObject* object = obj_holder->GetSelected();
+    if (Near(from, object->GetFrom())) {
+      object->SetTo(to);
+    } else if (Near(from, object->GetTo())) {
+      object->SetFrom(to);
+    } else if (!object->ContainsPoint(from)) {
+      obj_holder->AddRoadSegment(from, to);
+    }
+  } else {
+    obj_holder->AddRoadSegment(from, to);
+  }
+  // visualize::Scene::ResetSegment(fx, fy, tx, ty);
 }
 
 void KeyPressed(unsigned char c, int x, int y) {
   if (!TwEventKeyboardGLUT(c, x , y)) {
-    utils::UserInputHandler::PressRegularKey(c, x, y);
+    UserInputHandler::PressRegularKey(c, x, y);
   }
 }
 
 void KeyReleased(unsigned char c, int x, int y) {
   if (!TwEventKeyboardGLUT(c, x , y)) {
-    utils::UserInputHandler::ReleaseRegularKey(c);
+    UserInputHandler::ReleaseRegularKey(c);
   }
 }
 
-
 void SpecialKeyPressed(int c, int x, int y) {
   if (!TwEventSpecialGLUT(c, x, y)) {
-    utils::UserInputHandler::PressSpecialKey(c, x, y);
+    UserInputHandler::PressSpecialKey(c, x, y);
   }
 }
 
 void SpecialKeyReleased(int c, int x, int y) {
   if (!TwEventSpecialGLUT(c, x, y)) {
-    utils::UserInputHandler::ReleaseSpecialKey(c);
+    UserInputHandler::ReleaseSpecialKey(c);
   }
 }
 
@@ -55,15 +75,15 @@ void MousePressFunc(int button, int state, int x, int y) {
   if (!TwEventMouseButtonGLUT(button, state, x, y) ) {
 	  if (state == GLUT_DOWN) {
 		  if (button == GLUT_LEFT_BUTTON) {
-        utils::UserInputHandler::PressLeftMouse(x, y);
+        UserInputHandler::PressLeftMouse(x, y);
       } else {
-        utils::UserInputHandler::PressRightMouse(x, y);
+        UserInputHandler::PressRightMouse(x, y);
       }
 	  } else if (state = GLUT_UP) {
       if (button == GLUT_LEFT_BUTTON) {
-        utils::UserInputHandler::ReleaseLeftMouse(x, y);
+        UserInputHandler::ReleaseLeftMouse(x, y);
       } else {
-        utils::UserInputHandler::ReleaseRightMouse(x, y);
+        UserInputHandler::ReleaseRightMouse(x, y);
       }
     }
   }
@@ -71,36 +91,36 @@ void MousePressFunc(int button, int state, int x, int y) {
 
 void MouseMoveFunc(int x, int y) {
   if (!TwEventMouseMotionGLUT(x, y) ) {
-    utils::UserInputHandler::MoveMouse(x, y);
+    UserInputHandler::MoveMouse(x, y);
   }
 }
 
 void HandleKeyboardEvents() {
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_LEFT)) {
+  if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_LEFT)) {
     visualize::Scene::TurnCarLeft();
   }
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_RIGHT)) {
+  if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_RIGHT)) {
     visualize::Scene::TurnCarRight();
   }
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_UP)) {
+  if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_UP)) {
     visualize::Scene::MoveForward();
   }
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
+  if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
     visualize::Scene::MoveBackward();
   }
-  if (utils::UserInputHandler::IsRegularKeyPressed('a')) {
+  if (UserInputHandler::IsRegularKeyPressed('a')) {
     visualize::Scene::TranslateLeft();
   }
-  if (utils::UserInputHandler::IsRegularKeyPressed('d')) {
+  if (UserInputHandler::IsRegularKeyPressed('d')) {
     visualize::Scene::TranslateRight();
   }
-  if (utils::UserInputHandler::IsRegularKeyPressed('w')) {
+  if (UserInputHandler::IsRegularKeyPressed('w')) {
     visualize::Scene::TranslateUp();
   }
-  if (utils::UserInputHandler::IsRegularKeyPressed('s')) {
+  if (UserInputHandler::IsRegularKeyPressed('s')) {
     visualize::Scene::TranslateDown();
   }
-  if (utils::UserInputHandler::IsRegularKeyPressed(' ')) {
+  if (UserInputHandler::IsRegularKeyPressed(' ')) {
     visualize::Scene::ResetCarPosition();
   }
 }

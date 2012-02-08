@@ -23,10 +23,6 @@ namespace visualize {
 // rotations of the view point.
 class Scene {
 public:
-  // Draws a polygon.
-  static void DrawCar();
-  static void DrawSegment();
-
   // Draws all the polygons in the scene.
   static void Draw();
 
@@ -63,8 +59,12 @@ public:
 
   static double wi;
   static double hi;
+ private:
+  static void DrawCar();
+  static void DrawObjects();
+  static void DrawSelected(const geometry::Polygon& polygon);
 
-private:
+ private:
 
   static scoped_ptr<simulation::Car> car_;
   static scoped_ptr<geometry::RectangleObject> segment_;

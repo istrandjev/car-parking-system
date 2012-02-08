@@ -12,11 +12,11 @@ class Point;
 
 namespace utils {
 
-typedef std::vector<scoped_ptr<geometry::RectangleObject> > 
-    RectangleObjectContainer; 
+typedef std::vector<geometry::RectangleObject*> RectangleObjectContainer;
 
 class ObjectHolder {
  public:
+  ~ObjectHolder();
   bool HasSelected();
   void AddRoadSegment(const geometry::Point& from, const geometry::Point& to);
   void AddParkingLot(const geometry::Point& from, const geometry::Point& to);

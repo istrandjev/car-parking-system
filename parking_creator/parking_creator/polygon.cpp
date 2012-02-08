@@ -45,8 +45,12 @@ inline const Point& Polygon::GetPoint(unsigned index) const {
   return points_[index];
 }
 
-inline const Point& Polygon::GetPointCyclic(unsigned index) const {
-  return points_[index % points_.size()];
+inline const Point& Polygon::GetPointCyclic(int index) const {
+  index = index % (int)points_.size();
+  if (index <  0) {
+    index += (int) points_.size();
+  }
+  return points_[index];
 }
 
 bool Polygon::ContainsPoint(const Point& point) const {

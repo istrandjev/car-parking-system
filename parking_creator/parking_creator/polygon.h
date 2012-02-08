@@ -36,8 +36,7 @@ class Polygon {
   // @return - the point in the polygon with the specified index. The difference
   //     with the above version is that point number N is considered to be point
   //     0 point N + 1 is point 1 and so on. 
-  // NOTE: the method will not work with negative indices.
-  inline const Point& GetPointCyclic(unsigned index) const;
+  inline const Point& GetPointCyclic(int index) const;
 
   // Checks if a point is contained within the boundary of the polygon. For
   // points lying on the boundary this method still returns true.
