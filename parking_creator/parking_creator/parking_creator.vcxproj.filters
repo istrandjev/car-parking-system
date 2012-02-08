@@ -51,7 +51,13 @@
     <ClCompile Include="user_input_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="road_segment.cpp">
+    <ClCompile Include="rectangle_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="object_holder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="event_handlers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +98,13 @@
     <ClInclude Include="scoped_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="road_segment.h">
+    <ClInclude Include="rectangle_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="object_holder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="event_handlers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

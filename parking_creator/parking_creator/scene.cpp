@@ -1,8 +1,9 @@
 #include "scene.h"
 
 #include "car.h"
+#include "object_holder.h"
 #include "polygon.h"
-#include "road_segment.h"
+#include "rectangle_object.h"
 
 #include <cassert>
 #include <glut.h>
@@ -21,7 +22,8 @@ static const double SCALE_FACTOR = 10;
 
 // static declarations
 scoped_ptr<simulation::Car> Scene::car_;
-scoped_ptr<geometry::RoadSegment> Scene::segment_;
+scoped_ptr<geometry::RectangleObject> Scene::segment_;
+utils::ObjectHolder Scene::objectHolder_;
 
 int Scene::width_ = DEFAULT_WIDTH;
 int Scene::height_ = DEFAULT_HEIGHT;
@@ -96,6 +98,11 @@ int Scene::Width() {
 // static
 int Scene::Height() {
   return height_;
+}
+
+// static 
+utils::ObjectHolder* Scene::GetObjectHolder() {
+  return &objectHolder_;
 }
 
 void Scene::ResetCar(double width, double length, double max_steering_angle) {
@@ -185,7 +192,7 @@ void Scene::MoveBackward() {
 void Scene::ResetSegment(int fx, int fy, int tx, int ty) {
   geometry::Point from(fx, fy);
   geometry::Point to(tx, ty);
-  segment_.reset(new geometry::RoadSegment(from, to));
+  segment_.reset(new geometry::RectangleObject(from, to));
 }
 
 // static

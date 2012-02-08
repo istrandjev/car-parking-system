@@ -1,5 +1,5 @@
-#ifndef ROAD_SEGMENT_H
-#define ROAD_SEGMENT_H
+#ifndef RECTANGLE_OBJECT_H
+#define RECTANGLE_OBJECT_H
 
 #include "point.h"
 
@@ -7,10 +7,10 @@ namespace geometry {
 
 class Polygon;
 
-class RoadSegment {
+class RectangleObject {
  public:
-  RoadSegment(const Point& from, const Point& to);
-  RoadSegment(const Point& from, const Point& to, double width);
+  RectangleObject(const Point& from, const Point& to);
+  RectangleObject(const Point& from, const Point& to, double width);
   bool ContainsPoint(const Point& p) const;
   
   const Point& GetFrom() const;
@@ -32,4 +32,4 @@ class RoadSegment {
 };
 
 }  // namespace geometry
-#endif  // ROAD_SEGMENT_H
+#endif  // RECTANGLE_OBJECT_H

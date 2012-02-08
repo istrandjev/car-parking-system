@@ -1,8 +1,8 @@
 #include "glut_utils.h"
 
 #include "delay.h"
+#include "event_handlers.h"
 #include "scene.h"
-#include "user_input_handler.h"
 
 #include <AntTweakBar.h>
 #include <cstdlib>
@@ -20,12 +20,6 @@ bool special_keys[256];
 
 void handleResize(int w, int h);
 void display();
-void keyPressed(unsigned char c, int x, int y);
-void keyReleased(unsigned char c, int x, int y);
-void specialKeyPressed(int c, int x, int y);
-void specialKeyReleased(int c, int x, int y);
-void mousePressFunc(int button, int state, int x, int y); 
-void mouseMoveFunc(int x, int y); 
 void idle();
 
 void HandleKeyboardEvents();
@@ -33,14 +27,6 @@ void HandleKeyboardEvents();
 void TW_CALL ResetSize(void * /*clientData*/)
 { 
   Scene::wi = Scene::hi =  5.0;
-}
-
-void handleMouseClick(double x, double y) {
-  Scene::DoubleLineWidth();
-}
-
-void handleMouseDrag(double fx, double fy, double tx, double ty) {
-  Scene::ResetSegment(fx, fy, tx, ty);
 }
 
 void initGlut(int argc, char** argv) {
@@ -51,8 +37,6 @@ void initGlut(int argc, char** argv) {
   glEnable(GL_DEPTH);
 	glutInitWindowSize(Scene::Width(), Scene::Height());
 	glutCreateWindow("Car simulation");
-	utils::UserInputHandler::SetLeftMouseClickHandler(handleMouseClick);
-	utils::UserInputHandler::SetLeftMouseDragHandler(handleMouseDrag);
 
   Scene::TransformDrawingPane();
 
@@ -65,12 +49,12 @@ void initGlut(int argc, char** argv) {
 	// Initialize GLUT callbacks.
 	glutDisplayFunc(display);
 	glutReshapeFunc(handleResize);
-	glutKeyboardFunc(keyPressed);
-	glutKeyboardUpFunc(keyReleased);
-	glutSpecialUpFunc(specialKeyReleased);
-	glutSpecialFunc(specialKeyPressed);
-	glutMouseFunc(mousePressFunc);
-  glutMotionFunc(mouseMoveFunc);
+	glutKeyboardFunc(utils::KeyPressed);
+	glutKeyboardUpFunc(utils::KeyReleased);
+	glutSpecialUpFunc(utils::SpecialKeyReleased);
+	glutSpecialFunc(utils::SpecialKeyPressed);
+	glutMouseFunc(utils::MousePressFunc);
+  glutMotionFunc(utils::MouseMoveFunc);
   glutIdleFunc(idle);
 
   TwGLUTModifiersFunc(glutGetModifiers);
@@ -107,7 +91,7 @@ void handleResize(int w, int h)
 
 void display()
 {
-  HandleKeyboardEvents();
+  utils::HandleKeyboardEvents();
 
 	//Clear screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -119,84 +103,6 @@ void display()
   glutSwapBuffers();
 }
 
-void keyPressed(unsigned char c, int x, int y) {
-  if (!TwEventKeyboardGLUT(c, x , y)) {
-    utils::UserInputHandler::PressRegularKey(c, x, y);
-  }
-}
-
-void keyReleased(unsigned char c, int x, int y) {
-  if (!TwEventKeyboardGLUT(c, x , y)) {
-    utils::UserInputHandler::ReleaseRegularKey(c);
-  }
-}
-
-
-void specialKeyPressed(int c, int x, int y) {
-  if (!TwEventSpecialGLUT(c, x, y)) {
-    utils::UserInputHandler::PressSpecialKey(c, x, y);
-  }
-}
-
-void specialKeyReleased(int c, int x, int y) {
-  if (!TwEventSpecialGLUT(c, x, y)) {
-    utils::UserInputHandler::ReleaseSpecialKey(c);
-  }
-}
-
-void mousePressFunc(int button, int state, int x, int y) {
-  if (!TwEventMouseButtonGLUT(button, state, x, y) ) {
-	  if (state == GLUT_DOWN) {
-		  if (button == GLUT_LEFT_BUTTON) {
-        utils::UserInputHandler::PressLeftMouse(x, y);
-      } else {
-        utils::UserInputHandler::PressRightMouse(x, y);
-      }
-	  } else if (state = GLUT_UP) {
-      if (button == GLUT_LEFT_BUTTON) {
-        utils::UserInputHandler::ReleaseLeftMouse(x, y);
-      } else {
-        utils::UserInputHandler::ReleaseRightMouse(x, y);
-      }
-    }
-  }
-}
-
-void mouseMoveFunc(int x, int y) {
-  if (!TwEventMouseMotionGLUT(x, y) ) {
-    utils::UserInputHandler::MoveMouse(x, y);
-  }
-}
-
-void HandleKeyboardEvents() {
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_LEFT)) {
-    Scene::TurnCarLeft();
-  }
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_RIGHT)) {
-    Scene::TurnCarRight();
-  }
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_UP)) {
-    Scene::MoveForward();
-  }
-  if (utils::UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
-    Scene::MoveBackward();
-  }
-  if (utils::UserInputHandler::IsRegularKeyPressed('a')) {
-    Scene::TranslateLeft();
-  }
-  if (utils::UserInputHandler::IsRegularKeyPressed('d')) {
-    Scene::TranslateRight();
-  }
-  if (utils::UserInputHandler::IsRegularKeyPressed('w')) {
-    Scene::TranslateUp();
-  }
-  if (utils::UserInputHandler::IsRegularKeyPressed('s')) {
-    Scene::TranslateDown();
-  }
-  if (utils::UserInputHandler::IsRegularKeyPressed(' ')) {
-    Scene::ResetCarPosition();
-  }
-}
 void idle() {
   glutPostRedisplay();   
   delay(0.002);

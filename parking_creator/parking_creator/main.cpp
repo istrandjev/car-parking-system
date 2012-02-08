@@ -1,3 +1,4 @@
+#include "event_handlers.h"
 #include "geometry_utils.h"
 #include "glut_utils.h"
 #include "scene.h"
@@ -27,8 +28,9 @@ int main(int argc, char ** argv)
   ReadInput();
 
   // Initialize GLUT.
+  utils::InitializeHandlers();
   visualize::initGlut(argc, argv);
-
+  
   // Run GLUT main loop.
   glutMainLoop();
 

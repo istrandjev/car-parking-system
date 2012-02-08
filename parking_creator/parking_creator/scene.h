@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "object_holder.h"
 #include "scoped_ptr.h"
 
 #include <vector>
@@ -8,7 +9,7 @@
 namespace geometry {
 class Point;
 class Polygon;
-class RoadSegment;
+class RectangleObject;
 }  // namespace geometry
 
 namespace simulation {
@@ -56,6 +57,7 @@ public:
   static void Resize(int width, int height);
   static int Width();
   static int Height();
+  static utils::ObjectHolder* GetObjectHolder();
 
   static void TransformDrawingPane();
 
@@ -65,7 +67,8 @@ public:
 private:
 
   static scoped_ptr<simulation::Car> car_;
-  static scoped_ptr<geometry::RoadSegment> segment_;
+  static scoped_ptr<geometry::RectangleObject> segment_;
+  static utils::ObjectHolder objectHolder_;
 
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;

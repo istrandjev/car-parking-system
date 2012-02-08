@@ -1,0 +1,82 @@
+#include "object_holder.h"
+
+#include "point.h"
+#include "rectangle_object.h"
+
+#include <vector>
+
+namespace utils {
+
+static const double DEFAULT_WIDTH = 1.0;
+
+bool ObjectHolder::HasSelected() {
+  return !selected_.empty();
+}
+
+void ObjectHolder::AddRoadSegment(const geometry::Point& from, const geometry::Point& to) {
+  AddRectangleObjectToContainer(from, to, &roadSegments_);
+}
+
+void ObjectHolder::AddParkingLot(const geometry::Point& from, const geometry::Point& to) {
+  AddRectangleObjectToContainer(from, to, &parkingLots_);
+}
+
+void ObjectHolder::AddObstacle(const geometry::Point& from, const geometry::Point& to) {
+  AddRectangleObjectToContainer(from, to, &obstacles_);
+  
+}
+
+bool ObjectHolder::Select(const geometry::Point& location) {
+  selected_.clear();
+  AddSelectedFromContainer(location, &roadSegments_);
+  AddSelectedFromContainer(location, &parkingLots_);
+  AddSelectedFromContainer(location, &obstacles_);
+  selectedIndex_ = 0;
+  return !selected_.empty();
+}
+
+const RectangleObjectContainer& ObjectHolder::GetRoadSegments() const {
+  return roadSegments_;
+}
+
+const RectangleObjectContainer& ObjectHolder::GetParkingLots() const {
+  return parkingLots_;
+}
+
+const RectangleObjectContainer& ObjectHolder::GetObstacles() const {
+  return obstacles_;
+}
+
+void ObjectHolder::SelectNext() {
+  if (selected_.empty()) {
+    return;
+  }
+  selectedIndex_ = (selectedIndex_ +  1) % selected_.size();
+}
+
+void ObjectHolder::SelectPrevious() {
+  if (selected_.empty()) {
+    return;
+  }
+  selectedIndex_ = (selectedIndex_ + selected_.size() - 1) % selected_.size();
+}
+
+geometry::RectangleObject* ObjectHolder::GetSelected() {
+  return selected_[selectedIndex_];
+}
+ 
+void ObjectHolder::AddRectangleObjectToContainer(const geometry::Point& from, 
+    const geometry::Point& to, RectangleObjectContainer* container) {
+  container->push_back(new geometry::RectangleObject(from, to, DEFAULT_WIDTH));
+}
+
+void ObjectHolder::AddSelectedFromContainer(const geometry::Point& location,
+    RectangleObjectContainer* container) {
+  for (unsigned index = 0; index < container->size(); ++index) {
+    if (container->at(index)->ContainsPoint(location)) {
+      selected_.push_back(container->at(index).get());
+    }
+  }
+}
+
+}  // namespace utils
