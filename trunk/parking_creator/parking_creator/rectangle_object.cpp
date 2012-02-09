@@ -58,7 +58,7 @@ bool RectangleObject::ContainsPoint(const Point& p) const {
   }
 
   return DoubleIsGreaterOrEqual(width_ * segment.Length(),
-      segment.CrossProduct(from_p));
+      fabs(segment.CrossProduct(from_p)));
 }
 
 Polygon RectangleObject::GetBounds() const {

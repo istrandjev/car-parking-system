@@ -29,10 +29,10 @@ SpecialKeyPressHandler UserInputHandler::specialKeyPressHandler = NULL;
 
 // static
 void UserInputHandler::PressRegularKey(unsigned char key, int x, int y) {
-  regularKeysPressed[key] = true;
   if (keyPressHandler != NULL) {
     (*keyPressHandler)(key, x, y);
   }
+  regularKeysPressed[key] = true;
 }
   
 // static
@@ -43,10 +43,10 @@ void UserInputHandler::ReleaseRegularKey(unsigned char key) {
 
 // static
 void UserInputHandler::PressSpecialKey(int key, int x, int y) {
-  specialKeysPressed[key] = true;
   if (specialKeyPressHandler != NULL) {
     (*specialKeyPressHandler)(key, x, y);
   }
+  specialKeysPressed[key] = true;
 }
 
 // static
@@ -56,16 +56,15 @@ void UserInputHandler::ReleaseSpecialKey(int key) {
 
 // static
 void UserInputHandler::PressLeftMouse(int x, int y) {
-  leftMousePressed = true;
   UnprojectCoordinates(x, y, &leftMousePress);
   if (leftMousePressHandler != NULL) {
     (*leftMousePressHandler)(leftMousePress.x, leftMousePress.y);
   }
+  leftMousePressed = true;
 }
 
 // static
 void UserInputHandler::ReleaseLeftMouse(int x, int y) {
-  leftMousePressed = false;
   geometry::Point leftMouseRelease;
   UnprojectCoordinates(x, y, &leftMouseRelease);
   bool click = IsClick(leftMousePress, leftMouseRelease);
@@ -77,21 +76,20 @@ void UserInputHandler::ReleaseLeftMouse(int x, int y) {
   if (leftMouseReleaseHandler != NULL) {
     (*leftMouseReleaseHandler)(leftMouseRelease.x, leftMouseRelease.y);
   }
+  leftMousePressed = false;
 }
 
 // static
 void UserInputHandler::PressRightMouse(int x, int y) {
-  rightMousePressed = true;
   UnprojectCoordinates(x, y, &rightMousePress);
   if (rightMousePressHandler != NULL) {
     (*rightMousePressHandler)(rightMousePress.x, rightMousePress.y);
   }
+  rightMousePressed = true;
 }
   
 // static
 void UserInputHandler::ReleaseRightMouse(int x, int y) {
-  rightMousePressed = false;
-
   geometry::Point rightMouseRelease;
   UnprojectCoordinates(x, y, &rightMouseRelease);
   bool click = IsClick(rightMousePress, rightMouseRelease);
@@ -103,6 +101,7 @@ void UserInputHandler::ReleaseRightMouse(int x, int y) {
   if (rightMouseReleaseHandler != NULL) {
     (*rightMouseReleaseHandler)(rightMouseRelease.x, rightMouseRelease.y);
   }
+  rightMousePressed = false;
 }
 
 // static
