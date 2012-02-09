@@ -71,10 +71,12 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
     geometry::RectangleObject* object = obj_holder->GetSelected();
     if (CurrentState::movingFrom) {
       object->SetFrom(to);
-      return;
     } else if (CurrentState::movingTo || CurrentState::addingNewLine) {
-      object->SetTo(to);
-      return; 
+      if (CurrentState::addingNewLine && !Near(from, object->GetFrom())) {
+        obj_holder->AddRoadSegment(from, to);
+      } else {
+        object->SetTo(to);
+      }
     } else {
       object->SetTo(to);
     }
