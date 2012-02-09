@@ -27,8 +27,6 @@ utils::ObjectHolder Scene::objectHolder_;
 
 int Scene::width_ = DEFAULT_WIDTH;
 int Scene::height_ = DEFAULT_HEIGHT;
-double Scene::wi = 0.0;
-double Scene::hi = 0.0;
 
 double Scene::xTranslation = 0.0; 
 double Scene::yTranslation = 0.0;
@@ -121,14 +119,6 @@ void Scene::Draw() {
   }
 
   DrawObjects();
-
-  glColor3f(0.5, 0.5, 0.0);
-  glBegin(GL_POLYGON); 
-    glVertex2f(-wi, -hi );
-    glVertex2f(-wi, hi );
-    glVertex2f(wi, hi );
-    glVertex2f(wi, -hi );
-  glEnd();
 }
 
 // static 

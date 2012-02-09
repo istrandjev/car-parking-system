@@ -57,8 +57,6 @@ public:
 
   static void TransformDrawingPane();
 
-  static double wi;
-  static double hi;
  private:
   static void DrawCar();
   static void DrawObjects();

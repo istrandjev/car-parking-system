@@ -33,6 +33,7 @@ int main(int argc, char ** argv)
   
   // Run GLUT main loop.
   glutMainLoop();
-
+  
+  TwTerminate();
   return 0;
 }

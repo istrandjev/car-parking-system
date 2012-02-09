@@ -2,9 +2,11 @@
 
 #include "delay.h"
 #include "event_handlers.h"
+#include "object_holder.h"
+#include "rectangle_object.h"
 #include "scene.h"
+#include "tw_handler.h"
 
-#include <AntTweakBar.h>
 #include <cstdlib>
 #include <glut.h>
 #include <iostream>
@@ -12,20 +14,9 @@
 
 namespace visualize {
 
-TwBar *myBar;
-double myVar;
-
-bool regular_keys[256];
-bool special_keys[256];
-
 void handleResize(int w, int h);
 void display();
 void idle();
-
-void TW_CALL ResetSize(void * /*clientData*/)
-{ 
-  Scene::wi = Scene::hi =  5.0;
-}
 
 void initGlut(int argc, char** argv) {
 
@@ -54,16 +45,8 @@ void initGlut(int argc, char** argv) {
 	glutMouseFunc(utils::MousePressFunc);
   glutMotionFunc(utils::MouseMoveFunc);
   glutIdleFunc(idle);
-
-  TwGLUTModifiersFunc(glutGetModifiers);
-
-  TwInit(TW_OPENGL, NULL);
-  TwWindowSize(Scene::Width(), Scene::Height());
-  myBar = TwNewBar("Bira_ili_boza");
-	TwAddVarRW(myBar, "width", TW_TYPE_DOUBLE, &Scene::wi, "");
-	TwAddVarRW(myBar, "height", TW_TYPE_DOUBLE, &Scene::hi, "");
-  TwAddButton(myBar, "Run", ResetSize, NULL, " label='Reset Size' ");
-  TwDefine(" Bira_ili_boza size='160 60' ");
+  
+  TwHandler::Init();
 }
 
 //Called when the window is resized
@@ -74,7 +57,7 @@ void handleResize(int w, int h)
 
   Scene::Resize(w, h);
   Scene::TransformDrawingPane();
-  TwWindowSize(Scene::Width(), Scene::Height());
+  TwHandler::SetSize(Scene::Width(), Scene::Height());
 
 	glMatrixMode(GL_PROJECTION); //Switch to setting the camera perspective
 
@@ -97,7 +80,7 @@ void display()
   Scene::TransformDrawingPane();
   Scene::Draw();
 
-  TwDraw();
+  TwHandler::Draw();
   glutSwapBuffers();
 }
 
