@@ -1,6 +1,6 @@
  #include "user_input_handler.h"
 
- // #include "scene.h"
+ #include "current_state.h"
 
  #include <glut.h>
  #include <vector>
@@ -106,12 +106,13 @@ void UserInputHandler::ReleaseRightMouse(int x, int y) {
 
 // static
 void UserInputHandler::MoveMouse(int x, int y) {
-  if (!rightMousePressed && !leftMousePressed) {
-    return;
-  }
   geometry::Point mousePosition;
   UnprojectCoordinates(x, y, &mousePosition);
-
+  if (!rightMousePressed && !leftMousePressed) {
+    CurrentState::lastMousePosition = mousePosition;
+    return;
+  }
+  
   if (leftMouseDragHandler != NULL) {
       bool leftMouseDragged = leftMousePressed && 
           !IsClick(mousePosition, leftMousePress);
@@ -129,6 +130,8 @@ void UserInputHandler::MoveMouse(int x, int y) {
           mousePosition.x, mousePosition.y);
       }
   }
+
+  CurrentState::lastMousePosition = mousePosition;
 }
 
 // static

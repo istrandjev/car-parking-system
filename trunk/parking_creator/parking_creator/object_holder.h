@@ -49,8 +49,9 @@ class ObjectHolder {
   ObjectType currentType;
 
  private: 
-  void AddRectangleObjectToContainer(const geometry::Point& from, 
-      const geometry::Point& to, RectangleObjectContainer* container);
+  void AddRectangleObjectToContainer(
+      const geometry::Point& from, const geometry::Point& to,
+      double width, RectangleObjectContainer* container);
   void AddSelectedFromContainer(const geometry::Point& location,
       RectangleObjectContainer* container);
   bool FindAndDeleteFromContainer(geometry::RectangleObject* object,
