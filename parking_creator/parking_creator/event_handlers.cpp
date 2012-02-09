@@ -6,6 +6,7 @@
 #include "rectangle_object.h"
 #include "scene.h"
 #include "user_input_handler.h"
+#include "vector.h"
 
 #include <AntTweakBar.h>
 #include <cstdlib>
@@ -81,9 +82,11 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
       } else {
         object->SetTo(to);
       }
-    } /*else {
-      TODO(istrandjev): handle line dragging.
-    }*/
+    } else {
+      geometry::Vector move(CurrentState::lastMousePosition, to);
+      object->SetFrom(object->GetFrom() + move);
+      object->SetTo(object->GetTo() + move);
+    }
 
   } else {
     obj_holder->AddObjectOfCurrentType(from, to);

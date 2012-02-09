@@ -7,7 +7,9 @@
 
 namespace utils {
 
-static const double DEFAULT_WIDTH = 1.0;
+static const double DEFAULT_ROAD_WIDTH = 2.5;
+static const double DEFAULT_PARKING_WIDTH = 2.5;
+static const double DEFAULT_OBSTACLE_WIDTH = 2.0;
 
 ObjectHolder::ObjectHolder() 
     : selectedIsFianlized_(false), currentType(ROAD_SEGMENT) {}
@@ -29,16 +31,15 @@ bool ObjectHolder::HasSelected() {
 }
 
 void ObjectHolder::AddRoadSegment(const geometry::Point& from, const geometry::Point& to) {
-  AddRectangleObjectToContainer(from, to, &roadSegments_);
+  AddRectangleObjectToContainer(from, to, DEFAULT_ROAD_WIDTH, &roadSegments_);
 }
 
 void ObjectHolder::AddParkingLot(const geometry::Point& from, const geometry::Point& to) {
-  AddRectangleObjectToContainer(from, to, &parkingLots_);
+  AddRectangleObjectToContainer(from, to, DEFAULT_PARKING_WIDTH, &parkingLots_);
 }
 
 void ObjectHolder::AddObstacle(const geometry::Point& from, const geometry::Point& to) {
-  AddRectangleObjectToContainer(from, to, &obstacles_);
-  
+  AddRectangleObjectToContainer(from, to, DEFAULT_OBSTACLE_WIDTH, &obstacles_);
 }
 
 void ObjectHolder::AddObjectOfCurrentType(const geometry::Point& from, 
@@ -119,10 +120,11 @@ void ObjectHolder::DeleteSelected() {
   }
 }
 
-void ObjectHolder::AddRectangleObjectToContainer(const geometry::Point& from, 
-    const geometry::Point& to, RectangleObjectContainer* container) {
+void ObjectHolder::AddRectangleObjectToContainer(
+    const geometry::Point& from, const geometry::Point& to, 
+    double width, RectangleObjectContainer* container) {
   geometry::RectangleObject* object = 
-      new geometry::RectangleObject(from, to, DEFAULT_WIDTH);
+      new geometry::RectangleObject(from, to, width);
   container->push_back(object);
   selected_.clear();
   selected_.push_back(object);

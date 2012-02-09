@@ -114,11 +114,11 @@ void Scene::ResetCarPosition() {
 
 // static 
 void Scene::Draw() {
+  DrawObjects();
+  
   if (car_.get() != NULL) {
     DrawCar();
   }
-
-  DrawObjects();
 }
 
 // static 
@@ -134,11 +134,11 @@ void Scene::TransformDrawingPane() {
 
 // static
 void Scene::DrawCar() {
-  glColor3f(0.5, 0.5, 0.5);
+  glColor4f(0.5, 0.5, 0.5, 1.0);
   DrawPolygon(car_->GetBounds());
   
   std::vector<geometry::Polygon> wheels = car_->GetWheels();
-  glColor3f(0, 0, 0);
+  glColor4f(0.0, 0.0, 0.0, 1.0);
 
   for (unsigned wheel_index = 0; wheel_index < wheels.size(); 
       ++wheel_index) {
@@ -148,13 +148,13 @@ void Scene::DrawCar() {
 
 // static
 void Scene::DrawObjects() {
-  glColor4f(1.0, 0.8, 0.6, 0.5);
+  glColor4f(1.0, 0.8, 0.6, 1.0);
   const utils::RectangleObjectContainer& road_segments = 
       objectHolder_.GetRoadSegments();
   for (unsigned index = 0; index < road_segments.size(); ++index) {
     DrawPolygon(road_segments[index]->GetBounds());  
   }
-  glColor4f(0.5, 0.5, 0.5, 0.5);
+  glColor4f(0.5, 0.5, 0.5, 1.0);
   const utils::RectangleObjectContainer& parking_lots = 
       objectHolder_.GetParkingLots();
   for (unsigned index = 0; index < parking_lots.size(); ++index) {
