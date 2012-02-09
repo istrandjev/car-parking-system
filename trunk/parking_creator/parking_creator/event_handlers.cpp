@@ -80,7 +80,7 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
         object->SetTo(to);
       }
     } /*else {
-      object->SetTo(to);
+      TODO(istrandjev): handle line dragging.
     }*/
 
   } else {
@@ -95,9 +95,7 @@ void KeyPressed(unsigned char c, int x, int y) {
 }
 
 void KeyReleased(unsigned char c, int x, int y) {
-  if (!TwEventKeyboardGLUT(c, x , y)) {
-    UserInputHandler::ReleaseRegularKey(c);
-  }
+  UserInputHandler::ReleaseRegularKey(c);
 }
 
 void SpecialKeyPressed(int c, int x, int y) {
@@ -107,9 +105,7 @@ void SpecialKeyPressed(int c, int x, int y) {
 }
 
 void SpecialKeyReleased(int c, int x, int y) {
-  if (!TwEventSpecialGLUT(c, x, y)) {
-    UserInputHandler::ReleaseSpecialKey(c);
-  }
+  UserInputHandler::ReleaseSpecialKey(c);
 }
 
 void MousePressFunc(int button, int state, int x, int y) {
