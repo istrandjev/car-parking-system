@@ -23,6 +23,8 @@ class ObjectHolder {
   void AddRoadSegment(const geometry::Point& from, const geometry::Point& to);
   void AddParkingLot(const geometry::Point& from, const geometry::Point& to);
   void AddObstacle(const geometry::Point& from, const geometry::Point& to);
+  void AddObjectOfCurrentType(const geometry::Point& from, const geometry::Point& to);
+
   bool Select(const geometry::Point& location);
 
   const RectangleObjectContainer& GetRoadSegments() const;
@@ -37,6 +39,14 @@ class ObjectHolder {
 
   geometry::RectangleObject* GetSelected();
   void DeleteSelected();
+
+ public:
+  enum ObjectType {
+    ROAD_SEGMENT,
+    PARKING_LOT,
+    OBSTACLE
+  };
+  ObjectType currentType;
 
  private: 
   void AddRectangleObjectToContainer(const geometry::Point& from, 
