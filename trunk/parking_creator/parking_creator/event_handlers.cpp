@@ -49,6 +49,8 @@ void HandleMousePress(double x, double y) {
     } else if (!obj_holder->GetSelected()->ContainsPoint(point)) {
       CurrentState::addingNewLine = true;
     }
+  } else {
+    CurrentState::addingNewLine = true;
   }
 }
 
@@ -77,9 +79,9 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
       } else {
         object->SetTo(to);
       }
-    } else {
+    } /*else {
       object->SetTo(to);
-    }
+    }*/
 
   } else {
     obj_holder->AddRoadSegment(from, to);
