@@ -145,6 +145,12 @@ void HandleKeyboardEvents() {
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
     visualize::Scene::MoveBackward();
   }
+  if (UserInputHandler::IsRegularKeyPressed(127)) {
+    ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+    if (obj_holder->HasSelected()) {
+      obj_holder->DeleteSelected();
+    }
+  }
   if (UserInputHandler::IsRegularKeyPressed('a')) {
     visualize::Scene::TranslateLeft();
   }
