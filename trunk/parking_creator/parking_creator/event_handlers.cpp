@@ -17,6 +17,8 @@ bool Near(const geometry::Point& a, const geometry::Point& b) {
   return fabs(a.x - b.x) + fabs(a.y - b.y) < 1.0; 
 }
 
+static const double WIDTH_STEP = 0.1;
+
 void HandleMouseClick(double x, double y);
 void HandleMousePress(double x, double y);
 void HandleMouseRelease(double x, double y);
@@ -75,7 +77,7 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
       object->SetFrom(to);
     } else if (CurrentState::movingTo || CurrentState::addingNewLine) {
       if (CurrentState::addingNewLine && !Near(from, object->GetFrom())) {
-        obj_holder->AddRoadSegment(from, to);
+        obj_holder->AddObjectOfCurrentType(from, to);
       } else {
         object->SetTo(to);
       }
@@ -84,7 +86,7 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
     }*/
 
   } else {
-    obj_holder->AddRoadSegment(from, to);
+    obj_holder->AddObjectOfCurrentType(from, to);
   }
 }
 
@@ -149,6 +151,22 @@ void HandleKeyboardEvents() {
     ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
     if (obj_holder->HasSelected()) {
       obj_holder->DeleteSelected();
+    }
+  }
+  if (UserInputHandler::IsRegularKeyPressed(',')) {
+    ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+    if (obj_holder->HasSelected()) {
+      geometry::RectangleObject* object = obj_holder->GetSelected();
+      if (object->GetWidth() - WIDTH_STEP > 0.0) {
+        object->SetWidth(object->GetWidth() - WIDTH_STEP);
+      }
+    }
+  }
+  if (UserInputHandler::IsRegularKeyPressed('.')) {
+    ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+    if (obj_holder->HasSelected()) {
+      geometry::RectangleObject* object = obj_holder->GetSelected();
+      object->SetWidth(object->GetWidth() + WIDTH_STEP);
     }
   }
   if (UserInputHandler::IsRegularKeyPressed('a')) {

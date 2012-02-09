@@ -1,5 +1,6 @@
 #include "tw_handler.h"
 
+#include "object_holder.h"
 #include "rectangle_object.h"
 #include "scene.h"
 
@@ -25,6 +26,8 @@ void TwHandler::Init() {
   TwAddVarCB(bar, "width", TW_TYPE_DOUBLE, SetLineWidthCallback, GetLineWidthCallback, NULL, "");
   TwAddButton(bar, "Run", ResetSize, NULL, " label='Reset Size' ");
   TwDefine("'Line options' size='200 160' ");
+  
+  AddObjectTypeEnum();
 }
 
 
@@ -36,6 +39,20 @@ void TwHandler::SetSize(int width, int height) {
 // static
 void TwHandler::Draw() {
   TwDraw();
+}
+
+// static
+void TwHandler::AddObjectTypeEnum() {
+  TwEnumVal object_type_names[] = 
+      { {utils::ObjectHolder::ROAD_SEGMENT, "Road segment"},
+        {utils::ObjectHolder::PARKING_LOT, "Parking lot"},
+        {utils::ObjectHolder::OBSTACLE, "Obstacle"} };
+  TwType objectType;
+  objectType = TwDefineEnum("ObjectType", object_type_names, 3);
+   
+  utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+  TwAddVarRW(bar, "Object type", objectType, 
+    &obj_holder->currentType, NULL);
 }
 
 void TW_CALL ResetSize(void * /*clientData*/)

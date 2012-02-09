@@ -154,15 +154,15 @@ void Scene::DrawObjects() {
   for (unsigned index = 0; index < road_segments.size(); ++index) {
     DrawPolygon(road_segments[index]->GetBounds());  
   }
-  glColor3f(0.5, 0.5, 0.5);
+  glColor4f(0.5, 0.5, 0.5, 0.5);
   const utils::RectangleObjectContainer& parking_lots = 
       objectHolder_.GetParkingLots();
   for (unsigned index = 0; index < parking_lots.size(); ++index) {
     DrawPolygon(parking_lots[index]->GetBounds());  
   }
-  glColor3f(0.0, 0.0, 0.0);
+  glColor4f(0.0, 0.0, 0.0, 1.0);
   const utils::RectangleObjectContainer& obstacles = 
-      objectHolder_.GetParkingLots();
+      objectHolder_.GetObstacles();
   for (unsigned index = 0; index < obstacles.size(); ++index) {
     DrawPolygon(obstacles[index]->GetBounds());  
   }

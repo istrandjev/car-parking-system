@@ -9,7 +9,8 @@ namespace utils {
 
 static const double DEFAULT_WIDTH = 1.0;
 
-ObjectHolder::ObjectHolder() : selectedIsFianlized_(false) {}
+ObjectHolder::ObjectHolder() 
+    : selectedIsFianlized_(false), currentType(ROAD_SEGMENT) {}
 
 ObjectHolder::~ObjectHolder() {
   for (unsigned index = 0; index < roadSegments_.size(); ++index) {
@@ -38,6 +39,15 @@ void ObjectHolder::AddParkingLot(const geometry::Point& from, const geometry::Po
 void ObjectHolder::AddObstacle(const geometry::Point& from, const geometry::Point& to) {
   AddRectangleObjectToContainer(from, to, &obstacles_);
   
+}
+
+void ObjectHolder::AddObjectOfCurrentType(const geometry::Point& from, 
+    const geometry::Point& to) {
+  switch(currentType) {
+    case ROAD_SEGMENT: AddRoadSegment(from, to); break;
+    case PARKING_LOT: AddParkingLot(from, to); break;
+    case OBSTACLE: AddObstacle(from, to); break;
+  }
 }
 
 bool ObjectHolder::Select(const geometry::Point& location) {

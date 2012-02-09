@@ -12,6 +12,9 @@ class TwHandler {
   static void Draw();
 
  private:
+  static void AddObjectTypeEnum();
+
+ private:
   static TwBar *bar;  
 };
 
