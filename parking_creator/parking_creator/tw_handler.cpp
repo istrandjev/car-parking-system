@@ -24,7 +24,7 @@ void TwHandler::Init() {
   bar = TwNewBar("Line options");
   TwAddVarCB(bar, "width", TW_TYPE_DOUBLE, SetLineWidthCallback, GetLineWidthCallback, NULL, "");
   TwAddButton(bar, "Run", ResetSize, NULL, " label='Reset Size' ");
-  TwDefine(" Bira_ili_boza size='160 60' ");
+  TwDefine("'Line options' size='200 160' ");
 }
 
 

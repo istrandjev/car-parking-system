@@ -86,7 +86,29 @@ bool ObjectHolder::IsSelectedFinalized() const {
 geometry::RectangleObject* ObjectHolder::GetSelected() {
   return selected_[selectedIndex_];
 }
- 
+
+void ObjectHolder::DeleteSelected() {
+  if (selected_.empty()) {
+    return;
+  }
+
+  geometry::RectangleObject* selected = selected_[selectedIndex_];
+  if (FindAndDeleteFromContainer(selected, &roadSegments_)) {
+    selected_.clear();
+    return;
+  }
+
+  if (FindAndDeleteFromContainer(selected, &parkingLots_)) {
+    selected_.clear();
+    return;
+  }
+
+  if (FindAndDeleteFromContainer(selected, &obstacles_)) {
+    selected_.clear();
+    return;
+  }
+}
+
 void ObjectHolder::AddRectangleObjectToContainer(const geometry::Point& from, 
     const geometry::Point& to, RectangleObjectContainer* container) {
   geometry::RectangleObject* object = 
@@ -104,6 +126,20 @@ void ObjectHolder::AddSelectedFromContainer(const geometry::Point& location,
       selected_.push_back(container->at(index));
     }
   }
+}
+
+bool ObjectHolder::FindAndDeleteFromContainer(
+    geometry::RectangleObject* object,
+    RectangleObjectContainer* container) {
+  for (unsigned index = 0; index < roadSegments_.size(); ++index) {
+    if (container->at(index) == object) {
+      container->erase(container->begin() + index);
+      delete object;
+      return true;
+    }
+  }
+
+  return false;
 }
 
 }  // namespace utils
