@@ -18,7 +18,6 @@ bool Near(const geometry::Point& a, const geometry::Point& b) {
   return fabs(a.x - b.x) + fabs(a.y - b.y) < 1.0; 
 }
 
-
 void HandleMouseClick(double x, double y);
 void HandleMousePress(double x, double y);
 void HandleMouseRelease(double x, double y);
@@ -169,9 +168,6 @@ void HandleKeyboardEvents() {
   }
   if (UserInputHandler::IsRegularKeyPressed('s')) {
     visualize::Scene::TranslateDown();
-  }
-  if (UserInputHandler::IsRegularKeyPressed(' ')) {
-    visualize::Scene::ResetCarPosition();
   }
 }
 

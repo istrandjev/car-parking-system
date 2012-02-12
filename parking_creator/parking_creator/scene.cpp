@@ -1,10 +1,10 @@
 #include "scene.h"
 
-#include "car.h"
 #include "directed_rectangle_object.h"
 #include "object_holder.h"
 #include "polygon.h"
 #include "rectangle_object.h"
+#include "vector.h"
 
 #include <cassert>
 #include <glut.h>
@@ -14,7 +14,6 @@ namespace visualize {
 
 static const double METERS_PER_STEP = 0.2;
 static const double TRANSLATION_UNIT = 0.2;
-static const double ROTATION_UNIT = 0.2;
 
 static const int DEFAULT_WIDTH = 800;
 static const int DEFAULT_HEIGHT = 600;
@@ -22,8 +21,6 @@ static const int DEFAULT_HEIGHT = 600;
 static const double SCALE_FACTOR = 10;
 
 // static declarations
-scoped_ptr<simulation::Car> Scene::car_;
-scoped_ptr<geometry::RectangleObject> Scene::segment_;
 utils::ObjectHolder Scene::objectHolder_;
 
 int Scene::width_ = DEFAULT_WIDTH;
@@ -74,16 +71,6 @@ void Scene::TranslateOut() {
 }
 
 // static 
-void Scene::RotateXPositive() {
-  xRotate += ROTATION_UNIT;
-}
-
-// static 
-void Scene::RotateXNegative() {
-  xRotate -= ROTATION_UNIT;
-}
-
-// static 
 void Scene::Resize(int width, int height) {
   width_ = width;
   height_ = height;
@@ -104,22 +91,9 @@ utils::ObjectHolder* Scene::GetObjectHolder() {
   return &objectHolder_;
 }
 
-void Scene::ResetCar(double width, double length, double max_steering_angle) {
-  car_.reset(new simulation::Car(width, length, max_steering_angle));
-}
-
-// static
-void Scene::ResetCarPosition() {
-  car_->Reset();
-}
-
 // static 
 void Scene::Draw() {
   DrawObjects();
-  
-  if (car_.get() != NULL) {
-    DrawCar();
-  }
 }
 
 // static 
@@ -131,20 +105,6 @@ void Scene::TransformDrawingPane() {
           (-height_ * 0.5) / SCALE_FACTOR - yTranslation, 
           (height_ * 0.5) / SCALE_FACTOR - yTranslation, 0, 1);
   glMatrixMode(GL_MODELVIEW);
-}
-
-// static
-void Scene::DrawCar() {
-  glColor4f(0.5, 0.5, 0.5, 1.0);
-  DrawPolygon(car_->GetBounds());
-  
-  std::vector<geometry::Polygon> wheels = car_->GetWheels();
-  glColor4f(0.0, 0.0, 0.0, 1.0);
-
-  for (unsigned wheel_index = 0; wheel_index < wheels.size(); 
-      ++wheel_index) {
-    DrawPolygon(wheels[wheel_index]);
-  }
 }
 
 // static
@@ -247,44 +207,6 @@ void Scene::DrawDirectionalTips(
   DrawArrow(middle + vector * 0.165, middle + vector * 0.33, width);
   if (!directed_object.IsOneWay()) {
     DrawArrow(middle - vector * 0.165, middle - vector * 0.33, width);
-  }
-}
-
-// static
-void Scene::TurnCarLeft() {
-  assert(car_.get() != NULL);
-  car_->TurnLeft();
-}
-
-// static
-void Scene::TurnCarRight() {
-  assert(car_.get() != NULL);
-  car_->TurnRight();
-}
-
-// static 
-void Scene::MoveForward() {
-  assert(car_.get() != NULL);
-  car_->Move(METERS_PER_STEP);
-}
-
-// static 
-void Scene::MoveBackward() {
-  assert(car_.get() != NULL);
-  car_->Move(-METERS_PER_STEP);
-}
-
-// static
-void Scene::ResetSegment(int fx, int fy, int tx, int ty) {
-  geometry::Point from(fx, fy);
-  geometry::Point to(tx, ty);
-  segment_.reset(new geometry::RectangleObject(from, to));
-}
-
-// static
-void Scene::DoubleLineWidth() {
-  if (segment_.get() != NULL) {
-    segment_->SetWidth(segment_->GetWidth() * 2.0);
   }
 }
 

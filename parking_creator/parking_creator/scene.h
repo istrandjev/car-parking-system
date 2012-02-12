@@ -2,7 +2,6 @@
 #define SCENE_H
 
 #include "object_holder.h"
-#include "scoped_ptr.h"
 
 #include <vector>
 
@@ -27,18 +26,6 @@ public:
   // Draws all the polygons in the scene.
   static void Draw();
 
-  static void ResetCar(double width, double length, double max_steering_angle);
-  static void ResetCarPosition();
-
-  static void ResetSegment(int fx, int fy, int tx, int ty);
-  static void DoubleLineWidth();
-
-  static void TurnCarLeft();
-  static void TurnCarRight();
-
-  static void MoveForward();
-  static void MoveBackward();
-
   // Functions to translate the scene.
   static void TranslateLeft();
   static void TranslateRight();
@@ -46,10 +33,6 @@ public:
   static void TranslateDown();
   static void TranslateIn();
   static void TranslateOut();
-
-  // Functions to rotate the scene.
-  static void RotateXPositive();
-  static void RotateXNegative();
 
   static void Resize(int width, int height);
   static int Width();
@@ -68,8 +51,6 @@ public:
       const geometry::DirectedRectangleObject& directed_object);
 
  private:
-  static scoped_ptr<simulation::Car> car_;
-  static scoped_ptr<geometry::RectangleObject> segment_;
   static utils::ObjectHolder objectHolder_;
 
   static double xTranslation, yTranslation, zTranslation;

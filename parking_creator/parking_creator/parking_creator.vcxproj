@@ -63,7 +63,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="car.cpp" />
     <ClCompile Include="current_state.cpp" />
     <ClCompile Include="delay.cpp" />
     <ClCompile Include="directed_rectangle_object.cpp" />
@@ -83,7 +82,6 @@
     <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="car.h" />
     <ClInclude Include="current_state.h" />
     <ClInclude Include="delay.h" />
     <ClInclude Include="double_utils.h" />
