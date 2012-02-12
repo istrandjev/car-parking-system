@@ -1,6 +1,7 @@
 #include "scene.h"
 
 #include "car.h"
+#include "directed_rectangle_object.h"
 #include "object_holder.h"
 #include "polygon.h"
 #include "rectangle_object.h"
@@ -148,24 +149,15 @@ void Scene::DrawCar() {
 
 // static
 void Scene::DrawObjects() {
-  glColor4f(1.0, 0.8, 0.6, 1.0);
-  const utils::RectangleObjectContainer& road_segments = 
-      objectHolder_.GetRoadSegments();
-  for (unsigned index = 0; index < road_segments.size(); ++index) {
-    DrawPolygon(road_segments[index]->GetBounds());  
-  }
-  glColor4f(0.5, 0.5, 0.5, 1.0);
-  const utils::RectangleObjectContainer& parking_lots = 
-      objectHolder_.GetParkingLots();
-  for (unsigned index = 0; index < parking_lots.size(); ++index) {
-    DrawPolygon(parking_lots[index]->GetBounds());  
-  }
-  glColor4f(0.0, 0.0, 0.0, 1.0);
-  const utils::RectangleObjectContainer& obstacles = 
-      objectHolder_.GetObstacles();
-  for (unsigned index = 0; index < obstacles.size(); ++index) {
-    DrawPolygon(obstacles[index]->GetBounds());  
-  }
+  glColor4f(1.0, 0.8, 0.6, 0.5);
+  DrawObjectsFromContainer(objectHolder_.GetRoadSegments());
+  
+  glColor4f(0.5, 0.5, 0.5, 0.5);
+  DrawObjectsFromContainer(objectHolder_.GetParkingLots());
+  
+  glColor4f(0.0, 0.0, 0.0, 0.5);
+  DrawObjectsFromContainer(objectHolder_.GetObstacles());
+
   if (objectHolder_.HasSelected()) {
     DrawSelected(objectHolder_.GetSelected()->GetBounds());
   }
@@ -190,6 +182,67 @@ void Scene::DrawSelected(const geometry::Polygon& polygon) {
   }
   glEnd();
   glDisable(GL_LINE_STIPPLE);
+}
+
+// static
+void Scene::DrawObjectsFromContainer(
+    const utils::RectangleObjectContainer& container) {
+  double color[4], new_color[4];
+  glGetDoublev(GL_CURRENT_COLOR, color);
+  for (unsigned index = 0; index < container.size(); ++index) {
+    DrawPolygon(container[index]->GetBounds());  
+  }
+  for (int i = 0; i < 3; ++i) {
+    new_color[i] = 1.0 - color[i];
+  }
+  new_color[3] = color[3];
+  glColor4dv(new_color);
+  for (unsigned index = 0; index < container.size(); ++index) {
+    if (!container[index]->IsDirected()) {
+      continue;
+    }
+    geometry::DirectedRectangleObject* directed_object = 
+        dynamic_cast<geometry::DirectedRectangleObject*>(container[index]);
+    DrawDirectionalTips(*directed_object);
+  }
+  glColor4dv(color);
+}
+
+void DrawArrow(const geometry::Point& from, const geometry::Point& to,
+    double width) {
+  geometry::Vector vector(from, to);
+  geometry::Vector ortho = vector.GetOrthogonal().Unit();
+  for (int sign = -1; sign <= 1; sign += 2) {
+    geometry::Point vertex = from + ortho * width * 0.5 * sign;
+    geometry::Vector side(vertex, to);
+    geometry::Point end = vertex + side * 0.33;
+    glBegin(GL_LINE_STRIP);
+      glVertex2d(end.x, end.y);  
+      glVertex2d(to.x, to.y);
+    glEnd();  
+  }
+} 
+
+// static
+void Scene::DrawDirectionalTips(
+    const geometry::DirectedRectangleObject& directed_object) {
+  const geometry::Point& from = directed_object.GetFrom();
+  const geometry::Point& to = directed_object.GetTo();
+  double width = directed_object.GetWidth();
+
+  geometry::Vector vector(from, to);
+  geometry::Vector ortho = vector.GetOrthogonal().Unit();
+  geometry::Point middle = from + vector * 0.5;
+
+  glBegin(GL_LINE_STRIP);
+    glVertex2d(from.x, from.y);
+    glVertex2d(to.x, to.y);
+  glEnd();
+
+  DrawArrow(middle, middle + vector * 0.33, width);
+  if (!directed_object.IsOneWay()) {
+    DrawArrow(middle, middle - vector * 0.33, width);
+  }
 }
 
 // static

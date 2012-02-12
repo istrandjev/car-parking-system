@@ -10,6 +10,7 @@ namespace geometry {
 class Point;
 class Polygon;
 class RectangleObject;
+class DirectedRectangleObject;
 }  // namespace geometry
 
 namespace simulation {
@@ -61,6 +62,10 @@ public:
   static void DrawCar();
   static void DrawObjects();
   static void DrawSelected(const geometry::Polygon& polygon);
+  static void DrawObjectsFromContainer(
+      const utils::RectangleObjectContainer& container);
+  static void DrawDirectionalTips(
+      const geometry::DirectedRectangleObject& directed_object);
 
  private:
 

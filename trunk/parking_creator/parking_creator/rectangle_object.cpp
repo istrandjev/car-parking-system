@@ -72,4 +72,9 @@ Polygon RectangleObject::GetBounds() const {
   return result;
 }
 
+// virtual
+bool RectangleObject::IsDirected() const {
+  return false;
+}
+
 }  // namespace geometry
