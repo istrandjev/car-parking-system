@@ -18,6 +18,9 @@ void TW_CALL ReverseDirection(void * /*clientData*/);
 void TW_CALL SetLineWidthCallback(const void *value, void *clientData);
 void TW_CALL GetLineWidthCallback(void* value, void* clientData);
 
+void TW_CALL SetObjectTypeCallback(const void *value, void *clientData);
+void TW_CALL SetObjectTypeCallback(void* value, void* clientData);
+
 // static
 void TwHandler::Init() {
   TwGLUTModifiersFunc(glutGetModifiers);
@@ -40,6 +43,30 @@ void TwHandler::SetSize(int width, int height) {
 }
 
 // static
+void TwHandler::ModifyAccordingToState() {
+  utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+  if (obj_holder->currentType != utils::ObjectHolder::ROAD_SEGMENT) {
+    TwDefine(" 'Line options'/Direction  visible=false ");
+    TwDefine(" 'Line options'/ReverseDirection  visible=false ");
+  } else {
+    TwDefine(" 'Line options'/Direction  visible=true ");
+    TwDefine(" 'Line options'/ReverseDirection  visible=true ");
+    if (obj_holder->HasSelected()) {
+      geometry::RectangleObject* object = obj_holder->GetSelected();
+      if (object->IsDirected()) {
+        geometry::DirectedRectangleObject* directed = 
+          dynamic_cast<geometry::DirectedRectangleObject*>(object);
+        if (directed->IsOneWay()) {
+          TwDefine(" 'Line options'/Direction  label='Make two directional' ");
+        } else  {
+          TwDefine(" 'Line options'/Direction  label='Make one way' ");      
+        }
+      }
+    }
+  }
+}
+
+// static
 void TwHandler::Draw() {
   TwDraw();
 }
@@ -54,8 +81,7 @@ void TwHandler::AddObjectTypeEnum() {
   objectType = TwDefineEnum("ObjectType", object_type_names, 3);
    
   utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
-  TwAddVarRW(bar, "Object type", objectType, 
-    &obj_holder->currentType, NULL);
+  TwAddVarRW(bar, "Object type", objectType, &obj_holder->currentType, NULL);
 }
 
 void TW_CALL DirectionTypeChange(void * /*clientData*/)

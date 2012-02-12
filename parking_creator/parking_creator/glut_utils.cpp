@@ -80,6 +80,7 @@ void display()
   Scene::TransformDrawingPane();
   Scene::Draw();
 
+  TwHandler::ModifyAccordingToState();
   TwHandler::Draw();
   glutSwapBuffers();
 }
