@@ -9,6 +9,7 @@ class TwHandler {
  public:
   static void Init();
   static void SetSize(int width, int height);
+  static void ModifyAccordingToState();  
   static void Draw();
 
  private:
