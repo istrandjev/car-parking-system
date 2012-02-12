@@ -40,6 +40,16 @@ class ObjectHolder {
   geometry::RectangleObject* GetSelected();
   void DeleteSelected();
 
+  void TranslatedSelectedUp();
+  void TranslatedSelectedDown();
+  void TranslatedSelectedLeft();
+  void TranslatedSelectedRight();
+
+  void IncreaseSelectedWidth();
+  void DecreaseSelectedWidth();
+
+  void AddSibling();
+
  public:
   enum ObjectType {
     ROAD_SEGMENT,

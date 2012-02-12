@@ -16,6 +16,10 @@ bool DirectedRectangleObject::IsDirected() const {
   return true;
 }
   
+void DirectedRectangleObject::SetIsOneWay(bool is_one_way) {
+  oneWay_ = is_one_way;
+}
+
 bool DirectedRectangleObject::IsOneWay() const {
   return oneWay_;
 }

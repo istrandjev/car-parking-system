@@ -234,14 +234,19 @@ void Scene::DrawDirectionalTips(
   geometry::Vector ortho = vector.GetOrthogonal().Unit();
   geometry::Point middle = from + vector * 0.5;
 
+  glLineStipple(0.1, 0xf0f0);
+  glEnable(GL_LINE_STIPPLE);
+  
   glBegin(GL_LINE_STRIP);
     glVertex2d(from.x, from.y);
     glVertex2d(to.x, to.y);
   glEnd();
+  glDisable(GL_LINE_STIPPLE);
 
-  DrawArrow(middle, middle + vector * 0.33, width);
+
+  DrawArrow(middle + vector * 0.165, middle + vector * 0.33, width);
   if (!directed_object.IsOneWay()) {
-    DrawArrow(middle, middle - vector * 0.33, width);
+    DrawArrow(middle - vector * 0.165, middle - vector * 0.33, width);
   }
 }
 

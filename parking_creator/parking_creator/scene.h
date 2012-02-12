@@ -68,7 +68,6 @@ public:
       const geometry::DirectedRectangleObject& directed_object);
 
  private:
-
   static scoped_ptr<simulation::Car> car_;
   static scoped_ptr<geometry::RectangleObject> segment_;
   static utils::ObjectHolder objectHolder_;

@@ -38,7 +38,7 @@ Vector Vector::Unit() const {
 }
 
 Vector Vector::GetOrthogonal() const {
-  return Vector(this->y, -this->x);
+  return Vector(-this->y, this->x);
 }
 
 Vector Vector::Rotate(double angle) const {
