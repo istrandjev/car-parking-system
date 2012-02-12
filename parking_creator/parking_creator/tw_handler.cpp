@@ -45,6 +45,13 @@ void TwHandler::SetSize(int width, int height) {
 // static
 void TwHandler::ModifyAccordingToState() {
   utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+  if (!obj_holder->HasSelected()) {
+    TwDefine(" 'Line options'  visible=false ");
+    return;
+  } else {
+    TwDefine(" 'Line options'  visible=true ");
+  }
+
   if (obj_holder->currentType != utils::ObjectHolder::ROAD_SEGMENT) {
     TwDefine(" 'Line options'/Direction  visible=false ");
     TwDefine(" 'Line options'/ReverseDirection  visible=false ");
@@ -58,8 +65,10 @@ void TwHandler::ModifyAccordingToState() {
           dynamic_cast<geometry::DirectedRectangleObject*>(object);
         if (directed->IsOneWay()) {
           TwDefine(" 'Line options'/Direction  label='Make two directional' ");
+          TwDefine(" 'Line options'/ReverseDirection  visible=true ");
         } else  {
-          TwDefine(" 'Line options'/Direction  label='Make one way' ");      
+          TwDefine(" 'Line options'/Direction  label='Make one way' "); 
+          TwDefine(" 'Line options'/ReverseDirection  visible=false ");     
         }
       }
     }
