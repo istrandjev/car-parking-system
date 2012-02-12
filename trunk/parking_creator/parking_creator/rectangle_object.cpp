@@ -40,10 +40,6 @@ void RectangleObject::SetWidth(double width) {
   width_ = width;
 }
 
-void RectangleObject::ReverseDirection() {
-  std::swap(from_, to_);
-}
-
 bool RectangleObject::ContainsPoint(const Point& p) const {
   Vector segment(from_, to_);
 

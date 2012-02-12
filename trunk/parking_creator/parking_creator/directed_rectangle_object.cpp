@@ -24,4 +24,9 @@ void DirectedRectangleObject::SwapOneWayFlag() {
   oneWay_ = !oneWay_;
 }
 
+
+void DirectedRectangleObject::ReverseDirection() {
+  std::swap(from_, to_);
+}
+
 }  // namespace geometry

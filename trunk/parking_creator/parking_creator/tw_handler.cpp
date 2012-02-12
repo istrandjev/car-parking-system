@@ -1,5 +1,6 @@
 #include "tw_handler.h"
 
+#include "directed_rectangle_object.h"
 #include "object_holder.h"
 #include "rectangle_object.h"
 #include "scene.h"
@@ -12,7 +13,8 @@ namespace visualize {
 // static declarations
 TwBar* TwHandler::bar = NULL;
 
-void TW_CALL ResetSize(void * /*clientData*/);
+void TW_CALL DirectionTypeChange(void * /*clientData*/);
+void TW_CALL ReverseDirection(void * /*clientData*/);
 void TW_CALL SetLineWidthCallback(const void *value, void *clientData);
 void TW_CALL GetLineWidthCallback(void* value, void* clientData);
 
@@ -24,7 +26,8 @@ void TwHandler::Init() {
   TwWindowSize(Scene::Width(), Scene::Height());
   bar = TwNewBar("Line options");
   TwAddVarCB(bar, "width", TW_TYPE_DOUBLE, SetLineWidthCallback, GetLineWidthCallback, NULL, "");
-  TwAddButton(bar, "Run", ResetSize, NULL, " label='Reset Size' ");
+  TwAddButton(bar, "Direction", DirectionTypeChange, NULL, " label='Make one way' ");
+  TwAddButton(bar, "ReverseDirection", ReverseDirection, NULL, " label='Reverse direction' ");
   TwDefine("'Line options' size='200 160' ");
   
   AddObjectTypeEnum();
@@ -55,9 +58,32 @@ void TwHandler::AddObjectTypeEnum() {
     &obj_holder->currentType, NULL);
 }
 
-void TW_CALL ResetSize(void * /*clientData*/)
+void TW_CALL DirectionTypeChange(void * /*clientData*/)
 { 
-  // Scene::wi = Scene::hi =  5.0;
+    utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+    if (obj_holder->HasSelected()) {
+      geometry::RectangleObject* object = obj_holder->GetSelected();
+      if (object->IsDirected()) {
+        geometry::DirectedRectangleObject* directed = 
+            dynamic_cast<geometry::DirectedRectangleObject*>(object);
+        directed->SwapOneWayFlag();
+      }
+    }
+}
+
+void TW_CALL ReverseDirection(void * /*clientData*/)
+{ 
+    utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+    if (obj_holder->HasSelected()) {
+      geometry::RectangleObject* object = obj_holder->GetSelected();
+      if (object->IsDirected()) {
+        geometry::DirectedRectangleObject* directed = 
+            dynamic_cast<geometry::DirectedRectangleObject*>(object);
+        if (directed->IsOneWay()) {
+          directed->ReverseDirection();
+        }
+      }
+    }
 }
 
 void TW_CALL SetLineWidthCallback(const void *value, void *clientData)

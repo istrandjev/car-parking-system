@@ -22,13 +22,11 @@ class RectangleObject {
   double GetWidth() const;
   void SetWidth(double width);
 
-  void ReverseDirection();
-
   Polygon GetBounds() const;
   
   virtual bool IsDirected() const;
 
- private:
+ protected:
   Point from_, to_;
   double width_;
 };
