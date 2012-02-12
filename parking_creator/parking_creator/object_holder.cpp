@@ -1,5 +1,6 @@
 #include "object_holder.h"
 
+#include "directed_rectangle_object.h"
 #include "point.h"
 #include "rectangle_object.h"
 
@@ -31,15 +32,21 @@ bool ObjectHolder::HasSelected() {
 }
 
 void ObjectHolder::AddRoadSegment(const geometry::Point& from, const geometry::Point& to) {
-  AddRectangleObjectToContainer(from, to, DEFAULT_ROAD_WIDTH, &roadSegments_);
+  geometry::DirectedRectangleObject* object = 
+      new geometry::DirectedRectangleObject(from, to, DEFAULT_ROAD_WIDTH);
+  AddRectangleObjectToContainer(object, &roadSegments_);
 }
 
 void ObjectHolder::AddParkingLot(const geometry::Point& from, const geometry::Point& to) {
-  AddRectangleObjectToContainer(from, to, DEFAULT_PARKING_WIDTH, &parkingLots_);
+  geometry::RectangleObject* object = 
+      new geometry::RectangleObject(from, to, DEFAULT_PARKING_WIDTH);
+  AddRectangleObjectToContainer(object, &parkingLots_);
 }
 
 void ObjectHolder::AddObstacle(const geometry::Point& from, const geometry::Point& to) {
-  AddRectangleObjectToContainer(from, to, DEFAULT_OBSTACLE_WIDTH, &obstacles_);
+  geometry::RectangleObject* object = 
+      new geometry::RectangleObject(from, to, DEFAULT_OBSTACLE_WIDTH);
+  AddRectangleObjectToContainer(object, &obstacles_);
 }
 
 void ObjectHolder::AddObjectOfCurrentType(const geometry::Point& from, 
@@ -121,10 +128,8 @@ void ObjectHolder::DeleteSelected() {
 }
 
 void ObjectHolder::AddRectangleObjectToContainer(
-    const geometry::Point& from, const geometry::Point& to, 
-    double width, RectangleObjectContainer* container) {
-  geometry::RectangleObject* object = 
-      new geometry::RectangleObject(from, to, width);
+    geometry::RectangleObject* object,
+    RectangleObjectContainer* container) {
   container->push_back(object);
   selected_.clear();
   selected_.push_back(object);

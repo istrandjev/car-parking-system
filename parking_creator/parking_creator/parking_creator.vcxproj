@@ -66,6 +66,7 @@
     <ClCompile Include="car.cpp" />
     <ClCompile Include="current_state.cpp" />
     <ClCompile Include="delay.cpp" />
+    <ClCompile Include="directed_rectangle_object.cpp" />
     <ClCompile Include="double_utils.cpp" />
     <ClCompile Include="event_handlers.cpp" />
     <ClCompile Include="geometry_utils.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="point.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="rectangle_object.h" />
+    <ClInclude Include="directed_rectangle_object.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="object_holder.h" />
     <ClInclude Include="scoped_ptr.h" />

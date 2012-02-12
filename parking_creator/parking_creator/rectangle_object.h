@@ -25,7 +25,9 @@ class RectangleObject {
   void ReverseDirection();
 
   Polygon GetBounds() const;
-    
+  
+  virtual bool IsDirected() const;
+
  private:
   Point from_, to_;
   double width_;
