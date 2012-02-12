@@ -143,7 +143,7 @@ void ObjectHolder::AddSelectedFromContainer(const geometry::Point& location,
 bool ObjectHolder::FindAndDeleteFromContainer(
     geometry::RectangleObject* object,
     RectangleObjectContainer* container) {
-  for (unsigned index = 0; index < roadSegments_.size(); ++index) {
+  for (unsigned index = 0; index < container->size(); ++index) {
     if (container->at(index) == object) {
       container->erase(container->begin() + index);
       delete object;
