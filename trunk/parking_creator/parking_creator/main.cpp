@@ -11,22 +11,8 @@
 
 using namespace std;
 
-void ReadInput() {
-  ifstream in("input.in");
-  if (!in) {
-    std::exception("Could not open the input file");
-  }
-  double width, length, max_steering_angle;
-  in >> width >> length >> max_steering_angle;
-  max_steering_angle = geometry::GeometryUtils
-      ::DegreesToRadians(max_steering_angle);
-  visualize::Scene::ResetCar(width, length, max_steering_angle);
-}
-
 int main(int argc, char ** argv)
 {
-  ReadInput();
-
   // Initialize GLUT.
   utils::InitializeHandlers();
   visualize::initGlut(argc, argv);
