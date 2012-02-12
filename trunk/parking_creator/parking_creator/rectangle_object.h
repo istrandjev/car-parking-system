@@ -26,6 +26,9 @@ class RectangleObject {
   
   virtual bool IsDirected() const;
 
+  void Translate(double value);  
+  void TranslateByNormal(double value);
+
  protected:
   Point from_, to_;
   double width_;

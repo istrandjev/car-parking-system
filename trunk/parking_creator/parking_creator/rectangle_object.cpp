@@ -73,4 +73,16 @@ bool RectangleObject::IsDirected() const {
   return false;
 }
 
+void RectangleObject::Translate(double value) {
+  Vector translation = Vector(from_, to_).Unit() * value;
+  from_ = from_ + translation;
+  to_ = to_ + translation;
+}
+
+void RectangleObject::TranslateByNormal(double value) {
+  Vector translation = Vector(from_, to_).GetOrthogonal().Unit() * value;
+  from_ = from_ + translation;
+  to_ = to_ + translation;
+}
+
 }  // namespace geometry

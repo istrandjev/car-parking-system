@@ -18,7 +18,6 @@ bool Near(const geometry::Point& a, const geometry::Point& b) {
   return fabs(a.x - b.x) + fabs(a.y - b.y) < 1.0; 
 }
 
-static const double WIDTH_STEP = 0.1;
 
 void HandleMouseClick(double x, double y);
 void HandleMousePress(double x, double y);
@@ -139,38 +138,25 @@ void MouseMoveFunc(int x, int y) {
 
 void HandleKeyboardEvents() {
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_LEFT)) {
-    visualize::Scene::TurnCarLeft();
+    visualize::Scene::GetObjectHolder()->TranslatedSelectedLeft();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_RIGHT)) {
-    visualize::Scene::TurnCarRight();
+    visualize::Scene::GetObjectHolder()->TranslatedSelectedRight();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_UP)) {
-    visualize::Scene::MoveForward();
+    visualize::Scene::GetObjectHolder()->TranslatedSelectedUp();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
-    visualize::Scene::MoveBackward();
+    visualize::Scene::GetObjectHolder()->TranslatedSelectedDown();
   }
   if (UserInputHandler::IsRegularKeyPressed(127)) {
-    ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
-    if (obj_holder->HasSelected()) {
-      obj_holder->DeleteSelected();
-    }
+    visualize::Scene::GetObjectHolder()->DeleteSelected();
   }
   if (UserInputHandler::IsRegularKeyPressed(',')) {
-    ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
-    if (obj_holder->HasSelected()) {
-      geometry::RectangleObject* object = obj_holder->GetSelected();
-      if (object->GetWidth() - WIDTH_STEP > 0.0) {
-        object->SetWidth(object->GetWidth() - WIDTH_STEP);
-      }
-    }
+    visualize::Scene::GetObjectHolder()->DecreaseSelectedWidth();
   }
   if (UserInputHandler::IsRegularKeyPressed('.')) {
-    ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
-    if (obj_holder->HasSelected()) {
-      geometry::RectangleObject* object = obj_holder->GetSelected();
-      object->SetWidth(object->GetWidth() + WIDTH_STEP);
-    }
+    visualize::Scene::GetObjectHolder()->IncreaseSelectedWidth();
   }
   if (UserInputHandler::IsRegularKeyPressed('a')) {
     visualize::Scene::TranslateLeft();

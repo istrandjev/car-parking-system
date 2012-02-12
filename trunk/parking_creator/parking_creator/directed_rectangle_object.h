@@ -14,6 +14,7 @@ class DirectedRectangleObject : public RectangleObject {
 
   virtual bool IsDirected() const;
   
+  void SetIsOneWay(bool is_one_way);
   bool IsOneWay() const;
   
   void SwapOneWayFlag();
