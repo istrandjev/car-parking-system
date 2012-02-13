@@ -148,6 +148,13 @@ void HandleKeyboardEvents() {
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
     visualize::Scene::GetObjectHolder()->TranslatedSelectedDown();
   }
+  if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_PAGE_DOWN)) {
+    visualize::Scene::GetObjectHolder()->SelectPrevious();  
+  } 
+  if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_PAGE_UP)) {
+    visualize::Scene::GetObjectHolder()->SelectNext();  
+  }
+
   if (UserInputHandler::IsRegularKeyPressed(127)) {
     visualize::Scene::GetObjectHolder()->DeleteSelected();
   }
