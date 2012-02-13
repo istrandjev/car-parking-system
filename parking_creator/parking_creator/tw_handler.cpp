@@ -13,9 +13,13 @@ namespace visualize {
 // static declarations
 TwBar* TwHandler::bar = NULL;
 
+static const char* DEFAULT_SAVE_LOCATION = "parking_serialized.txt";
+
 void TW_CALL DirectionTypeChange(void * /*clientData*/);
 void TW_CALL ReverseDirection(void * /*clientData*/);
 void TW_CALL CreateSibling(void * /*clientData*/);
+void TW_CALL SaveToFile(void * /*clientData*/);
+void TW_CALL LoadFromFile(void * /*clientData*/);
 void TW_CALL SetLineWidthCallback(const void *value, void *clientData);
 void TW_CALL GetLineWidthCallback(void* value, void* clientData);
 
@@ -33,9 +37,13 @@ void TwHandler::Init() {
   TwAddButton(bar, "Direction", DirectionTypeChange, NULL, " label='Make one way' ");
   TwAddButton(bar, "CreateSibling", CreateSibling, NULL, " label='Create sibling' ");
   TwAddButton(bar, "ReverseDirection", ReverseDirection, NULL, " label='Reverse direction' ");
+
   TwDefine("'Line options' size='200 160' ");
   
   AddObjectTypeEnum();
+  
+  TwAddButton(bar, "SaveToFile", SaveToFile, NULL, " label='Save to file' ");
+  TwAddButton(bar, "LoadFromFile", LoadFromFile, NULL, " label='Load from file' ");
 }
 
 
@@ -137,6 +145,16 @@ void TW_CALL CreateSibling(void * /*clientData*/)
       }
       obj_holder->AddSibling();
     }
+}
+
+void TW_CALL SaveToFile(void * /*clientData*/) {
+  utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+  obj_holder->DumpToFile(DEFAULT_SAVE_LOCATION);
+}
+
+void TW_CALL LoadFromFile(void * /*clientData*/) {
+  utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
+  obj_holder->ParseFromFile(DEFAULT_SAVE_LOCATION);
 }
 
 void TW_CALL SetLineWidthCallback(const void *value, void *clientData)
