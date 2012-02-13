@@ -13,114 +13,132 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\geometry">
+      <UniqueIdentifier>{0ea72131-411a-4bea-8993-4d54fd2e126d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{23be3b1c-118e-40ff-9b67-9247bf7544a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\visualize">
+      <UniqueIdentifier>{6ac3ecf3-853f-4f3f-89d4-0122531eb79e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry">
+      <UniqueIdentifier>{6aed2189-b294-4f49-b0c3-6ecec1fae0c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{7d6a72ec-ad2a-4d05-b28f-991b6cb85907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\visualize">
+      <UniqueIdentifier>{4394e486-d5c5-4a14-a6a4-3fff63f25f75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="delay.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\directed_rectangle_object.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="double_utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\geometry_utils.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="geometry_utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\line.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="glut_utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\point.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="line.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\polygon.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="point.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\rectangle_object.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="polygon.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\geometry\vector.cpp">
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\current_state.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="vector.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\delay.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="user_input_handler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\double_utils.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="rectangle_object.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\event_handlers.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="object_holder.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\object_holder.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="event_handlers.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\object_holder_serialization.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="current_state.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\tw_handler.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="tw_handler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\utils\user_input_handler.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="directed_rectangle_object.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\visualize\glut_utils.cpp">
+      <Filter>Source Files\visualize</Filter>
     </ClCompile>
-    <ClCompile Include="object_holder_serialization.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\visualize\scene.cpp">
+      <Filter>Source Files\visualize</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="delay.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\vector.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="double_utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="geometry_utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\geometry_utils.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="glut_utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\line.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="line.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\point.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="point.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\polygon.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="polygon.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\geometry\rectangle_object.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\current_state.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="vector.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\delay.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="user_input_handler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\double_utils.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="scoped_ptr.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\event_handlers.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="rectangle_object.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\object_holder.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="object_holder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\scoped_ptr.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="event_handlers.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\tw_handler.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="current_state.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\utils\user_input_handler.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="tw_handler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\visualize\glut_utils.h">
+      <Filter>Header Files\visualize</Filter>
     </ClInclude>
-    <ClInclude Include="directed_rectangle_object.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\visualize\scene.h">
+      <Filter>Header Files\visualize</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
