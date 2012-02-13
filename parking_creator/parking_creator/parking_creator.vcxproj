@@ -41,7 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\ant tweak bar\AntTweakBar\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\include;C:\ant tweak bar\AntTweakBar\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -63,43 +63,43 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="current_state.cpp" />
-    <ClCompile Include="delay.cpp" />
-    <ClCompile Include="directed_rectangle_object.cpp" />
-    <ClCompile Include="double_utils.cpp" />
-    <ClCompile Include="event_handlers.cpp" />
-    <ClCompile Include="geometry_utils.cpp" />
-    <ClCompile Include="glut_utils.cpp" />
-    <ClCompile Include="line.cpp" />
+    <ClCompile Include="..\..\geometry\directed_rectangle_object.cpp" />
+    <ClCompile Include="..\..\geometry\geometry_utils.cpp" />
+    <ClCompile Include="..\..\geometry\line.cpp" />
+    <ClCompile Include="..\..\geometry\point.cpp" />
+    <ClCompile Include="..\..\geometry\polygon.cpp" />
+    <ClCompile Include="..\..\geometry\rectangle_object.cpp" />
+    <ClCompile Include="..\..\geometry\vector.cpp" />
+    <ClCompile Include="..\..\utils\current_state.cpp" />
+    <ClCompile Include="..\..\utils\delay.cpp" />
+    <ClCompile Include="..\..\utils\double_utils.cpp" />
+    <ClCompile Include="..\..\utils\event_handlers.cpp" />
+    <ClCompile Include="..\..\utils\object_holder.cpp" />
+    <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
+    <ClCompile Include="..\..\utils\tw_handler.cpp" />
+    <ClCompile Include="..\..\utils\user_input_handler.cpp" />
+    <ClCompile Include="..\..\visualize\glut_utils.cpp" />
+    <ClCompile Include="..\..\visualize\scene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="object_holder_serialization.cpp" />
-    <ClCompile Include="point.cpp" />
-    <ClCompile Include="polygon.cpp" />
-    <ClCompile Include="rectangle_object.cpp" />
-    <ClCompile Include="scene.cpp" />
-    <ClCompile Include="object_holder.cpp" />
-    <ClCompile Include="tw_handler.cpp" />
-    <ClCompile Include="user_input_handler.cpp" />
-    <ClCompile Include="vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="current_state.h" />
-    <ClInclude Include="delay.h" />
-    <ClInclude Include="double_utils.h" />
-    <ClInclude Include="event_handlers.h" />
-    <ClInclude Include="geometry_utils.h" />
-    <ClInclude Include="glut_utils.h" />
-    <ClInclude Include="line.h" />
-    <ClInclude Include="point.h" />
-    <ClInclude Include="polygon.h" />
-    <ClInclude Include="rectangle_object.h" />
-    <ClInclude Include="directed_rectangle_object.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="object_holder.h" />
-    <ClInclude Include="scoped_ptr.h" />
-    <ClInclude Include="tw_handler.h" />
-    <ClInclude Include="user_input_handler.h" />
-    <ClInclude Include="vector.h" />
+    <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\geometry_utils.h" />
+    <ClInclude Include="..\..\include\geometry\line.h" />
+    <ClInclude Include="..\..\include\geometry\point.h" />
+    <ClInclude Include="..\..\include\geometry\polygon.h" />
+    <ClInclude Include="..\..\include\geometry\rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\vector.h" />
+    <ClInclude Include="..\..\include\utils\current_state.h" />
+    <ClInclude Include="..\..\include\utils\delay.h" />
+    <ClInclude Include="..\..\include\utils\double_utils.h" />
+    <ClInclude Include="..\..\include\utils\event_handlers.h" />
+    <ClInclude Include="..\..\include\utils\object_holder.h" />
+    <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
+    <ClInclude Include="..\..\include\utils\tw_handler.h" />
+    <ClInclude Include="..\..\include\utils\user_input_handler.h" />
+    <ClInclude Include="..\..\include\visualize\glut_utils.h" />
+    <ClInclude Include="..\..\include\visualize\scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
