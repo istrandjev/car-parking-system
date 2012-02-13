@@ -21,6 +21,10 @@ ObjectHolder::ObjectHolder()
     : selectedIsFianlized_(false), currentType(ROAD_SEGMENT) {}
 
 ObjectHolder::~ObjectHolder() {
+  DeleteObjects();
+}
+
+void ObjectHolder::DeleteObjects() {
   for (unsigned index = 0; index < roadSegments_.size(); ++index) {
     delete roadSegments_[index];
   }
@@ -30,6 +34,9 @@ ObjectHolder::~ObjectHolder() {
   for (unsigned index = 0; index < obstacles_.size(); ++index) {
     delete obstacles_[index];
   }
+  roadSegments_.clear();
+  obstacles_.clear();
+  parkingLots_.clear();
 }
 
 bool ObjectHolder::HasSelected() {

@@ -9,6 +9,7 @@ class Point;
 
 class DirectedRectangleObject : public RectangleObject {
  public:
+  DirectedRectangleObject();
   DirectedRectangleObject(const Point& from, const Point& to);
   DirectedRectangleObject(const Point& from, const Point& to, double width);
 
@@ -20,6 +21,10 @@ class DirectedRectangleObject : public RectangleObject {
   void SwapOneWayFlag();
   void ReverseDirection();
  
+  virtual std::string Serialize();
+  virtual void Parse(const std::string& serialized);
+  static bool IsSerializedDirectedRectangleObject(const std::string& str);
+
  private:
   bool oneWay_;
 };

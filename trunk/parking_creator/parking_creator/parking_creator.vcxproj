@@ -72,6 +72,7 @@
     <ClCompile Include="glut_utils.cpp" />
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object_holder_serialization.cpp" />
     <ClCompile Include="point.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="rectangle_object.cpp" />

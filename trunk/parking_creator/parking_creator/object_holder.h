@@ -3,6 +3,7 @@
 
 #include "scoped_ptr.h"
 
+#include <string>
 #include <vector>
 
 namespace geometry {
@@ -18,6 +19,8 @@ class ObjectHolder {
  public:
   ObjectHolder();
   ~ObjectHolder();
+  void DeleteObjects();
+
 
   bool HasSelected();
   void AddRoadSegment(const geometry::Point& from, const geometry::Point& to);
@@ -49,6 +52,9 @@ class ObjectHolder {
   void DecreaseSelectedWidth();
 
   void AddSibling();
+
+  void DumpToFile(const std::string& file_path) const;
+  void ParseFromFile(const std::string& file_path);
 
  public:
   enum ObjectType {

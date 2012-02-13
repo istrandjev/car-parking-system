@@ -6,6 +6,9 @@
 #include "polygon.h"
 #include "vector.h"
 
+#include <string>
+#include <sstream>
+
 namespace geometry {
 
 static const double DEFAULT_WIDTH = 2.0;
@@ -71,6 +74,19 @@ Polygon RectangleObject::GetBounds() const {
 // virtual
 bool RectangleObject::IsDirected() const {
   return false;
+}
+
+// virtual 
+std::string RectangleObject::Serialize() {
+  std::ostringstream out;
+  out << from_ << " " << to_ << " "<< width_;
+  return out.str();
+}
+
+// virtual 
+void RectangleObject::Parse(const std::string& serialized) {
+  std::istringstream in(serialized);
+  in >> from_ >> to_ >> width_;
 }
 
 void RectangleObject::Translate(double value) {

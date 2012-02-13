@@ -66,6 +66,9 @@
     <ClCompile Include="directed_rectangle_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="object_holder_serialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="delay.h">
