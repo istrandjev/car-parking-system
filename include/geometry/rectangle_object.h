@@ -31,7 +31,7 @@ class RectangleObject {
   virtual std::string Serialize();
   virtual void Parse(const std::string& serialized);
 
-  void Translate(double value);  
+  void Translate(double translatex, double translatey);  
   void TranslateByNormal(double value);
 
  protected:
