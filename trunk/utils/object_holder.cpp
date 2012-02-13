@@ -143,28 +143,28 @@ void ObjectHolder::TranslatedSelectedUp() {
   if (!HasSelected()) {
     return;
   }
-  GetSelected()->Translate(TRANSLATION_STEP);
+  GetSelected()->Translate(0, TRANSLATION_STEP);
 }
 
 void ObjectHolder::TranslatedSelectedDown() {
   if (!HasSelected()) {
     return;
   }
-  GetSelected()->Translate(-TRANSLATION_STEP);
+  GetSelected()->Translate(0, -TRANSLATION_STEP);
 }
 
 void ObjectHolder::TranslatedSelectedLeft() {
   if (!HasSelected()) {
     return;
   }
-  GetSelected()->TranslateByNormal(TRANSLATION_STEP);
+  GetSelected()->Translate(-TRANSLATION_STEP, 0);
 }
 
 void ObjectHolder::TranslatedSelectedRight() {
   if (!HasSelected()) {
     return;
   }
-  GetSelected()->TranslateByNormal(-TRANSLATION_STEP);
+  GetSelected()->Translate(TRANSLATION_STEP, 0);
 }
 
 void ObjectHolder::IncreaseSelectedWidth() {

@@ -89,8 +89,8 @@ void RectangleObject::Parse(const std::string& serialized) {
   in >> from_ >> to_ >> width_;
 }
 
-void RectangleObject::Translate(double value) {
-  Vector translation = Vector(from_, to_).Unit() * value;
+void RectangleObject::Translate(double translatex, double translatey) {
+  Vector translation = Vector(translatex, translatey);
   from_ = from_ + translation;
   to_ = to_ + translation;
 }
