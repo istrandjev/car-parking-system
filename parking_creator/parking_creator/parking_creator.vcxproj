@@ -73,14 +73,14 @@
     <ClCompile Include="..\..\utils\current_state.cpp" />
     <ClCompile Include="..\..\utils\delay.cpp" />
     <ClCompile Include="..\..\utils\double_utils.cpp" />
-    <ClCompile Include="..\..\utils\event_handlers.cpp" />
     <ClCompile Include="..\..\utils\object_holder.cpp" />
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
-    <ClCompile Include="..\..\utils\tw_handler.cpp" />
     <ClCompile Include="..\..\utils\user_input_handler.cpp" />
-    <ClCompile Include="..\..\visualize\glut_utils.cpp" />
-    <ClCompile Include="..\..\visualize\scene.cpp" />
+    <ClCompile Include="event_handlers.cpp" />
+    <ClCompile Include="glut_utils.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="scene.cpp" />
+    <ClCompile Include="tw_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h" />
@@ -93,13 +93,13 @@
     <ClInclude Include="..\..\include\utils\current_state.h" />
     <ClInclude Include="..\..\include\utils\delay.h" />
     <ClInclude Include="..\..\include\utils\double_utils.h" />
-    <ClInclude Include="..\..\include\utils\event_handlers.h" />
     <ClInclude Include="..\..\include\utils\object_holder.h" />
     <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
-    <ClInclude Include="..\..\include\utils\tw_handler.h" />
     <ClInclude Include="..\..\include\utils\user_input_handler.h" />
-    <ClInclude Include="..\..\include\visualize\glut_utils.h" />
-    <ClInclude Include="..\..\include\visualize\scene.h" />
+    <ClInclude Include="event_handlers.h" />
+    <ClInclude Include="glut_utils.h" />
+    <ClInclude Include="scene.h" />
+    <ClInclude Include="tw_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

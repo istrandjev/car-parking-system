@@ -1,7 +1,7 @@
+#include "./event_handlers.h"
 #include "geometry/geometry_utils.h"
-#include "utils/event_handlers.h"
-#include "visualize/glut_utils.h"
-#include "visualize/scene.h"
+#include "./glut_utils.h"
+#include "./scene.h"
 
 #include <AntTweakBar.h>
 #include <glut.h>
