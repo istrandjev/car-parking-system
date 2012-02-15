@@ -37,6 +37,7 @@ void ObjectHolder::DeleteObjects() {
   roadSegments_.clear();
   obstacles_.clear();
   parkingLots_.clear();
+  selected_.clear();
 }
 
 bool ObjectHolder::HasSelected() {
