@@ -17,7 +17,7 @@ static const double TRANSLATION_STEP = 0.2;
 static const double WIDTH_STEP = 0.1;
 static const double MIN_WIDTH = 0.5;
 
-ObjectHolder::ObjectHolder() 
+ObjectHolder::ObjectHolder()
     : selectedIsFianlized_(false), currentType(ROAD_SEGMENT) {}
 
 ObjectHolder::~ObjectHolder() {
@@ -43,27 +43,30 @@ bool ObjectHolder::HasSelected() {
   return !selected_.empty();
 }
 
-void ObjectHolder::AddRoadSegment(const geometry::Point& from, const geometry::Point& to) {
-  geometry::DirectedRectangleObject* object = 
+void ObjectHolder::AddRoadSegment(const geometry::Point& from,
+    const geometry::Point& to) {
+  geometry::DirectedRectangleObject* object =
       new geometry::DirectedRectangleObject(from, to, DEFAULT_ROAD_WIDTH);
   AddRectangleObjectToContainer(object, &roadSegments_);
 }
 
-void ObjectHolder::AddParkingLot(const geometry::Point& from, const geometry::Point& to) {
-  geometry::RectangleObject* object = 
+void ObjectHolder::AddParkingLot(const geometry::Point& from,
+    const geometry::Point& to) {
+  geometry::RectangleObject* object =
       new geometry::RectangleObject(from, to, DEFAULT_PARKING_WIDTH);
   AddRectangleObjectToContainer(object, &parkingLots_);
 }
 
-void ObjectHolder::AddObstacle(const geometry::Point& from, const geometry::Point& to) {
-  geometry::RectangleObject* object = 
+void ObjectHolder::AddObstacle(const geometry::Point& from,
+    const geometry::Point& to) {
+  geometry::RectangleObject* object =
       new geometry::RectangleObject(from, to, DEFAULT_OBSTACLE_WIDTH);
   AddRectangleObjectToContainer(object, &obstacles_);
 }
 
-void ObjectHolder::AddObjectOfCurrentType(const geometry::Point& from, 
+void ObjectHolder::AddObjectOfCurrentType(const geometry::Point& from,
     const geometry::Point& to) {
-  switch(currentType) {
+  switch (currentType) {
     case ROAD_SEGMENT: AddRoadSegment(from, to); break;
     case PARKING_LOT: AddParkingLot(from, to); break;
     case OBSTACLE: AddObstacle(from, to); break;
@@ -108,7 +111,7 @@ void ObjectHolder::SelectPrevious() {
 void ObjectHolder::FinalizeSelected() {
   selectedIsFianlized_ = true;
 }
- 
+
 bool ObjectHolder::IsSelectedFinalized() const {
   return selectedIsFianlized_;
 }
@@ -190,9 +193,9 @@ void ObjectHolder::AddSibling() {
   if (!HasSelected() || !selected->IsDirected()) {
     return;
   }
-  geometry::DirectedRectangleObject* directed = 
+  geometry::DirectedRectangleObject* directed =
       dynamic_cast<geometry::DirectedRectangleObject*>(selected);
-  geometry::DirectedRectangleObject* sibling = 
+  geometry::DirectedRectangleObject* sibling =
       new geometry::DirectedRectangleObject(
           directed->GetTo(), directed->GetFrom(), directed->GetWidth());
   sibling->TranslateByNormal(sibling->GetWidth());

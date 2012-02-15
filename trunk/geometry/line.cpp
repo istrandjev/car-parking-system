@@ -6,18 +6,18 @@
 
 namespace geometry {
 
-Line::Line(const Point& A,const Point& B) {
+Line::Line(const Point& A, const Point& B) {
   Init(A, B);
 }
 
-Line::Line(const Point& A,const Vector& v) {
-  Init(A, A + v);  
+Line::Line(const Point& A, const Vector& v) {
+  Init(A, A + v);
 }
 
 void Line::Init(const Point& A, const Point& B) {
-	A_ = A.y - B.y;		
+  A_ = A.y - B.y;
   B_ = B.x - A.x;
-	C_ = A.x * B.y - B.x * A.y;
+  C_ = A.x * B.y - B.x * A.y;
 }
 
 Vector Line::Normal() const {

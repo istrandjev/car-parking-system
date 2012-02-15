@@ -1,5 +1,5 @@
-#ifndef POINT_H
-#define POINT_H
+#ifndef INCLUDE_GEOMETRY_POINT_H_
+#define INCLUDE_GEOMETRY_POINT_H_
 
 #include <iostream>
 
@@ -11,9 +11,9 @@ class Vector;
 class Point {
  public:
   Point() : x(0), y(0) {}
-  Point(double x_coordinate, double y_coordinate) 
+  Point(double x_coordinate, double y_coordinate)
     : x(x_coordinate), y(y_coordinate) {}
- 
+
   Point& operator+=(const Vector& vector);
   Point& operator-=(const Vector& vector);
   Point operator+(const Vector& vector) const;
@@ -32,4 +32,4 @@ std::istream& operator>>(std::istream& in, Point& point);
 std::ostream& operator<<(std::ostream& out, Point& point);
 
 }  // namespace geometry
-#endif  // POINT_H
+#endif  // INCLUDE_GEOMETRY_POINT_H_

@@ -1,14 +1,14 @@
 // This file contains some utility methods for double comparisons.
 
-#ifndef DOUBLE_UTILS_H
-#define DOUBLE_UTILS_H
+#ifndef INCLUDE_UTILS_DOUBLE_UTILS_H_
+#define INCLUDE_UTILS_DOUBLE_UTILS_H_
 
 static const double epsylon = 1e-9;
 
 // @return - true iff "lhs" is greater then "rhs" with double tolerance.
 bool DoubleIsGreater(double lhs, double rhs);
 
-// @return true iff "lhs" is greater then or equal to "rhs" with double 
+// @return true iff "lhs" is greater then or equal to "rhs" with double
 //     tolerance.
 bool DoubleIsGreaterOrEqual(double lhs, double rhs);
 
@@ -25,4 +25,5 @@ int DoubleSign(double x);
 // @param x - double value to check if zero.
 // @return - true iff x is zero.
 bool DoubleIsZero(double x);
-#endif  // DOUBLE_UTILS_H
+
+#endif  // INCLUDE_UTILS_DOUBLE_UTILS_H_

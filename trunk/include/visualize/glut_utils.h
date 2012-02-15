@@ -1,5 +1,5 @@
-#ifndef GLUT_UTILS_H
-#define GLUT_UTILS_H
+#ifndef INCLUDE_VISUALIZE_GLUT_UTILS_H_
+#define INCLUDE_VISUALIZE_GLUT_UTILS_H_
 
 namespace visualize {
 
@@ -8,4 +8,4 @@ void initGlut(int argc, char** argv);
 
 }  // namespace visualize
 
- #endif  // GLUT_UTILS_H
+#endif  // INCLUDE_VISUALIZE_GLUT_UTILS_H_

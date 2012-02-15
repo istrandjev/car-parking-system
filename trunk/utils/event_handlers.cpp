@@ -9,13 +9,15 @@
 #include "visualize/scene.h"
 
 #include <AntTweakBar.h>
-#include <cstdlib>
 #include <glut.h>
+
+#include <cstdlib>
+
 
 namespace utils {
 
 bool Near(const geometry::Point& a, const geometry::Point& b) {
-  return fabs(a.x - b.x) + fabs(a.y - b.y) < 1.0; 
+  return fabs(a.x - b.x) + fabs(a.y - b.y) < 1.0;
 }
 
 void HandleMouseClick(double x, double y);
@@ -24,9 +26,9 @@ void HandleMouseRelease(double x, double y);
 void HandleMouseDrag(double fx, double fy, double tx, double ty);
 
 void InitializeHandlers() {
-	UserInputHandler::SetLeftMouseClickHandler(HandleMouseClick);
-	UserInputHandler::SetLeftMouseDragHandler(HandleMouseDrag);
-	UserInputHandler::SetLeftMouseReleaseHandler(HandleMouseRelease);
+  UserInputHandler::SetLeftMouseClickHandler(HandleMouseClick);
+  UserInputHandler::SetLeftMouseDragHandler(HandleMouseDrag);
+  UserInputHandler::SetLeftMouseReleaseHandler(HandleMouseRelease);
   UserInputHandler::SetLeftMousePressHandler(HandleMousePress);
 }
 
@@ -41,11 +43,11 @@ void HandleMousePress(double x, double y) {
     if (!obj_holder->IsSelectedFinalized()) {
      return;
     }
-    
+
     geometry::RectangleObject* object = obj_holder->GetSelected();
     if (Near(object->GetFrom(), point)) {
       CurrentState::movingFrom = true;
-    } else if(Near(object->GetTo(), point)) {
+    } else if (Near(object->GetTo(), point)) {
       CurrentState::movingTo = true;
     } else if (!obj_holder->GetSelected()->ContainsPoint(point)) {
       CurrentState::addingNewLine = true;
@@ -112,14 +114,14 @@ void SpecialKeyReleased(int c, int x, int y) {
 }
 
 void MousePressFunc(int button, int state, int x, int y) {
-  if (!TwEventMouseButtonGLUT(button, state, x, y) ) {
-	  if (state == GLUT_DOWN) {
-		  if (button == GLUT_LEFT_BUTTON) {
+  if (!TwEventMouseButtonGLUT(button, state, x, y)) {
+    if (state == GLUT_DOWN) {
+      if (button == GLUT_LEFT_BUTTON) {
         UserInputHandler::PressLeftMouse(x, y);
       } else {
         UserInputHandler::PressRightMouse(x, y);
       }
-	  } else if (state = GLUT_UP) {
+    } else if (state = GLUT_UP) {
       if (button == GLUT_LEFT_BUTTON) {
         UserInputHandler::ReleaseLeftMouse(x, y);
       } else {
@@ -130,7 +132,7 @@ void MousePressFunc(int button, int state, int x, int y) {
 }
 
 void MouseMoveFunc(int x, int y) {
-  if (!TwEventMouseMotionGLUT(x, y) ) {
+  if (!TwEventMouseMotionGLUT(x, y)) {
     UserInputHandler::MoveMouse(x, y);
   }
 }
@@ -149,10 +151,10 @@ void HandleKeyboardEvents() {
     visualize::Scene::GetObjectHolder()->TranslatedSelectedDown();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_PAGE_DOWN)) {
-    visualize::Scene::GetObjectHolder()->SelectPrevious();  
-  } 
+    visualize::Scene::GetObjectHolder()->SelectPrevious();
+  }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_PAGE_UP)) {
-    visualize::Scene::GetObjectHolder()->SelectNext();  
+    visualize::Scene::GetObjectHolder()->SelectNext();
   }
 
   if (UserInputHandler::IsRegularKeyPressed(127)) {

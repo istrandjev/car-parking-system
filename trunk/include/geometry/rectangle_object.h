@@ -1,5 +1,5 @@
-#ifndef RECTANGLE_OBJECT_H
-#define RECTANGLE_OBJECT_H
+#ifndef INCLUDE_GEOMETRY_RECTANGLE_OBJECT_H_
+#define INCLUDE_GEOMETRY_RECTANGLE_OBJECT_H_
 
 #include "geometry/point.h"
 
@@ -11,14 +11,15 @@ class Polygon;
 
 class RectangleObject {
  public:
-  RectangleObject() {};
+  RectangleObject() {}
+  virtual ~RectangleObject() {}
   RectangleObject(const Point& from, const Point& to);
   RectangleObject(const Point& from, const Point& to, double width);
   bool ContainsPoint(const Point& p) const;
-  
+
   const Point& GetFrom() const;
   void SetFrom(const Point& point);
-  
+
   const Point& GetTo() const;
   void SetTo(const Point& point);
 
@@ -26,12 +27,12 @@ class RectangleObject {
   void SetWidth(double width);
 
   Polygon GetBounds() const;
-  
+
   virtual bool IsDirected() const;
   virtual std::string Serialize();
   virtual void Parse(const std::string& serialized);
 
-  void Translate(double translatex, double translatey);  
+  void Translate(double translatex, double translatey);
   void TranslateByNormal(double value);
 
  protected:
@@ -40,4 +41,4 @@ class RectangleObject {
 };
 
 }  // namespace geometry
-#endif  // RECTANGLE_OBJECT_H
+#endif  // INCLUDE_GEOMETRY_RECTANGLE_OBJECT_H_

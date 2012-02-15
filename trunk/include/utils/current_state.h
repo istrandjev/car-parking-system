@@ -1,5 +1,5 @@
-#ifndef CURRENT_STATE_H
-#define CURRENT_STATE_H
+#ifndef INCLUDE_UTILS_CURRENT_STATE_H_
+#define INCLUDE_UTILS_CURRENT_STATE_H_
 
 #include "geometry/point.h"
 
@@ -10,8 +10,8 @@ class CurrentState {
   static bool movingFrom;
   static bool movingTo;
   static bool addingNewLine;
-  static geometry::Point lastMousePosition; 
+  static geometry::Point lastMousePosition;
 };
 
 }  // namespace utils
-#endif  // CURRENT_STATE_H
+#endif  // INCLUDE_UTILS_CURRENT_STATE_H_

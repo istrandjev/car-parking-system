@@ -1,5 +1,5 @@
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef INCLUDE_VISUALIZE_SCENE_H_
+#define INCLUDE_VISUALIZE_SCENE_H_
 
 #include "utils/object_holder.h"
 
@@ -19,10 +19,10 @@ namespace simulation {
 namespace visualize {
 
 // This class is used to represent the scene. It actually holds the set of
-// all polygons to be drawn and also is responsible for the translations and 
+// all polygons to be drawn and also is responsible for the translations and
 // rotations of the view point.
 class Scene {
-public:
+ public:
   // Draws all the polygons in the scene.
   static void Draw();
 
@@ -60,4 +60,4 @@ public:
 
 }  // namespace visualize
 
-#endif  // SCENE_H
+#endif  // INCLUDE_VISUALIZE_SCENE_H_

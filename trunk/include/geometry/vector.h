@@ -1,5 +1,5 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef INCLUDE_GEOMETRY_VECTOR_H_
+#define INCLUDE_GEOMETRY_VECTOR_H_
 
 #include <iostream>
 
@@ -10,8 +10,8 @@ class Point;
 class Vector {
  public:
   Vector() : x(0), y(0) {}
-  Vector(double x_coordinate, double y_coordinate) 
-    : x(x_coordinate), y(y_coordinate){}
+  Vector(double x_coordinate, double y_coordinate)
+    : x(x_coordinate), y(y_coordinate) {}
   Vector(const Point& a, const Point& b);
 
   Vector& operator*=(double scalar);
@@ -27,11 +27,11 @@ class Vector {
 
   bool Parallel(const Vector& other) const;
 
-public:
+ public:
   double x, y;
 };
 
 std::istream& operator>>(std::istream& in, Vector& vector);
 
 }  // namespace geometry
-#endif  // VECTOR_H
+#endif  // INCLUDE_GEOMETRY_VECTOR_H_

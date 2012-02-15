@@ -1,5 +1,5 @@
-#ifndef POLYGON_H
-#define POLYGON_H
+#ifndef INCLUDE_GEOMETRY_POLYGON_H_
+#define INCLUDE_GEOMETRY_POLYGON_H_
 
 #include "geometry/point.h"
 
@@ -12,9 +12,9 @@ namespace geometry {
 class Polygon {
  public:
   Polygon() {}
-  Polygon(const std::vector<Point>& points);
+  explicit Polygon(const std::vector<Point>& points);
 
-  // Normalizes the polygon in a way that its vertices are listed in 
+  // Normalizes the polygon in a way that its vertices are listed in
   // counter-clockwise direction.
   void Normalize();
 
@@ -24,7 +24,7 @@ class Polygon {
   //     it will still be added.
   void AddPointDropDuplicates(const Point& point);
 
-  friend void Intersect(const Polygon& poly1, const Polygon& poly2, 
+  friend void Intersect(const Polygon& poly1, const Polygon& poly2,
     std::vector<Polygon>* intersection);
 
   // @return - the number of the vertices of the polygon.
@@ -35,7 +35,7 @@ class Polygon {
 
   // @return - the point in the polygon with the specified index. The difference
   //     with the above version is that point number N is considered to be point
-  //     0 point N + 1 is point 1 and so on. 
+  //     0 point N + 1 is point 1 and so on.
   inline const Point& GetPointCyclic(int index) const;
 
   // Checks if a point is contained within the boundary of the polygon. For
@@ -46,7 +46,7 @@ class Polygon {
   friend std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 
  private:
-   std::vector<Point> points_;
+  std::vector<Point> points_;
 };
 
 // Intersects the two polygons and stores the set of the polygons representing
@@ -55,7 +55,7 @@ class Polygon {
 // @param poly2 - second polygon
 // @param intersections - vector where the intersection polygons will be stored.
 //     Output parameter. Can not be NULL.
-void Intersect(const Polygon& poly1, const Polygon& poly2, 
+void Intersect(const Polygon& poly1, const Polygon& poly2,
   std::vector<Polygon>* intersection);
 
 std::istream& operator>>(std::istream& in, Polygon& polygon);
@@ -63,4 +63,4 @@ std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 
 }  // namespace geometry
 
-#endif
+#endif  // INCLUDE_GEOMETRY_POLYGON_H_

@@ -13,11 +13,11 @@ namespace geometry {
 
 static const double DEFAULT_WIDTH = 2.0;
 
-RectangleObject::RectangleObject(const Point& from, const Point& to) 
-    : from_(from), to_(to), width_(DEFAULT_WIDTH){}
+RectangleObject::RectangleObject(const Point& from, const Point& to)
+    : from_(from), to_(to), width_(DEFAULT_WIDTH) {}
 
-RectangleObject::RectangleObject(const Point& from, const Point& to, double width)
-    : from_(from), to_(to), width_(width) {}
+RectangleObject::RectangleObject(const Point& from, const Point& to,
+    double width) : from_(from), to_(to), width_(width) {}
 
 const Point& RectangleObject::GetFrom() const {
   return from_;
@@ -26,7 +26,7 @@ const Point& RectangleObject::GetFrom() const {
 void RectangleObject::SetFrom(const Point& point) {
   from_ = point;
 }
-  
+
 const Point& RectangleObject::GetTo() const {
   return to_;
 }
@@ -76,14 +76,14 @@ bool RectangleObject::IsDirected() const {
   return false;
 }
 
-// virtual 
+// virtual
 std::string RectangleObject::Serialize() {
   std::ostringstream out;
   out << from_ << " " << to_ << " "<< width_;
   return out.str();
 }
 
-// virtual 
+// virtual
 void RectangleObject::Parse(const std::string& serialized) {
   std::istringstream in(serialized);
   in >> from_ >> to_ >> width_;

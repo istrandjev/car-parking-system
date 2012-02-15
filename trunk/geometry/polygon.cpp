@@ -7,17 +7,18 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace geometry {
 
-Polygon::Polygon(const std::vector<Point>& points) : points_(points){
+Polygon::Polygon(const std::vector<Point>& points) : points_(points) {
   Normalize();
 }
 
 void Polygon::Normalize() {
   double total_area = 0.0;
   for (unsigned index = 0; index < NumberOfVertices(); ++index) {
-    total_area += GeometryUtils::GetOrientedArea(GetPoint(0), GetPoint(index), 
+    total_area += GeometryUtils::GetOrientedArea(GetPoint(0), GetPoint(index),
       GetPointCyclic(index + 1));
   }
 
@@ -46,19 +47,20 @@ inline const Point& Polygon::GetPoint(unsigned index) const {
 }
 
 inline const Point& Polygon::GetPointCyclic(int index) const {
-  index = index % (int)points_.size();
+  index = index % static_cast<int>(points_.size());
   if (index <  0) {
-    index += (int) points_.size();
+    index += static_cast<int>(points_.size());
   }
   return points_[index];
 }
 
 bool Polygon::ContainsPoint(const Point& point) const {
   int intersections = 0;
-  
+
   // Check if the point lies on the boundary.
   for (unsigned index = 0; index < points_.size(); ++index) {
-    if (GeometryUtils::LiesOnLine(GetPoint(index), GetPointCyclic(index + 1), point)) {
+    if (GeometryUtils::LiesOnLine(GetPoint(index), GetPointCyclic(index + 1),
+                                  point)) {
       return true;
     }
   }
@@ -78,8 +80,9 @@ bool Polygon::ContainsPoint(const Point& point) const {
     }
 
     if (sign1 != sign2) {
-      double y = (current.y * (next.x - point.x) + next.y * (point.x - current.x)) 
-          / (next.x - current.x);
+      double y =
+          (current.y * (next.x - point.x) + next.y * (point.x - current.x)) /
+              (next.x - current.x);
       if (DoubleIsGreater(y, point.y)) {
         intersections++;
       }
@@ -95,7 +98,7 @@ std::istream& operator>>(std::istream& in, Polygon& polygon) {
   std::string temp;
 
   polygon.points_.resize(number_of_points);
-  
+
   getline(in, temp);
   for (int index = 0; index < number_of_points; ++index) {
     getline(in, temp);
@@ -109,17 +112,17 @@ std::istream& operator>>(std::istream& in, Polygon& polygon) {
     in >> polygon.points_[index].x >> polygon.points_[index].y;
   }
   polygon.Normalize();
-  
+
   return in;
 }
 
 std::ostream& operator<<(std::ostream& out, const Polygon& polygon) {
   out << polygon.points_.size() << std::endl;
   for (unsigned index = 0; index < polygon.points_.size(); ++index) {
-    out << polygon.points_[index].x << ", " << polygon.points_[index].y 
+    out << polygon.points_[index].x << ", " << polygon.points_[index].y
       << std::endl;
   }
-  
+
   return out;
 }
 

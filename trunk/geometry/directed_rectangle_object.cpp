@@ -2,6 +2,7 @@
 
 #include "geometry/point.h"
 
+#include <algorithm>
 #include <cstring>
 #include <string>
 
@@ -13,8 +14,8 @@ static const int STAMP_SIZE = strlen(DIRECTED_RECTANGLE_OBJECT_STAMP);
 DirectedRectangleObject::DirectedRectangleObject() : oneWay_(false) {}
 
 DirectedRectangleObject::DirectedRectangleObject(
-    const Point& from, const Point& to) 
-    : RectangleObject(from, to), oneWay_(false) {};
+    const Point& from, const Point& to)
+    : RectangleObject(from, to), oneWay_(false) {}
 DirectedRectangleObject::DirectedRectangleObject(
     const Point& from, const Point& to, double width)
     : RectangleObject(from, to, width), oneWay_(false) {}
@@ -23,7 +24,7 @@ DirectedRectangleObject::DirectedRectangleObject(
 bool DirectedRectangleObject::IsDirected() const {
   return true;
 }
-  
+
 void DirectedRectangleObject::SetIsOneWay(bool is_one_way) {
   oneWay_ = is_one_way;
 }

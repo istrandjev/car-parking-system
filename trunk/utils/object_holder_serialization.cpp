@@ -8,7 +8,8 @@
 
 namespace utils {
 
-geometry::RectangleObject* RectangleObjectFactory(const std::string& serialized) {
+geometry::RectangleObject* RectangleObjectFactory(
+    const std::string& serialized) {
   geometry::RectangleObject* res;
   if (geometry::DirectedRectangleObject::IsSerializedDirectedRectangleObject(
       serialized)) {
@@ -55,25 +56,25 @@ void ObjectHolder::ParseFromFile(const std::string& file_path) {
 
   unsigned road_segments_size;
   in >>  road_segments_size;
-  getline(in, serialized); 
+  getline(in, serialized);
   for (unsigned index = 0; index < road_segments_size; ++index) {
-    getline(in, serialized); 
+    getline(in, serialized);
     roadSegments_.push_back(RectangleObjectFactory(serialized));
   }
 
   unsigned parking_lots_size;
   in >>  parking_lots_size;
-  getline(in, serialized); 
+  getline(in, serialized);
   for (unsigned index = 0; index < parking_lots_size; ++index) {
-    getline(in, serialized); 
+    getline(in, serialized);
     parkingLots_.push_back(RectangleObjectFactory(serialized));
   }
 
   unsigned obstacles_size;
   in >>  obstacles_size;
-  getline(in, serialized); 
+  getline(in, serialized);
   for (unsigned index = 0; index < obstacles_size; ++index) {
-    getline(in, serialized); 
+    getline(in, serialized);
     obstacles_.push_back(RectangleObjectFactory(serialized));
   }
 }
