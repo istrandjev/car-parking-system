@@ -1,5 +1,5 @@
-#ifndef USER_INPUT_HANDLER_H
-#define USER_INPUT_HANDLER_H
+#ifndef INCLUDE_UTILS_USER_INPUT_HANDLER_H_
+#define INCLUDE_UTILS_USER_INPUT_HANDLER_H_
 
 #include "geometry/point.h"
 
@@ -42,11 +42,11 @@ class UserInputHandler {
   static void SetKeyPressHandler(KeyPressHandler handler);
   static void SetSpecialKeyPressHandler(SpecialKeyPressHandler handler);
 
-private:
+ private:
   static void UnprojectCoordinates(int x, int y, geometry::Point* point);
   static bool IsClick(const geometry::Point& from, const geometry::Point& to);
 
-private:
+ private:
   static std::vector<bool> regularKeysPressed;
   static std::vector<bool> specialKeysPressed;
   static bool leftMousePressed;
@@ -69,4 +69,4 @@ private:
 
 }  // namespace utils
 
-#endif  // USER_INPUT_HANDLER_H
+#endif  // INCLUDE_UTILS_USER_INPUT_HANDLER_H_

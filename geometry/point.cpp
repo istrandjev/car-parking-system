@@ -41,7 +41,7 @@ Point Point::Rotate(const Point& center, double angle) const {
   double sin_angle = sin(angle);
   Point result;
   result.x = translatedx * cos_angle - translatedy * sin_angle + center.x;
-  result.y = translatedx * sin_angle + translatedy * cos_angle + center.y; 
+  result.y = translatedx * sin_angle + translatedy * cos_angle + center.y;
   return result;
 }
 

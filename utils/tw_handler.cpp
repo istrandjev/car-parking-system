@@ -15,11 +15,11 @@ TwBar* TwHandler::bar = NULL;
 
 static const char* DEFAULT_SAVE_LOCATION = "parking_serialized.txt";
 
-void TW_CALL DirectionTypeChange(void * /*clientData*/);
-void TW_CALL ReverseDirection(void * /*clientData*/);
-void TW_CALL CreateSibling(void * /*clientData*/);
-void TW_CALL SaveToFile(void * /*clientData*/);
-void TW_CALL LoadFromFile(void * /*clientData*/);
+void TW_CALL DirectionTypeChange(void * clientData);
+void TW_CALL ReverseDirection(void * clientData);
+void TW_CALL CreateSibling(void * clientData);
+void TW_CALL SaveToFile(void * clientData);
+void TW_CALL LoadFromFile(void * clientData);
 void TW_CALL SetLineWidthCallback(const void *value, void *clientData);
 void TW_CALL GetLineWidthCallback(void* value, void* clientData);
 
@@ -33,17 +33,22 @@ void TwHandler::Init() {
   TwInit(TW_OPENGL, NULL);
   TwWindowSize(Scene::Width(), Scene::Height());
   bar = TwNewBar("Line options");
-  TwAddVarCB(bar, "width", TW_TYPE_DOUBLE, SetLineWidthCallback, GetLineWidthCallback, NULL, "");
-  TwAddButton(bar, "Direction", DirectionTypeChange, NULL, " label='Make one way' ");
-  TwAddButton(bar, "CreateSibling", CreateSibling, NULL, " label='Create sibling' ");
-  TwAddButton(bar, "ReverseDirection", ReverseDirection, NULL, " label='Reverse direction' ");
+  TwAddVarCB(bar, "width", TW_TYPE_DOUBLE, SetLineWidthCallback,
+             GetLineWidthCallback, NULL, "");
+  TwAddButton(bar, "Direction", DirectionTypeChange, NULL,
+              " label='Make one way' ");
+  TwAddButton(bar, "CreateSibling", CreateSibling, NULL,
+              " label='Create sibling' ");
+  TwAddButton(bar, "ReverseDirection", ReverseDirection, NULL,
+              " label='Reverse direction' ");
 
   TwDefine("'Line options' size='200 160' ");
-  
+
   AddObjectTypeEnum();
-  
+
   TwAddButton(bar, "SaveToFile", SaveToFile, NULL, " label='Save to file' ");
-  TwAddButton(bar, "LoadFromFile", LoadFromFile, NULL, " label='Load from file' ");
+  TwAddButton(bar, "LoadFromFile", LoadFromFile, NULL,
+              " label='Load from file' ");
 }
 
 
@@ -57,7 +62,7 @@ void TwHandler::ModifyAccordingToState() {
   utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
   if (!obj_holder->HasSelected()) {
     TwDefine(" 'Line options'/Direction  visible=false ");
-    TwDefine(" 'Line options'/ReverseDirection  visible=false ");     
+    TwDefine(" 'Line options'/ReverseDirection  visible=false ");
     TwDefine(" 'Line options'/CreateSibling  visible=false ");
     return;
   }
@@ -68,7 +73,7 @@ void TwHandler::ModifyAccordingToState() {
   } else {
     geometry::RectangleObject* object = obj_holder->GetSelected();
     if (object->IsDirected()) {
-      geometry::DirectedRectangleObject* directed = 
+      geometry::DirectedRectangleObject* directed =
         dynamic_cast<geometry::DirectedRectangleObject*>(object);
       TwDefine(" 'Line options'/Direction  visible=true ");
       if (directed->IsOneWay()) {
@@ -77,7 +82,7 @@ void TwHandler::ModifyAccordingToState() {
         TwDefine(" 'Line options'/CreateSibling  visible=true ");
       } else  {
         TwDefine(" 'Line options'/Direction  label='Make one way' ");
-        TwDefine(" 'Line options'/ReverseDirection  visible=false ");     
+        TwDefine(" 'Line options'/ReverseDirection  visible=false ");
         TwDefine(" 'Line options'/CreateSibling  visible=false ");
       }
     }
@@ -91,37 +96,35 @@ void TwHandler::Draw() {
 
 // static
 void TwHandler::AddObjectTypeEnum() {
-  TwEnumVal object_type_names[] = 
+  TwEnumVal object_type_names[] =
       { {utils::ObjectHolder::ROAD_SEGMENT, "Road segment"},
         {utils::ObjectHolder::PARKING_LOT, "Parking lot"},
         {utils::ObjectHolder::OBSTACLE, "Obstacle"} };
   TwType objectType;
   objectType = TwDefineEnum("ObjectType", object_type_names, 3);
-   
+
   utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
   TwAddVarRW(bar, "Object type", objectType, &obj_holder->currentType, NULL);
 }
 
-void TW_CALL DirectionTypeChange(void * /*clientData*/)
-{ 
+void TW_CALL DirectionTypeChange(void * /*clientData*/) {
     utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
     if (obj_holder->HasSelected()) {
       geometry::RectangleObject* object = obj_holder->GetSelected();
       if (object->IsDirected()) {
-        geometry::DirectedRectangleObject* directed = 
+        geometry::DirectedRectangleObject* directed =
             dynamic_cast<geometry::DirectedRectangleObject*>(object);
         directed->SwapOneWayFlag();
       }
     }
 }
 
-void TW_CALL ReverseDirection(void * /*clientData*/)
-{ 
+void TW_CALL ReverseDirection(void * /*clientData*/) {
     utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
     if (obj_holder->HasSelected()) {
       geometry::RectangleObject* object = obj_holder->GetSelected();
       if (object->IsDirected()) {
-        geometry::DirectedRectangleObject* directed = 
+        geometry::DirectedRectangleObject* directed =
             dynamic_cast<geometry::DirectedRectangleObject*>(object);
         if (directed->IsOneWay()) {
           directed->ReverseDirection();
@@ -130,15 +133,14 @@ void TW_CALL ReverseDirection(void * /*clientData*/)
     }
 }
 
-void TW_CALL CreateSibling(void * /*clientData*/)
-{ 
+void TW_CALL CreateSibling(void * /*clientData*/) {
     utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
     if (obj_holder->HasSelected()) {
       geometry::RectangleObject* object = obj_holder->GetSelected();
       if (!object->IsDirected()) {
         return;
       }
-      geometry::DirectedRectangleObject* directed = 
+      geometry::DirectedRectangleObject* directed =
           dynamic_cast<geometry::DirectedRectangleObject*>(object);
       if (!directed->IsOneWay()) {
         return;
@@ -157,12 +159,11 @@ void TW_CALL LoadFromFile(void * /*clientData*/) {
   obj_holder->ParseFromFile(DEFAULT_SAVE_LOCATION);
 }
 
-void TW_CALL SetLineWidthCallback(const void *value, void *clientData)
-{ 
+void TW_CALL SetLineWidthCallback(const void *value, void *clientData) {
     utils::ObjectHolder* obj_holder = Scene::GetObjectHolder();
     if (obj_holder->HasSelected()) {
       geometry::RectangleObject* object = obj_holder->GetSelected();
-      object->SetWidth(*((double*)value));
+      object->SetWidth(*static_cast<const double*>(value));
     }
 }
 

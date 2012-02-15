@@ -4,7 +4,7 @@
 
 #include <ctime>
 
-inline double get_time(){    
+inline double get_time() {
   return static_cast<double>(clock())/CLOCKS_PER_SEC;
 };
 

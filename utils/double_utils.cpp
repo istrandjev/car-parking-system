@@ -1,4 +1,4 @@
-#include "utils/double_utils.h" 
+#include "utils/double_utils.h"
 
 bool DoubleIsGreater(double lhs, double rhs) {
   return lhs > rhs + epsylon;

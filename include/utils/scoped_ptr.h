@@ -1,5 +1,5 @@
-#ifndef SCOPED_PTR_H
-#define SCOPED_PTR_H
+#ifndef INCLUDE_UTILS_SCOPED_PTR_H_
+#define INCLUDE_UTILS_SCOPED_PTR_H_
 
 #include <cstddef>
 
@@ -7,11 +7,11 @@ template<class T>
 class scoped_ptr {
  public:
   scoped_ptr() : ptr_(NULL) {}
-  scoped_ptr(T* ptr) : ptr_(ptr) {}
+  explicit scoped_ptr(T* ptr) : ptr_(ptr) {}
   ~scoped_ptr() {
     delete ptr_;
   }
-  
+
   T& operator*() {
     return *ptr_;
   }
@@ -36,4 +36,4 @@ class scoped_ptr {
   T *ptr_;
 };
 
-#endif  // SCOPED_PTR_H
+#endif  // INCLUDE_UTILS_SCOPED_PTR_H_

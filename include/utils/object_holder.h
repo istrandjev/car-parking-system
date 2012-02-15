@@ -1,5 +1,5 @@
-#ifndef OBJECT_HOLDER_H
-#define OBJECT_HOLDER_H
+#ifndef INCLUDE_UTILS_OBJECT_HOLDER_H_
+#define INCLUDE_UTILS_OBJECT_HOLDER_H_
 
 #include "utils/scoped_ptr.h"
 
@@ -26,7 +26,8 @@ class ObjectHolder {
   void AddRoadSegment(const geometry::Point& from, const geometry::Point& to);
   void AddParkingLot(const geometry::Point& from, const geometry::Point& to);
   void AddObstacle(const geometry::Point& from, const geometry::Point& to);
-  void AddObjectOfCurrentType(const geometry::Point& from, const geometry::Point& to);
+  void AddObjectOfCurrentType(const geometry::Point& from,
+      const geometry::Point& to);
 
   bool Select(const geometry::Point& location);
 
@@ -64,7 +65,7 @@ class ObjectHolder {
   };
   ObjectType currentType;
 
- private: 
+ private:
   void AddRectangleObjectToContainer(geometry::RectangleObject* object,
       RectangleObjectContainer* container);
   void AddSelectedFromContainer(const geometry::Point& location,
@@ -81,6 +82,6 @@ class ObjectHolder {
   bool selectedIsFianlized_;
 };
 
-}  // namespace utils 
+}  // namespace utils
 
-#endif  // OBJECT_HOLDER_H
+#endif  // INCLUDE_UTILS_OBJECT_HOLDER_H_

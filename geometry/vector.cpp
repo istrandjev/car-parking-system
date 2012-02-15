@@ -44,7 +44,7 @@ Vector Vector::GetOrthogonal() const {
 Vector Vector::Rotate(double angle) const {
   double cos_angle = cos(angle);
   double sin_angle = sin(angle);
-  return Vector(x * cos_angle - y * sin_angle, 
+  return Vector(x * cos_angle - y * sin_angle,
       x * sin_angle + y * cos_angle);
 }
 

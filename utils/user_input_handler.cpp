@@ -1,10 +1,10 @@
- #include "utils/user_input_handler.h"
+#include "utils/user_input_handler.h"
 
- #include "geometry/point.h"
- #include "utils/current_state.h"
+#include "geometry/point.h"
+#include "utils/current_state.h"
 
- #include <glut.h>
- #include <vector>
+#include <glut.h>
+#include <vector>
 
 namespace utils {
 
@@ -14,9 +14,9 @@ static const int CLICK_TOLERANCE = 2;
 std::vector<bool> UserInputHandler::regularKeysPressed(256, false);
 std::vector<bool> UserInputHandler::specialKeysPressed(256, false);
 bool UserInputHandler::leftMousePressed = false;
-geometry::Point UserInputHandler::leftMousePress; 
+geometry::Point UserInputHandler::leftMousePress;
 bool UserInputHandler::rightMousePressed = false;
-geometry::Point UserInputHandler::rightMousePress; 
+geometry::Point UserInputHandler::rightMousePress;
 MouseClickHandler UserInputHandler::leftMouseClickHandler = NULL;
 MousePressHandler UserInputHandler::leftMousePressHandler = NULL;
 MouseReleaseHandler UserInputHandler::leftMouseReleaseHandler = NULL;
@@ -35,7 +35,7 @@ void UserInputHandler::PressRegularKey(unsigned char key, int x, int y) {
   }
   regularKeysPressed[key] = true;
 }
-  
+
 // static
 void UserInputHandler::ReleaseRegularKey(unsigned char key) {
   regularKeysPressed[key] = false;
@@ -88,7 +88,7 @@ void UserInputHandler::PressRightMouse(int x, int y) {
   }
   rightMousePressed = true;
 }
-  
+
 // static
 void UserInputHandler::ReleaseRightMouse(int x, int y) {
   geometry::Point rightMouseRelease;
@@ -98,7 +98,7 @@ void UserInputHandler::ReleaseRightMouse(int x, int y) {
     if (rightMouseClickHandler != NULL) {
       (*rightMouseClickHandler)(rightMousePress.x, rightMousePress.y);
     }
-  } 
+  }
   if (rightMouseReleaseHandler != NULL) {
     (*rightMouseReleaseHandler)(rightMouseRelease.x, rightMouseRelease.y);
   }
@@ -113,21 +113,21 @@ void UserInputHandler::MoveMouse(int x, int y) {
     CurrentState::lastMousePosition = mousePosition;
     return;
   }
-  
+
   if (leftMouseDragHandler != NULL) {
-      bool leftMouseDragged = leftMousePressed && 
+      bool leftMouseDragged = leftMousePressed &&
           !IsClick(mousePosition, leftMousePress);
       if (leftMouseDragged) {
-        (*leftMouseDragHandler)(leftMousePress.x, leftMousePress.y, 
+        (*leftMouseDragHandler)(leftMousePress.x, leftMousePress.y,
           mousePosition.x, mousePosition.y);
       }
   }
 
   if (rightMouseDragHandler != NULL) {
-      bool rightMouseDragged = rightMousePressed && 
+      bool rightMouseDragged = rightMousePressed &&
           !IsClick(mousePosition, rightMousePress);
       if (rightMouseDragged) {
-        (*rightMouseDragHandler)(rightMousePress.x, rightMousePress.y, 
+        (*rightMouseDragHandler)(rightMousePress.x, rightMousePress.y,
           mousePosition.x, mousePosition.y);
       }
   }
@@ -146,39 +146,40 @@ bool UserInputHandler::IsSpecialKeyPressed(unsigned char key) {
 }
 
 
-// static 
+// static
 void UserInputHandler::SetLeftMouseClickHandler(MouseClickHandler handler) {
   leftMouseClickHandler = handler;
 }
 
-// static 
+// static
 void UserInputHandler::SetLeftMousePressHandler(MousePressHandler handler) {
   leftMousePressHandler = handler;
 }
 
-// static 
+// static
 void UserInputHandler::SetLeftMouseReleaseHandler(MouseReleaseHandler handler) {
   leftMouseReleaseHandler = handler;
 }
 
 // static
 void UserInputHandler::SetLeftMouseDragHandler(MouseDragHandler handler) {
-  leftMouseDragHandler = handler;  
+  leftMouseDragHandler = handler;
 }
 
 // static
 void UserInputHandler::SetRightMouseClickHandler(MouseClickHandler handler) {
-  rightMouseClickHandler = handler;  
+  rightMouseClickHandler = handler;
 }
 
 // static
 void UserInputHandler::SetRightMousePressHandler(MousePressHandler handler) {
-  rightMousePressHandler = handler;  
+  rightMousePressHandler = handler;
 }
 
 // static
-void UserInputHandler::SetRightMouseReleaseHandler(MouseReleaseHandler handler) {
-  rightMouseReleaseHandler = handler;  
+void UserInputHandler::SetRightMouseReleaseHandler(
+    MouseReleaseHandler handler) {
+  rightMouseReleaseHandler = handler;
 }
 
 // static
@@ -198,28 +199,29 @@ void UserInputHandler::SetSpecialKeyPressHandler(
 }
 
 // static
-void UserInputHandler::UnprojectCoordinates(int x, int y, geometry::Point* point) {
+void UserInputHandler::UnprojectCoordinates(int x, int y,
+    geometry::Point* point) {
   double modelview[16], projection[16];
   int viewport[4];
   double objz;
 
-  //get the modelview matrix		
-  glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
-  //get the projection matrix
-  glGetDoublev( GL_PROJECTION_MATRIX, projection );
-  //get the viewport		
-  glGetIntegerv( GL_VIEWPORT, viewport );
-  
-  //Unproject the window co-ordinates to 
-  //find the world co-ordinates.
+  // get the modelview matrix
+  glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+  // get the projection matrix
+  glGetDoublev(GL_PROJECTION_MATRIX, projection);
+  // get the viewport
+  glGetIntegerv(GL_VIEWPORT, viewport);
+
+  // Unproject the window co-ordinates to
+  // find the world co-ordinates.
   double xd, yd;
-  gluUnProject( x, y, 0, modelview, projection, viewport, &xd, &yd, &objz);
+  gluUnProject(x, y, 0, modelview, projection, viewport, &xd, &yd, &objz);
   point->x = xd;
   point->y = -yd;
 }
 
 // static
-bool UserInputHandler::IsClick(const geometry::Point& from, 
+bool UserInputHandler::IsClick(const geometry::Point& from,
     const geometry::Point& to) {
   return fabs(from.x - to.x) + fabs(from.y - to.y) <= CLICK_TOLERANCE;
 }
