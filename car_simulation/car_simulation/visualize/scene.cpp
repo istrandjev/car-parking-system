@@ -1,6 +1,9 @@
 #include "visualize/scene.h"
 
 #include "geometry/polygon.h"
+#include "geometry/directed_rectangle_object.h"
+#include "geometry/rectangle_object.h"
+#include "utils/object_holder.h"
 
 #include <glut.h>
 
@@ -19,6 +22,8 @@ static const double SCALE_FACTOR = 10;
 
 // static declarations
 std::vector<simulation::Car> Scene::cars_;
+utils::ObjectHolder Scene::objectHolder_;
+
 int Scene::width_ = DEFAULT_WIDTH;
 int Scene::height_ = DEFAULT_HEIGHT;
 
@@ -26,6 +31,15 @@ double Scene::xTranslation = 0.0;
 double Scene::yTranslation = 0.0;
 double Scene::zTranslation = 0.0;
 double Scene::xRotate = 0.0;
+
+void DrawPolygon(const geometry::Polygon& polygon) {
+  glBegin(GL_POLYGON);
+  for (unsigned vindex = 0; vindex < polygon.NumberOfVertices(); ++vindex) {
+    const geometry::Point& vertex = polygon.GetPoint(vindex);
+    glVertex2f(vertex.x, vertex.y);
+  }
+  glEnd();   // GL_POLYGON
+}
 
 // static 
 void Scene::TranslateLeft() {
@@ -83,6 +97,11 @@ int Scene::Height() {
   return height_;
 }
 
+// static
+utils::ObjectHolder* Scene::GetObjectHolder() {
+  return &objectHolder_;
+}
+
 void Scene::ResetCar(unsigned index) {
   cars_[index].Reset();
 }
@@ -94,6 +113,8 @@ void Scene::AddCar(double width, double length, double max_steering_angle) {
 
 // static 
 void Scene::Draw() {
+  DrawObjects();
+
   for (unsigned index = 0; index < cars_.size(); ++index) {
     DrawCar(index);
   }
@@ -113,29 +134,118 @@ void Scene::TransformDrawingPane() {
 // static
 void Scene::DrawCar(unsigned index) {
   const simulation::Car& car = cars_[index];
-  geometry::Polygon bounds = car.GetBounds();
-  glColor3f(0.5, 0.5, 0.5);
-  glBegin(GL_POLYGON);
-    for (unsigned vertex_index = 0; 
-        vertex_index < bounds.NumberOfVertices(); ++vertex_index) {
-      const geometry::Point& vertex = bounds.GetPoint(vertex_index);
-      glVertex2f(vertex.x, vertex.y);
-    }
-  glEnd();   // GL_POLYGON
-
+  glColor4f(0.5, 0.5, 0.5, 1.0);
+  DrawPolygon(car.GetBounds());
+  
   std::vector<geometry::Polygon> wheels = car.GetWheels();
-  glColor3f(0, 0, 0);
-
+  
+  glColor4f(0, 0, 0, 1.0);
   for (unsigned wheel_index = 0; wheel_index < wheels.size(); 
       ++wheel_index) {
-    const geometry::Polygon& wheel = wheels[wheel_index];
-    glBegin(GL_POLYGON);
-      for (unsigned vertex_index = 0; 
-          vertex_index < bounds.NumberOfVertices(); ++vertex_index) {
-        const geometry::Point& vertex = wheel.GetPoint(vertex_index);
-        glVertex2f(vertex.x, vertex.y);
-      }
-    glEnd();   // GL_POLYGON
+    DrawPolygon(wheels[wheel_index]);
+  }
+}
+
+// static
+void Scene::DrawObjects() {
+  glColor4f(1.0, 0.8, 0.6, 0.5);
+  DrawObjectsFromContainer(objectHolder_.GetRoadSegments());
+
+  glColor4f(0.5, 0.5, 0.5, 0.5);
+  DrawObjectsFromContainer(objectHolder_.GetParkingLots());
+
+  glColor4f(0.0, 0.0, 0.0, 0.5);
+  DrawObjectsFromContainer(objectHolder_.GetObstacles());
+
+  if (objectHolder_.HasSelected()) {
+    DrawSelected(objectHolder_.GetSelected()->GetBounds());
+  }
+}
+
+// static
+void Scene::DrawSelected(const geometry::Polygon& polygon) {
+  const double SELECTION_LENGTH = 0.4;
+  glLineStipple(0.1, 0xf88f);
+  glEnable(GL_LINE_STIPPLE);
+  glColor3f(0.0, 0.0, 0.8);
+
+  glBegin(GL_LINE_STRIP);
+  for (unsigned index = 0; index <= polygon.NumberOfVertices(); ++index) {
+    const geometry::Point& prev = polygon.GetPointCyclic(index - 1);
+    const geometry::Point& cur = polygon.GetPointCyclic(index);
+    const geometry::Point& next = polygon.GetPointCyclic(index + 1);
+    geometry::Point point = cur;
+    point += (geometry::Vector(prev, cur).Unit() * SELECTION_LENGTH);
+    point += (geometry::Vector(next, cur).Unit() * SELECTION_LENGTH);
+    glVertex2f(point.x, point.y);
+  }
+  glEnd();
+  glDisable(GL_LINE_STIPPLE);
+}
+
+// static
+void Scene::DrawObjectsFromContainer(
+    const utils::RectangleObjectContainer& container) {
+  double color[4], new_color[4];
+  glGetDoublev(GL_CURRENT_COLOR, color);
+  for (unsigned index = 0; index < container.size(); ++index) {
+    DrawPolygon(container[index]->GetBounds());
+  }
+  for (int i = 0; i < 3; ++i) {
+    new_color[i] = 1.0 - color[i];
+  }
+  new_color[3] = color[3];
+  glColor4dv(new_color);
+  for (unsigned index = 0; index < container.size(); ++index) {
+    if (!container[index]->IsDirected()) {
+      continue;
+    }
+    geometry::DirectedRectangleObject* directed_object =
+        dynamic_cast<geometry::DirectedRectangleObject*>(container[index]);
+    DrawDirectionalTips(*directed_object);
+  }
+  glColor4dv(color);
+}
+
+void DrawArrow(const geometry::Point& from, const geometry::Point& to,
+    double width) {
+  geometry::Vector vector(from, to);
+  geometry::Vector ortho = vector.GetOrthogonal().Unit();
+  for (int sign = -1; sign <= 1; sign += 2) {
+    geometry::Point vertex = from + ortho * width * 0.5 * sign;
+    geometry::Vector side(vertex, to);
+    geometry::Point end = vertex + side * 0.33;
+    glBegin(GL_LINE_STRIP);
+      glVertex2d(end.x, end.y);
+      glVertex2d(to.x, to.y);
+    glEnd();
+  }
+}
+
+// static
+void Scene::DrawDirectionalTips(
+    const geometry::DirectedRectangleObject& directed_object) {
+  const geometry::Point& from = directed_object.GetFrom();
+  const geometry::Point& to = directed_object.GetTo();
+  double width = directed_object.GetWidth();
+
+  geometry::Vector vector(from, to);
+  geometry::Vector ortho = vector.GetOrthogonal().Unit();
+  geometry::Point middle = from + vector * 0.5;
+
+  glLineStipple(0.1, 0xf0f0);
+  glEnable(GL_LINE_STIPPLE);
+
+  glBegin(GL_LINE_STRIP);
+    glVertex2d(from.x, from.y);
+    glVertex2d(to.x, to.y);
+  glEnd();
+  glDisable(GL_LINE_STIPPLE);
+
+
+  DrawArrow(middle + vector * 0.165, middle + vector * 0.33, width);
+  if (!directed_object.IsOneWay()) {
+    DrawArrow(middle - vector * 0.165, middle - vector * 0.33, width);
   }
 }
 

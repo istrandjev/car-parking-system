@@ -9,8 +9,11 @@
 
 using namespace std;
 
+static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
+static const char* DEFAULT_INPUT_LOCATION = "../../resources/input.in";
+
 void ReadInput() {
-  ifstream in("../../resources/input.in");
+  ifstream in(DEFAULT_INPUT_LOCATION);
   if (!in) {
     std::exception("Could not open the input file");
   }
@@ -19,6 +22,8 @@ void ReadInput() {
   max_steering_angle = geometry::GeometryUtils
       ::DegreesToRadians(max_steering_angle);
   visualize::Scene::AddCar(width, length, max_steering_angle);
+
+  visualize::Scene::GetObjectHolder()->ParseFromFile(DEFAULT_SAVE_LOCATION);
 }
 
 int main(int argc, char ** argv)
