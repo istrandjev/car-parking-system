@@ -29,6 +29,8 @@ void initGlut(int argc, char** argv) {
 	// Background color.
 	glClearColor(1.0, 1.0, 1.0, 0);
 	glDisable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialize GLUT callbacks.
 	glutDisplayFunc(display);
