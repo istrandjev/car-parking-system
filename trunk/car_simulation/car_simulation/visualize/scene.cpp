@@ -1,6 +1,6 @@
-#include "scene.h"
+#include "visualize/scene.h"
 
-#include "polygon.h"
+#include "geometry/polygon.h"
 
 #include <glut.h>
 
