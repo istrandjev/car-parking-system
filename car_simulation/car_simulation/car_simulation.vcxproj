@@ -41,11 +41,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\car_simulation\car_simulation;C:\Documents and Settings\bs\Desktop\projects\diplomna\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\ant tweak bar\AntTweakBar\include;C:\Documents and Settings\bs\Desktop\projects\diplomna\car_simulation\car_simulation;C:\Documents and Settings\bs\Desktop\projects\diplomna\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\glut\glut-3.7.6-bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\ant tweak bar\AntTweakBar\lib;C:\glut\glut-3.7.6-bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -76,6 +76,7 @@
     <ClCompile Include="..\..\utils\object_holder.cpp" />
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
     <ClCompile Include="..\..\utils\user_input_handler.cpp" />
+    <ClCompile Include="handlers\event_handlers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="visualize\glut_utils.cpp" />
     <ClCompile Include="visualize\scene.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="..\..\include\utils\object_holder.h" />
     <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
     <ClInclude Include="..\..\include\utils\user_input_handler.h" />
+    <ClInclude Include="handlers\event_handlers.h" />
     <ClInclude Include="visualize\glut_utils.h" />
     <ClInclude Include="visualize\scene.h" />
   </ItemGroup>
