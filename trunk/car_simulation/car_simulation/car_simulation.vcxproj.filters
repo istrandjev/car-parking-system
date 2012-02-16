@@ -37,6 +37,12 @@
     <Filter Include="Source Files\visualize">
       <UniqueIdentifier>{22b7c8e2-1fe2-47f7-a12f-377cd96d9abc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\handlers">
+      <UniqueIdentifier>{19767f30-a0b4-47dc-aa80-2c88d9f61bec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\handlers">
+      <UniqueIdentifier>{245c5c60-ebcd-4652-beb9-10a68e676089}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +96,9 @@
     <ClCompile Include="visualize\scene.cpp">
       <Filter>Source Files\visualize</Filter>
     </ClCompile>
+    <ClCompile Include="handlers\event_handlers.cpp">
+      <Filter>Source Files\handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -139,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="visualize\scene.h">
       <Filter>Header Files\visualize</Filter>
+    </ClInclude>
+    <ClInclude Include="handlers\event_handlers.h">
+      <Filter>Header Files\handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

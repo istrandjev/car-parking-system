@@ -1,5 +1,6 @@
 #include "visualize/glut_utils.h"
 
+#include "handlers/event_handlers.h"
 #include "visualize/scene.h"
 #include "utils/delay.h"
 
@@ -12,9 +13,6 @@ namespace visualize {
 
 void handleResize(int w, int h);
 void display();
-void keyPressed(unsigned char c, int x, int y);
-void specialKeyPressed(int c, int x, int y);
-void mouseFunc(int button, int state, int x, int y); 
 void idle();
 
 void initGlut(int argc, char** argv) {
@@ -35,9 +33,12 @@ void initGlut(int argc, char** argv) {
 	// Initialize GLUT callbacks.
 	glutDisplayFunc(display);
 	glutReshapeFunc(handleResize);
-	glutKeyboardFunc(keyPressed);
-	glutSpecialFunc(specialKeyPressed);
-	glutMouseFunc(mouseFunc);
+  glutKeyboardFunc(utils::KeyPressed);
+  glutKeyboardUpFunc(utils::KeyReleased);
+  glutSpecialUpFunc(utils::SpecialKeyReleased);
+  glutSpecialFunc(utils::SpecialKeyPressed);
+  glutMouseFunc(utils::MousePressFunc);
+  glutMotionFunc(utils::MouseMoveFunc);
   glutIdleFunc(idle);
 }
 
@@ -63,48 +64,15 @@ void handleResize(int w, int h)
 
 void display()
 {
-	//Clear screen
+  utils::HandleKeyboardEvents();
+	
+  //Clear screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
   Scene::TransformDrawingPane();
   Scene::Draw();
 
 	glutSwapBuffers();
-}
-
-void keyPressed(unsigned char c, int x, int y) {
-	switch(c) {
-  case 'a': Scene::TranslateLeft(); break;
-  case 'd': Scene::TranslateRight(); break;
-  case 'w': Scene::TranslateUp(); break;
-  case 's': Scene::TranslateDown(); break;
-  case ' ': Scene::ResetCar(0); break;
-	}
-
-	display();
-}
-
-void specialKeyPressed(int c, int x, int y) {
-	switch(c) {
-  case GLUT_KEY_LEFT: Scene::TurnCarLeft(0); break;
-  case GLUT_KEY_RIGHT: Scene::TurnCarRight(0); break;
-  case GLUT_KEY_UP: Scene::Move(true); break;
-  case GLUT_KEY_DOWN: Scene::Move(false); break;
-	}
-
-	display();
-}
-
-void mouseFunc(int button, int state, int x, int y) {
-	if (state == GLUT_DOWN) {
-		if (button == GLUT_LEFT_BUTTON) {
-			Scene::RotateXPositive();
-		} else if (button == GLUT_RIGHT_BUTTON) {
-			Scene::RotateXNegative();
-		}
-	}
-
-	display();
 }
 
 void idle() {
