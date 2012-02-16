@@ -99,7 +99,7 @@
     <ClInclude Include="visualize\scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="input.in" />
+    <None Include="..\..\resources\input.in" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
