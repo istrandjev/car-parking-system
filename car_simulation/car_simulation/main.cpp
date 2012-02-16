@@ -1,6 +1,6 @@
-#include "geometry_utils.h"
-#include "glut_utils.h"
-#include "scene.h"
+#include "visualize/glut_utils.h"
+#include "visualize/scene.h"
+#include "geometry/geometry_utils.h"
 
 #include <cstdlib>
 #include <fstream>

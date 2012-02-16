@@ -41,7 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\car_simulation\car_simulation;C:\Documents and Settings\bs\Desktop\projects\diplomna\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -62,29 +62,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="car.cpp" />
-    <ClCompile Include="delay.cpp" />
+    <ClCompile Include="..\..\geometry\directed_rectangle_object.cpp" />
+    <ClCompile Include="..\..\geometry\geometry_utils.cpp" />
+    <ClCompile Include="..\..\geometry\line.cpp" />
+    <ClCompile Include="..\..\geometry\point.cpp" />
+    <ClCompile Include="..\..\geometry\polygon.cpp" />
+    <ClCompile Include="..\..\geometry\rectangle_object.cpp" />
+    <ClCompile Include="..\..\geometry\vector.cpp" />
+    <ClCompile Include="..\..\simulation\car.cpp" />
+    <ClCompile Include="..\..\utils\current_state.cpp" />
+    <ClCompile Include="..\..\utils\delay.cpp" />
+    <ClCompile Include="..\..\utils\double_utils.cpp" />
+    <ClCompile Include="..\..\utils\object_holder.cpp" />
+    <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
+    <ClCompile Include="..\..\utils\user_input_handler.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="double_utils.cpp" />
-    <ClCompile Include="geometry_utils.cpp" />
-    <ClCompile Include="glut_utils.cpp" />
-    <ClCompile Include="line.cpp" />
-    <ClCompile Include="point.cpp" />
-    <ClCompile Include="polygon.cpp" />
-    <ClCompile Include="scene.cpp" />
-    <ClCompile Include="vector.cpp" />
+    <ClCompile Include="visualize\glut_utils.cpp" />
+    <ClCompile Include="visualize\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="car.h" />
-    <ClInclude Include="delay.h" />
-    <ClInclude Include="double_utils.h" />
-    <ClInclude Include="geometry_utils.h" />
-    <ClInclude Include="glut_utils.h" />
-    <ClInclude Include="line.h" />
-    <ClInclude Include="point.h" />
-    <ClInclude Include="polygon.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="vector.h" />
+    <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\geometry_utils.h" />
+    <ClInclude Include="..\..\include\geometry\line.h" />
+    <ClInclude Include="..\..\include\geometry\point.h" />
+    <ClInclude Include="..\..\include\geometry\polygon.h" />
+    <ClInclude Include="..\..\include\geometry\rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\vector.h" />
+    <ClInclude Include="..\..\include\simulation\car.h" />
+    <ClInclude Include="..\..\include\utils\current_state.h" />
+    <ClInclude Include="..\..\include\utils\delay.h" />
+    <ClInclude Include="..\..\include\utils\double_utils.h" />
+    <ClInclude Include="..\..\include\utils\object_holder.h" />
+    <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
+    <ClInclude Include="..\..\include\utils\user_input_handler.h" />
+    <ClInclude Include="visualize\glut_utils.h" />
+    <ClInclude Include="visualize\scene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="input.in" />

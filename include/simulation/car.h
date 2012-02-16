@@ -1,8 +1,8 @@
 #ifndef CAR_H
 #define CAR_H
 
-#include "point.h"
-#include "vector.h"
+#include "geometry/point.h"
+#include "geometry/vector.h"
 
 #include <vector>
 

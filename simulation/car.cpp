@@ -1,10 +1,10 @@
-#include "car.h"
+#include "simulation/car.h"
 
-#include "double_utils.h"
-#include "geometry_utils.h"
-#include "line.h"
-#include "point.h"
-#include "polygon.h"
+#include "geometry/geometry_utils.h"
+#include "geometry/line.h"
+#include "geometry/point.h"
+#include "geometry/polygon.h"
+#include "utils/double_utils.h"
 
 #include <cmath>
 

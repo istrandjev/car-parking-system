@@ -1,7 +1,7 @@
-#include "glut_utils.h"
+#include "visualize/glut_utils.h"
 
-#include "delay.h"
-#include "scene.h"
+#include "visualize/scene.h"
+#include "utils/delay.h"
 
 #include <cstdlib>
 #include <glut.h>
