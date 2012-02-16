@@ -1,8 +1,8 @@
-#include "./tw_handler.h"
+#include "handlers/tw_handler.h"
 
 #include "geometry/directed_rectangle_object.h"
 #include "geometry/rectangle_object.h"
-#include "./scene.h"
+#include "visualize/scene.h"
 #include "utils/object_holder.h"
 
 #include <AntTweakBar.h>
@@ -13,7 +13,7 @@ namespace visualize {
 // static declarations
 TwBar* TwHandler::bar = NULL;
 
-static const char* DEFAULT_SAVE_LOCATION = "parking_serialized.txt";
+static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
 
 void TW_CALL DirectionTypeChange(void * clientData);
 void TW_CALL ReverseDirection(void * clientData);

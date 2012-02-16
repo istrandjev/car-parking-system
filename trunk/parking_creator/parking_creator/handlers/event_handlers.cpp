@@ -1,13 +1,12 @@
-#include "./event_handlers.h"
+#include "handlers/event_handlers.h"
 
 #include "geometry/point.h"
 #include "geometry/rectangle_object.h"
 #include "geometry/vector.h"
-#include "./scene.h"
 #include "utils/current_state.h"
 #include "utils/object_holder.h"
 #include "utils/user_input_handler.h"
-
+#include "visualize/scene.h"
 
 #include <AntTweakBar.h>
 #include <glut.h>

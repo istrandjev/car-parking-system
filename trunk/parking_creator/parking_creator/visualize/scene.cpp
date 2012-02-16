@@ -1,4 +1,4 @@
-#include "./scene.h"
+#include "visualize/scene.h"
 
 #include "geometry/directed_rectangle_object.h"
 #include "geometry/polygon.h"

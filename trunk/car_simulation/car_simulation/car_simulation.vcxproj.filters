@@ -34,6 +34,9 @@
     <Filter Include="Header Files\visualize">
       <UniqueIdentifier>{9376c793-dca4-4575-a865-9720cde1c06f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\visualize">
+      <UniqueIdentifier>{22b7c8e2-1fe2-47f7-a12f-377cd96d9abc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,10 +85,10 @@
       <Filter>Source Files\simulation</Filter>
     </ClCompile>
     <ClCompile Include="visualize\glut_utils.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\visualize</Filter>
     </ClCompile>
     <ClCompile Include="visualize\scene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\visualize</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +142,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="input.in">
+    <None Include="..\..\resources\input.in">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

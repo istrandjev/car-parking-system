@@ -10,7 +10,7 @@
 using namespace std;
 
 void ReadInput() {
-  ifstream in("input.in");
+  ifstream in("../../resources/input.in");
   if (!in) {
     std::exception("Could not open the input file");
   }

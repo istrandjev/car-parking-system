@@ -1,11 +1,11 @@
-#include "./glut_utils.h"
+#include "visualize/glut_utils.h"
 
-#include "./event_handlers.h"
 #include "geometry/rectangle_object.h"
+#include "handlers/event_handlers.h"
+#include "handlers/tw_handler.h"
 #include "utils/delay.h"
 #include "utils/object_holder.h"
-#include "./scene.h"
-#include "./tw_handler.h"
+#include "visualize/scene.h"
 
 #include <glut.h>
 

@@ -41,7 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\include;C:\ant tweak bar\AntTweakBar\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\parking_creator\parking_creator;C:\Documents and Settings\bs\Desktop\projects\diplomna\include;C:\ant tweak bar\AntTweakBar\include;C:\glut\glut-3.7.6-bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,11 +76,11 @@
     <ClCompile Include="..\..\utils\object_holder.cpp" />
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
     <ClCompile Include="..\..\utils\user_input_handler.cpp" />
-    <ClCompile Include="event_handlers.cpp" />
-    <ClCompile Include="glut_utils.cpp" />
+    <ClCompile Include="handlers\event_handlers.cpp" />
+    <ClCompile Include="handlers\tw_handler.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="scene.cpp" />
-    <ClCompile Include="tw_handler.cpp" />
+    <ClCompile Include="visualize\glut_utils.cpp" />
+    <ClCompile Include="visualize\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h" />
@@ -96,10 +96,10 @@
     <ClInclude Include="..\..\include\utils\object_holder.h" />
     <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
     <ClInclude Include="..\..\include\utils\user_input_handler.h" />
-    <ClInclude Include="event_handlers.h" />
-    <ClInclude Include="glut_utils.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="tw_handler.h" />
+    <ClInclude Include="handlers\event_handlers.h" />
+    <ClInclude Include="handlers\tw_handler.h" />
+    <ClInclude Include="visualize\glut_utils.h" />
+    <ClInclude Include="visualize\scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
