@@ -46,6 +46,9 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
 void KeyPressed(unsigned char c, int x, int y) {
   if (!TwEventKeyboardGLUT(c, x , y)) {
     UserInputHandler::PressRegularKey(c, x, y);
+    if (c == 't') {
+      visualize::Scene::ShowHideTurnTip();
+    }
   }
 }
 

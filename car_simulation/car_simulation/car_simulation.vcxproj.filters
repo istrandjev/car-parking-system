@@ -99,6 +99,12 @@
     <ClCompile Include="handlers\event_handlers.cpp">
       <Filter>Source Files\handlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\geometry\arc.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\circle.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -152,9 +158,18 @@
     <ClInclude Include="handlers\event_handlers.h">
       <Filter>Header Files\handlers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\geometry\arc.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\geometry\circle.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\input.in">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\resources\parking_serialized.txt">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

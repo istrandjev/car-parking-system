@@ -23,6 +23,7 @@ static const double SCALE_FACTOR = 10;
 // static declarations
 std::vector<simulation::Car> Scene::cars_;
 utils::ObjectHolder Scene::objectHolder_;
+bool Scene::showTurnTip_ = false;
 
 int Scene::width_ = DEFAULT_WIDTH;
 int Scene::height_ = DEFAULT_HEIGHT;
@@ -111,6 +112,14 @@ void Scene::AddCar(double width, double length, double max_steering_angle) {
   cars_.push_back(simulation::Car(width, length, max_steering_angle));
 }
 
+// static
+void Scene::AddCar(double width, double length, double max_steering_angle,
+    const geometry::Point& center, const geometry::Point& second_point) {
+  cars_.push_back(simulation::Car(width, length, max_steering_angle));
+  cars_.back().SetCenter(center);
+  cars_.back().SetDirection(geometry::Vector(center, second_point));
+}
+
 // static 
 void Scene::Draw() {
   DrawObjects();
@@ -131,6 +140,11 @@ void Scene::TransformDrawingPane() {
   glMatrixMode(GL_MODELVIEW);
 }
 
+// static 
+void Scene::ShowHideTurnTip() {
+ showTurnTip_ = !showTurnTip_;
+}
+
 // static
 void Scene::DrawCar(unsigned index) {
   const simulation::Car& car = cars_[index];
@@ -143,6 +157,14 @@ void Scene::DrawCar(unsigned index) {
   for (unsigned wheel_index = 0; wheel_index < wheels.size(); 
       ++wheel_index) {
     DrawPolygon(wheels[wheel_index]);
+  }
+
+  glColor4f(0.5, 0.5, 0.0, 0.8);
+  if (showTurnTip_) {
+    std::vector<geometry::Polygon> gr = cars_[index].GetRotationGraphics();
+    for (unsigned index = 0; index < gr.size(); ++index) {
+      DrawPolygon(gr[index]);
+    }
   }
 }
 
