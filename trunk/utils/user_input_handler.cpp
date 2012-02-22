@@ -8,7 +8,7 @@
 
 namespace utils {
 
-static const int CLICK_TOLERANCE = 2;
+static const int CLICK_TOLERANCE = 1;
 
 // static declarations
 std::vector<bool> UserInputHandler::regularKeysPressed(256, false);

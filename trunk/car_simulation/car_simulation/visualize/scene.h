@@ -32,6 +32,8 @@ public:
 
   static void ResetCar(unsigned index);
   static void AddCar(double width, double length, double max_steering_angle);
+  static void AddCar(double width, double length, double max_steering_angle, 
+      const geometry::Point& center, const geometry::Point& second_point);
 
   static void TurnCarLeft(unsigned index);
   static void TurnCarRight(unsigned index);
@@ -58,6 +60,8 @@ public:
 
   static void TransformDrawingPane();
 
+  static void ShowHideTurnTip();
+
  private:
   // Sets the current drawing color according to the polygon index. Tries to 
   // choose as differentiable colors as possible.
@@ -69,6 +73,7 @@ public:
 
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;
+  static bool showTurnTip_;
   static double xRotate;
 };
 

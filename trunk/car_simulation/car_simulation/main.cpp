@@ -1,4 +1,6 @@
 #include "geometry/geometry_utils.h"
+#include "geometry/point.h"
+#include "geometry/vector.h"
 #include "handlers/event_handlers.h"
 #include "visualize/glut_utils.h"
 #include "visualize/scene.h"
@@ -20,9 +22,13 @@ void ReadInput() {
   }
   double width, length, max_steering_angle;
   in >> width >> length >> max_steering_angle;
+  geometry::Point car_center, second_point;
+  in >> car_center >> second_point;
+  
   max_steering_angle = geometry::GeometryUtils
       ::DegreesToRadians(max_steering_angle);
-  visualize::Scene::AddCar(width, length, max_steering_angle);
+  visualize::Scene::AddCar(width, length, max_steering_angle, car_center,
+      second_point);
 
   visualize::Scene::GetObjectHolder()->ParseFromFile(DEFAULT_SAVE_LOCATION);
 }

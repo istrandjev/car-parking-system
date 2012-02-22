@@ -15,7 +15,7 @@ namespace simulation {
 class Car {
  public:
   Car(double width, double length, double max_steering_angle);
-  
+
   void SetCenter(const geometry::Point& center);
   void SetDirection(const geometry::Vector& direction);
 
@@ -28,7 +28,9 @@ class Car {
   geometry::Polygon GetBounds() const;
 
   std::vector<geometry::Polygon> GetWheels() const;
-
+  
+  std::vector<geometry::Polygon> GetRotationGraphics();
+ 
  private:
   geometry::Point GetFrontLeftWheelCenter() const;
   geometry::Point GetFrontRightWheelCenter() const;

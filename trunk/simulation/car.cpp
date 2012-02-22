@@ -10,7 +10,7 @@
 
 namespace simulation {
 
-static const double TURN_STEP_RADIANS = 0.04;
+static const double TURN_STEP_RADIANS = 0.01;
 static const double WHEEL_AXIS_FRACTION = 0.62;
 static const double WHEEL_WIDTH = 0.195;
 static const double WHEEL_LENGTH = 0.8128;
@@ -27,7 +27,7 @@ void Car::SetCenter(const geometry::Point& center) {
 }
 
 void Car::SetDirection(const geometry::Vector& direction) {
-  direction_ = direction;
+  direction_ = direction.Unit();
 }
 
 void Car::Move(double meters_step) {
@@ -181,6 +181,45 @@ std::vector<geometry::Polygon> Car::GetWheels() const {
   result.push_back(GetRearRightWheel());
   return result;
 }
+
+std::vector<geometry::Polygon> Car::GetRotationGraphics() {
+  std::vector<geometry::Polygon> res;
+  geometry::Point saved_center = center_;
+  geometry::Vector saved_direction = direction_;
+  const double step = 3e-2;
+  for (double c = 0.0; c <= geometry::GeometryUtils::PI * 0.5; c += step) {
+    res.push_back(GetBounds());
+    int angle_sign = DoubleSign(current_steering_angle_);
+    double fw_angle = current_steering_angle_ + 
+        geometry::GeometryUtils::PI * angle_sign * 0.5;
+
+    geometry::Vector fw_axis_vector = direction_.Rotate(fw_angle);
+    geometry::Vector rw_axis_vector = direction_.GetOrthogonal();
+
+    geometry::Point fw_center, rw_center;
+    if (angle_sign > 0) {
+      fw_center = GetFrontLeftWheelCenter();
+      rw_center = GetRearLeftWheelCenter();
+    } else {
+      fw_center = GetFrontRightWheelCenter();  
+      rw_center = GetRearRightWheelCenter();
+    }
+
+    geometry::Line fw_axis(fw_center, fw_axis_vector);
+    geometry::Line rw_axis(rw_center, rw_axis_vector);
+    geometry::Point rotation_center;
+    if (!fw_axis.Intersect(rw_axis, &rotation_center)) {
+      throw std::invalid_argument("current_steering_angle in "
+          "Car::Move has incorrect value!");
+    }
+    center_ = center_.Rotate(rotation_center, step * angle_sign);
+    direction_ = direction_.Rotate(step * angle_sign);
+  }
+  center_ = saved_center;
+  direction_ = saved_direction;
+  return res;
+}
+
 void  Car::Reset() {
   center_ = geometry::Point(0, 0);
   direction_ = geometry::Vector(0, 1);

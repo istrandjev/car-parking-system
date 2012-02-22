@@ -24,6 +24,14 @@ Vector Line::Normal() const {
   return Vector(A_, B_);
 }
 
+double Line::GetOrientedDistanceFromPoint(const Point& A) const {
+  return (A.x * A_ + A.y * B_ + C_) / Normal().Length();
+}
+
+double Line::GetDistanceFromPoint(const Point& A) const {
+  return fabs(GetOrientedDistanceFromPoint(A));
+}
+
 bool Line::Intersect(const Line& other, Point* intersection) const {
   double cross_product = other.Normal().CrossProduct(Normal());
   if (DoubleIsZero(cross_product)) {
