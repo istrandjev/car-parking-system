@@ -8,6 +8,7 @@
 namespace geometry {
 
 class Polygon;
+class BoundingBox;
 
 class RectangleObject {
  public:
@@ -27,6 +28,7 @@ class RectangleObject {
   void SetWidth(double width);
 
   Polygon GetBounds() const;
+  virtual BoundingBox GetBoundingBox() const;
 
   virtual bool IsDirected() const;
   virtual std::string Serialize();

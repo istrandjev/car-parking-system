@@ -63,6 +63,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\geometry\arc.cpp" />
+    <ClCompile Include="..\..\geometry\bounding_box.cpp" />
     <ClCompile Include="..\..\geometry\circle.cpp" />
     <ClCompile Include="..\..\geometry\directed_rectangle_object.cpp" />
     <ClCompile Include="..\..\geometry\geometry_utils.cpp" />
@@ -71,6 +72,7 @@
     <ClCompile Include="..\..\geometry\polygon.cpp" />
     <ClCompile Include="..\..\geometry\rectangle_object.cpp" />
     <ClCompile Include="..\..\geometry\vector.cpp" />
+    <ClCompile Include="..\..\include\geometry\segement.cpp" />
     <ClCompile Include="..\..\simulation\car.cpp" />
     <ClCompile Include="..\..\utils\current_state.cpp" />
     <ClCompile Include="..\..\utils\delay.cpp" />
@@ -78,6 +80,9 @@
     <ClCompile Include="..\..\utils\object_holder.cpp" />
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
     <ClCompile Include="..\..\utils\user_input_handler.cpp" />
+    <ClCompile Include="geometry\boundary_line.cpp" />
+    <ClCompile Include="geometry\regular_grid.cpp" />
+    <ClCompile Include="geometry\straight_boundary_line.cpp" />
     <ClCompile Include="handlers\event_handlers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="visualize\glut_utils.cpp" />
@@ -85,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\arc.h" />
+    <ClInclude Include="..\..\include\geometry\bounding_box.h" />
     <ClInclude Include="..\..\include\geometry\circle.h" />
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h" />
     <ClInclude Include="..\..\include\geometry\geometry_utils.h" />
@@ -92,6 +98,7 @@
     <ClInclude Include="..\..\include\geometry\point.h" />
     <ClInclude Include="..\..\include\geometry\polygon.h" />
     <ClInclude Include="..\..\include\geometry\rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\segment.h" />
     <ClInclude Include="..\..\include\geometry\vector.h" />
     <ClInclude Include="..\..\include\simulation\car.h" />
     <ClInclude Include="..\..\include\utils\current_state.h" />
@@ -100,7 +107,11 @@
     <ClInclude Include="..\..\include\utils\object_holder.h" />
     <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
     <ClInclude Include="..\..\include\utils\user_input_handler.h" />
+    <ClInclude Include="geometry\boundary_line.h" />
+    <ClInclude Include="geometry\regular_grid.h" />
+    <ClInclude Include="geometry\straight_boundary_line.h" />
     <ClInclude Include="handlers\event_handlers.h" />
+    <ClInclude Include="utils\boundary_line_holder.h" />
     <ClInclude Include="visualize\glut_utils.h" />
     <ClInclude Include="visualize\scene.h" />
   </ItemGroup>
