@@ -1,11 +1,13 @@
 #include "geometry/rectangle_object.h"
 
+#include "geometry/bounding_box.h"
 #include "geometry/geometry_utils.h"
 #include "geometry/point.h"
 #include "geometry/polygon.h"
 #include "geometry/vector.h"
 #include "utils/double_utils.h"
 
+#include <algorithm>
 #include <string>
 #include <sstream>
 
@@ -69,6 +71,25 @@ Polygon RectangleObject::GetBounds() const {
   result.AddPointDropDuplicates(to_ - shift);
   result.AddPointDropDuplicates(to_ + shift);
   return result;
+}
+
+// virtual
+BoundingBox RectangleObject::GetBoundingBox() const {
+  Polygon bounds = GetBounds();
+  double minx, maxx;
+  double miny, maxy;
+  minx = maxx = bounds.GetPoint(0).x;
+  miny = maxy = bounds.GetPoint(0).y;
+
+  for (unsigned index = 0; index < bounds.NumberOfVertices();
+      ++index) {
+    const Point& point = bounds.GetPoint(index);
+    minx = std::min(minx, point.x);
+    maxx = std::max(maxx, point.x);
+    miny = std::max(miny, point.y);
+    maxy = std::max(maxy, point.y);
+  }
+  return BoundingBox(minx, maxx, miny, maxy);
 }
 
 // virtual
