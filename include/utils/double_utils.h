@@ -12,6 +12,12 @@ bool DoubleIsGreater(double lhs, double rhs);
 //     tolerance.
 bool DoubleIsGreaterOrEqual(double lhs, double rhs);
 
+// @return true iff 'x' belongs to the open interval (min_val, max_val).
+bool DoubleIsStrictlyBetween(double x, double min_val, double max_val);
+
+// @return true iff 'x' belongs to the closed interval [min_val, max_val].
+bool DoubleIsBetween(double x, double min_val, double max_val);
+
 // @return true iff "lhs" is equal to "rhs" with double tolerance.
 bool DoubleEquals(double lhs, double rhs);
 

@@ -15,6 +15,13 @@ class Segment {
   const Point& B() const;
 
   BoundingBox GetBoundingBox() const;
+  
+  bool Intersect(const Segment& other, double* this_fraction, 
+      double* other_fraction) const;
+  bool Intersect(const Segment& other, double* this_fraction) const;
+
+  Point GetPoint(double fraction) const;
+  Segment SubSegment(double start_fraction, double end_fraction) const;
 
  public:
   geometry::Point A_, B_;

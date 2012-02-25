@@ -8,6 +8,15 @@ bool DoubleIsGreaterOrEqual(double lhs, double rhs) {
   return lhs > rhs - epsylon;
 }
 
+
+bool DoubleIsStrictlyBetween(double x, double min_val, double max_val) {
+  return x > min_val + epsylon && x < max_val - epsylon;
+}
+
+bool DoubleIsBetween(double x, double min_val, double max_val) {
+  return x > min_val - epsylon && x < max_val + epsylon;
+}
+
 bool DoubleEquals(double lhs, double rhs) {
   return lhs > rhs - epsylon && lhs < rhs + epsylon;
 }
