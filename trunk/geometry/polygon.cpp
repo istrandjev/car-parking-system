@@ -2,6 +2,7 @@
 
 #include "geometry/geometry_utils.h"
 #include "geometry/point.h"
+#include "geometry/segment.h"
 #include "utils/double_utils.h"
 
 #include <iostream>
@@ -42,6 +43,10 @@ unsigned Polygon::NumberOfVertices() const {
   return points_.size();
 }
 
+unsigned Polygon::NumberOfSides() const {
+  return points_.size();
+}
+
 inline const Point& Polygon::GetPoint(unsigned index) const {
   return points_[index];
 }
@@ -52,6 +57,14 @@ inline const Point& Polygon::GetPointCyclic(int index) const {
     index += static_cast<int>(points_.size());
   }
   return points_[index];
+}
+
+Segment Polygon::GetSide(unsigned side_index) const {
+  if (side_index + 1 != NumberOfSides()) {
+    return Segment(GetPoint(side_index), GetPoint(side_index + 1));
+  } else {
+    return Segment(GetPoint(side_index), GetPoint(0));
+  }
 }
 
 bool Polygon::ContainsPoint(const Point& point) const {

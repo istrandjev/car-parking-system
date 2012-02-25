@@ -62,6 +62,7 @@ void ObjectHolder::AddObstacle(const geometry::Point& from,
     const geometry::Point& to) {
   geometry::RectangleObject* object =
       new geometry::RectangleObject(from, to, DEFAULT_OBSTACLE_WIDTH);
+  object->SetIsObstacle(true);
   AddRectangleObjectToContainer(object, &obstacles_);
 }
 

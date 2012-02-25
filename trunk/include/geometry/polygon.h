@@ -8,6 +8,8 @@
 
 namespace geometry {
 
+class Segment;
+
 // This class represents a 2D polygon.
 class Polygon {
  public:
@@ -29,6 +31,9 @@ class Polygon {
 
   // @return - the number of the vertices of the polygon.
   unsigned NumberOfVertices() const;
+  
+  // @return - the number of sides of the polygon.
+  unsigned NumberOfSides() const;
 
   // @return the point in the polygon with the specified index.
   inline const Point& GetPoint(unsigned index) const;
@@ -37,6 +42,9 @@ class Polygon {
   //     with the above version is that point number N is considered to be point
   //     0 point N + 1 is point 1 and so on.
   inline const Point& GetPointCyclic(int index) const;
+
+  // @return - a segment that represents the side with the given index.
+  Segment GetSide(unsigned side_index) const;
 
   // Checks if a point is contained within the boundary of the polygon. For
   // points lying on the boundary this method still returns true.
