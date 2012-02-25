@@ -15,11 +15,16 @@ namespace geometry {
 
 static const double DEFAULT_WIDTH = 2.0;
 
+RectangleObject::RectangleObject() : isObstacle_(false) {}
+
+
 RectangleObject::RectangleObject(const Point& from, const Point& to)
     : from_(from), to_(to), width_(DEFAULT_WIDTH) {}
 
 RectangleObject::RectangleObject(const Point& from, const Point& to,
     double width) : from_(from), to_(to), width_(width) {}
+
+RectangleObject::~RectangleObject() {}
 
 const Point& RectangleObject::GetFrom() const {
   return from_;
@@ -43,6 +48,14 @@ double RectangleObject::GetWidth() const {
 
 void RectangleObject::SetWidth(double width) {
   width_ = width;
+}
+
+bool RectangleObject::IsObstacle() const {
+  return isObstacle_;
+}
+
+void RectangleObject::SetIsObstacle(bool is_obstacle) {
+  isObstacle_ = is_obstacle;
 }
 
 bool RectangleObject::ContainsPoint(const Point& p) const {

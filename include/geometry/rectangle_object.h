@@ -12,10 +12,11 @@ class BoundingBox;
 
 class RectangleObject {
  public:
-  RectangleObject() {}
-  virtual ~RectangleObject() {}
+  RectangleObject();
   RectangleObject(const Point& from, const Point& to);
   RectangleObject(const Point& from, const Point& to, double width);
+
+  virtual ~RectangleObject();
   bool ContainsPoint(const Point& p) const;
 
   const Point& GetFrom() const;
@@ -26,6 +27,9 @@ class RectangleObject {
 
   double GetWidth() const;
   void SetWidth(double width);
+
+  bool IsObstacle() const;
+  void SetIsObstacle(bool is_obstacle);
 
   Polygon GetBounds() const;
   virtual BoundingBox GetBoundingBox() const;
@@ -40,6 +44,7 @@ class RectangleObject {
  protected:
   Point from_, to_;
   double width_;
+  bool isObstacle_;
 };
 
 }  // namespace geometry
