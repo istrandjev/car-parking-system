@@ -30,10 +30,12 @@ class RegularGrid {
 
   std::vector<const RectangleObject*> GetRectangleObjects(
       const BoundingBox& bounding_box) const;
+  std::vector<const RectangleObject*> GetRectangleObjects() const;
 
   std::vector<const BoundaryLine*> GetBoundaryLines(
       const BoundingBox& bounding_box) const;
- 
+  std::vector<const BoundaryLine*> GetBoundaryLines() const;
+       
  private:
   void GetCellCoordinates(double x, double y, int* i, int* j) const;
 

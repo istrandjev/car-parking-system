@@ -11,6 +11,10 @@ class DirectedRectangleObject;
 class Polygon;
 }  // namespace geometry
 
+namespace utils {
+class IntersectionHandler;
+}  // namespace utils
+
 namespace visualize {
 
 // This class is used to represent the scene. It actually holds the set of
@@ -18,16 +22,7 @@ namespace visualize {
 // rotations of the view point.
 class Scene {
 public:
-  // Draws a polygon.
-  static void DrawCar(unsigned index);
-  static void DrawObjects();
-  static void DrawSelected(const geometry::Polygon& polygon);
-  static void DrawObjectsFromContainer(
-      const utils::RectangleObjectContainer& container);
-  static void DrawDirectionalTips(
-      const geometry::DirectedRectangleObject& directed_object);
-  
-  // Draws all the polygons in the scene.
+  // Draws all the objects in the scene.
   static void Draw();
 
   static void ResetCar(unsigned index);
@@ -56,19 +51,34 @@ public:
   static int Width();
   static int Height();
 
+  static void SetObjectHolder(utils::ObjectHolder* object_holder);
   static utils::ObjectHolder* GetObjectHolder();
+  
+  static void SetIntersectionHandler(utils::IntersectionHandler*
+      intersection_handler);
+  static utils::IntersectionHandler* GetIntersectionHandler();
 
   static void TransformDrawingPane();
 
   static void ShowHideTurnTip();
 
  private:
+  static void DrawCar(unsigned index);
+  static void DrawObjects();
+  static void DrawSelected(const geometry::Polygon& polygon);
+  static void DrawObjectsFromContainer(
+      const utils::RectangleObjectContainer& container);
+  static void DrawDirectionalTips(
+      const geometry::DirectedRectangleObject& directed_object);
+  static void DrawBorderLines();
+
   // Sets the current drawing color according to the polygon index. Tries to 
   // choose as differentiable colors as possible.
   static void SetColorForPolygon(unsigned index);
  
  private:
-  static utils::ObjectHolder objectHolder_;
+  static utils::IntersectionHandler* intersectionHandler_;
+  static utils::ObjectHolder* objectHolder_;
   static std::vector<simulation::Car> cars_;
 
   static double xTranslation, yTranslation, zTranslation;

@@ -5,6 +5,7 @@
 #include "geometry/rectangle_object.h"
 #include "utils/double_utils.h"
 
+#include <set>
 #include <vector>
 
 namespace geometry {
@@ -45,7 +46,7 @@ void RegularGrid::AddRectangleObject(const RectangleObject* object) {
 
   GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
       &mini, &minj);
-  GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
+  GetCellCoordinates(bounding_box.GetMaxX(), bounding_box.GetMaxY(),
       &maxi, &maxj);
   for (int i = mini; i <= maxi; ++i) {
     for (int j = minj; j <= maxj; ++j) {
@@ -73,56 +74,67 @@ void RegularGrid::AddBoundaryLine(const BoundaryLine* border) {
 
 std::vector<const RectangleObject*> RegularGrid::GetRectangleObjects(
     const BoundingBox& bounding_box) const {
-  std::vector<const RectangleObject*> result;
-
   int mini, maxi;
   int minj, maxj;
   GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
       &mini, &minj);
-  GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
+  GetCellCoordinates(bounding_box.GetMaxX(), bounding_box.GetMaxY(),
       &maxi, &maxj);
-  for (int i = mini; i < maxi; ++i) {
-    for (int j = minj; j < maxj; ++j) {
+  std::set<const RectangleObject*> rectangle_objects;
+  for (int i = mini; i <= maxi; ++i) {
+    for (int j = minj; j <= maxj; ++j) {
       const std::vector<const RectangleObject*>& objects =
           grid_[i][j].GetRectangleObjects();
-      result.insert(result.end(), objects.begin(), objects.end());
+      rectangle_objects.insert(objects.begin(), objects.end());
     }
   }
 
-  return result;
+  return std::vector<const RectangleObject*>(
+      rectangle_objects.begin(), rectangle_objects.end());
+}
+
+std::vector<const RectangleObject*> RegularGrid::GetRectangleObjects() const {
+  geometry::BoundingBox bounding_box(minx_, maxx_, miny_, maxy_);
+  return GetRectangleObjects(bounding_box);
 }
 
 std::vector<const BoundaryLine*> RegularGrid::GetBoundaryLines(
     const BoundingBox& bounding_box) const {
-  std::vector<const BoundaryLine*> result;
-
   int mini, maxi;
   int minj, maxj;
   GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
       &mini, &minj);
-  GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
+  GetCellCoordinates(bounding_box.GetMaxX(), bounding_box.GetMaxY(),
       &maxi, &maxj);
-  for (int i = mini; i < maxi; ++i) {
-    for (int j = minj; j < maxj; ++j) {
-      const std::vector<const BoundaryLine*>& lines =
+
+  std::set<const BoundaryLine*> boundary_lines;
+  for (int i = mini; i <= maxi; ++i) {
+    for (int j = minj; j <= maxj; ++j) {
+      std::vector<const BoundaryLine*> lines =
           grid_[i][j].GetBoudnaryLines();
-      result.insert(result.end(), lines.begin(), lines.end());
+      boundary_lines.insert(lines.begin(), lines.end());
     }
   }
 
-  return result;
+  return std::vector<const BoundaryLine*>(
+      boundary_lines.begin(), boundary_lines.end());
+}
+
+std::vector<const BoundaryLine*> RegularGrid::GetBoundaryLines() const {
+  geometry::BoundingBox bounding_box(minx_, maxx_, miny_, maxy_);
+  return GetBoundaryLines(bounding_box);
 }
 
 void RegularGrid::GetCellCoordinates(double x, double y,
     int* i, int* j) const {
-  *i = static_cast<int>((x * VERTICAL_CELL_NUM) / (maxx_ - minx_));
+  *i = static_cast<int>(((x - minx_) * VERTICAL_CELL_NUM) / (maxx_ - minx_));
   if (*i == VERTICAL_CELL_NUM) {
-    *i--;
+    (*i)--;
   }
 
-  *j = static_cast<int>((y * HORIZONTAL_CELL_NUM) / (maxy_ - miny_));
+  *j = static_cast<int>(((y - miny_) * HORIZONTAL_CELL_NUM) / (maxy_ - miny_));
   if (*j == HORIZONTAL_CELL_NUM) {
-    *j--;
+    (*j)--;
   }
 }
 

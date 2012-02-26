@@ -12,4 +12,8 @@ BoundingBox StraightBoundaryLine::GetBoundingBox() const {
   return segment_.GetBoundingBox();  
 }
 
+Segment StraightBoundaryLine::GetSegment() const {
+  return segment_;
+}
+
 }  // namespace geometry
