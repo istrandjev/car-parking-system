@@ -86,6 +86,20 @@ Polygon RectangleObject::GetBounds() const {
   return result;
 }
 
+Polygon RectangleObject::GetExpandedBounds(double expand) const {
+  Vector segment(from_, to_);
+  
+  Vector parallel_shift = segment.Unit() * expand;
+  Vector orthogonal_shift = segment.GetOrthogonal().Unit() * 
+      (width_ * 0.5 + expand);
+  Polygon result;
+  result.AddPointDropDuplicates(from_ + orthogonal_shift - parallel_shift);
+  result.AddPointDropDuplicates(from_ - orthogonal_shift - parallel_shift);
+  result.AddPointDropDuplicates(to_ + orthogonal_shift + parallel_shift);
+  result.AddPointDropDuplicates(to_ - orthogonal_shift + parallel_shift);
+  return result;
+}
+
 // virtual
 BoundingBox RectangleObject::GetBoundingBox() const {
   Polygon bounds = GetBounds();
@@ -99,7 +113,7 @@ BoundingBox RectangleObject::GetBoundingBox() const {
     const Point& point = bounds.GetPoint(index);
     minx = std::min(minx, point.x);
     maxx = std::max(maxx, point.x);
-    miny = std::max(miny, point.y);
+    miny = std::min(miny, point.y);
     maxy = std::max(maxy, point.y);
   }
   return BoundingBox(minx, maxx, miny, maxy);

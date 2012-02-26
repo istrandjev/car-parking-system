@@ -54,11 +54,13 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\car_simulation\car_simulation;C:\glut\glut-3.7.6-bin;C:\ant tweak bar\AntTweakBar\include;C:\Documents and Settings\bs\Desktop\projects\diplomna\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\ant tweak bar\AntTweakBar\lib;C:\glut\glut-3.7.6-bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -10,7 +10,9 @@ class StraightBoundaryLine : public BoundaryLine {
  public:
   StraightBoundaryLine(const Segment& segment);
   virtual BoundingBox GetBoundingBox() const;
-   
+  
+  Segment GetSegment() const;
+
  private:
   Segment segment_;
 };

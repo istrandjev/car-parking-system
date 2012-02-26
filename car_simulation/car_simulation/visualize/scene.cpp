@@ -1,8 +1,12 @@
 #include "visualize/scene.h"
 
+#include "geometry/boundary_line.h"
 #include "geometry/polygon.h"
 #include "geometry/directed_rectangle_object.h"
 #include "geometry/rectangle_object.h"
+#include "geometry/segment.h"
+#include "geometry/straight_boundary_line.h"
+#include "utils/intersection_handler.h"
 #include "utils/object_holder.h"
 
 #include <glut.h>
@@ -22,7 +26,9 @@ static const double SCALE_FACTOR = 10;
 
 // static declarations
 std::vector<simulation::Car> Scene::cars_;
-utils::ObjectHolder Scene::objectHolder_;
+utils::ObjectHolder* Scene::objectHolder_ = NULL;
+utils::IntersectionHandler* Scene::intersectionHandler_ = NULL;
+
 bool Scene::showTurnTip_ = false;
 
 int Scene::width_ = DEFAULT_WIDTH;
@@ -98,9 +104,26 @@ int Scene::Height() {
   return height_;
 }
 
+
+// static
+void Scene::SetObjectHolder(utils::ObjectHolder* object_holder) {
+  objectHolder_ = object_holder;
+}
+
 // static
 utils::ObjectHolder* Scene::GetObjectHolder() {
-  return &objectHolder_;
+  return objectHolder_;
+}
+
+// static
+void Scene::SetIntersectionHandler(utils::IntersectionHandler*
+    intersection_handler) {
+  intersectionHandler_ = intersection_handler;
+}
+
+// static
+utils::IntersectionHandler* Scene::GetIntersectionHandler() {
+  return intersectionHandler_;
 }
 
 void Scene::ResetCar(unsigned index) {
@@ -110,6 +133,27 @@ void Scene::ResetCar(unsigned index) {
 // static 
 void Scene::AddCar(double width, double length, double max_steering_angle) {
   cars_.push_back(simulation::Car(width, length, max_steering_angle));
+}
+
+// static
+void Scene::TurnCarLeft(unsigned index) {
+  cars_[index].TurnLeft();
+}
+
+// static
+void Scene::TurnCarRight(unsigned index) {
+  cars_[index].TurnRight();
+}
+
+// static 
+void Scene::Move(bool forward) {
+  for (unsigned index = 0; index < cars_.size(); ++index) {
+    if (forward) {
+      cars_[index].Move(METERS_PER_STEP);
+    } else {
+      cars_[index].Move(-METERS_PER_STEP);    
+    }
+  }
 }
 
 // static
@@ -127,6 +171,7 @@ void Scene::Draw() {
   for (unsigned index = 0; index < cars_.size(); ++index) {
     DrawCar(index);
   }
+  DrawBorderLines();
 }
 
 // static 
@@ -171,16 +216,16 @@ void Scene::DrawCar(unsigned index) {
 // static
 void Scene::DrawObjects() {
   glColor4f(1.0, 0.8, 0.6, 0.5);
-  DrawObjectsFromContainer(objectHolder_.GetRoadSegments());
+  DrawObjectsFromContainer(objectHolder_->GetRoadSegments());
 
   glColor4f(0.5, 0.5, 0.5, 0.5);
-  DrawObjectsFromContainer(objectHolder_.GetParkingLots());
+  DrawObjectsFromContainer(objectHolder_->GetParkingLots());
 
   glColor4f(0.0, 0.0, 0.0, 0.5);
-  DrawObjectsFromContainer(objectHolder_.GetObstacles());
+  DrawObjectsFromContainer(objectHolder_->GetObstacles());
 
-  if (objectHolder_.HasSelected()) {
-    DrawSelected(objectHolder_.GetSelected()->GetBounds());
+  if (objectHolder_->HasSelected()) {
+    DrawSelected(objectHolder_->GetSelected()->GetBounds());
   }
 }
 
@@ -264,7 +309,6 @@ void Scene::DrawDirectionalTips(
   glEnd();
   glDisable(GL_LINE_STIPPLE);
 
-
   DrawArrow(middle + vector * 0.165, middle + vector * 0.33, width);
   if (!directed_object.IsOneWay()) {
     DrawArrow(middle - vector * 0.165, middle - vector * 0.33, width);
@@ -272,24 +316,26 @@ void Scene::DrawDirectionalTips(
 }
 
 // static
-void Scene::TurnCarLeft(unsigned index) {
-  cars_[index].TurnLeft();
-}
+void Scene::DrawBorderLines() {
+  std::vector<const geometry::BoundaryLine*> boundary_lines =
+      intersectionHandler_->GetBoundaryLines();
 
-// static
-void Scene::TurnCarRight(unsigned index) {
-  cars_[index].TurnRight();
-}
+  glColor4f(1.0, 0.0, 0.0, 1.0);
+  glLineStipple(0.1, 0xffff);
+  glEnable(GL_LINE_STIPPLE);
 
-// static 
-void Scene::Move(bool forward) {
-  for (unsigned index = 0; index < cars_.size(); ++index) {
-    if (forward) {
-      cars_[index].Move(METERS_PER_STEP);
-    } else {
-      cars_[index].Move(-METERS_PER_STEP);    
-    }
+  for (unsigned index = 0 ;index < boundary_lines.size(); ++index) {
+    const geometry::Segment segment = 
+        dynamic_cast<const geometry::StraightBoundaryLine*>(
+            boundary_lines[index])->GetSegment();
+
+    glBegin(GL_LINE_STRIP);
+      glVertex2d(segment.A().x, segment.A().y);
+      glVertex2d(segment.B().x, segment.B().y);
+    glEnd();
   }
+
+  glDisable(GL_LINE_STIPPLE);
 }
 
 }  // namespace visualize
