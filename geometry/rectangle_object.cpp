@@ -95,8 +95,8 @@ Polygon RectangleObject::GetExpandedBounds(double expand) const {
   Polygon result;
   result.AddPointDropDuplicates(from_ + orthogonal_shift - parallel_shift);
   result.AddPointDropDuplicates(from_ - orthogonal_shift - parallel_shift);
-  result.AddPointDropDuplicates(to_ + orthogonal_shift + parallel_shift);
   result.AddPointDropDuplicates(to_ - orthogonal_shift + parallel_shift);
+  result.AddPointDropDuplicates(to_ + orthogonal_shift + parallel_shift);
   return result;
 }
 

@@ -9,7 +9,7 @@ bool BoundaryLine::IsCrossable() const {
 }
 
 void BoundaryLine::SetIsCrossable(bool crossable) {
-  crossable = crossable_;
+  crossable_ = crossable;
 }
 
 }  // namespace geometry

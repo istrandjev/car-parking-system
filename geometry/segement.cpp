@@ -72,4 +72,8 @@ Segment Segment::SubSegment(double start_fraction, double end_fraction) const {
   return Segment(GetPoint(start_fraction), GetPoint(end_fraction));
 }
 
+double Segment::Length() const {
+  return A_.GetDistance(B_);
+}
+
 }  // namespace geometry

@@ -320,7 +320,6 @@ void Scene::DrawBorderLines() {
   std::vector<const geometry::BoundaryLine*> boundary_lines =
       intersectionHandler_->GetBoundaryLines();
 
-  glColor4f(1.0, 0.0, 0.0, 1.0);
   glLineStipple(0.1, 0xffff);
   glEnable(GL_LINE_STIPPLE);
 
@@ -328,7 +327,11 @@ void Scene::DrawBorderLines() {
     const geometry::Segment segment = 
         dynamic_cast<const geometry::StraightBoundaryLine*>(
             boundary_lines[index])->GetSegment();
-
+    if (boundary_lines[index]->IsCrossable()) {
+      glColor4f(0.0, 1.0, 0.0, 1.0);
+    } else {
+      glColor4f(1.0, 0.0, 0.0, 1.0);    
+    }
     glBegin(GL_LINE_STRIP);
       glVertex2d(segment.A().x, segment.A().y);
       glVertex2d(segment.B().x, segment.B().y);
