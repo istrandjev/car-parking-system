@@ -187,7 +187,7 @@ std::vector<geometry::Polygon> Car::GetRotationGraphics() {
   geometry::Point saved_center = center_;
   geometry::Vector saved_direction = direction_;
   const double step = 3e-2;
-  for (double c = 0.0; c <= geometry::GeometryUtils::PI * 0.5; c += step) {
+  for (double c = 0.0; c <= geometry::GeometryUtils::PI; c += step) {
     res.push_back(GetBounds());
     int angle_sign = DoubleSign(current_steering_angle_);
     double fw_angle = current_steering_angle_ + 

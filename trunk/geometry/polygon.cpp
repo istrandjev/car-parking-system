@@ -3,6 +3,7 @@
 #include "geometry/geometry_utils.h"
 #include "geometry/point.h"
 #include "geometry/segment.h"
+#include "geometry/vector.h"
 #include "utils/double_utils.h"
 
 #include <iostream>
@@ -67,6 +68,19 @@ Segment Polygon::GetSide(unsigned side_index) const {
   }
 }
 
+Vector Polygon::GetSideNormal(unsigned side_index) const {
+  const geometry::Point& A = GetPoint(side_index);
+  const geometry::Point& B = GetPointCyclic(side_index + 1);
+  const geometry::Point& C = GetPointCyclic(side_index + 2);
+
+  Vector side_vector(A, B);
+  if (geometry::GeometryUtils::InNegativeSemiPlane(C, A, B)) {
+    return Vector(side_vector.y, -side_vector.x);
+  } else {
+    return Vector(-side_vector.y, side_vector.x);  
+  }
+}
+
 bool Polygon::ContainsPoint(const Point& point) const {
   int intersections = 0;
 
@@ -103,6 +117,12 @@ bool Polygon::ContainsPoint(const Point& point) const {
   }
 
   return intersections % 2 == 1;
+}
+
+void Polygon::Translate(const Vector& translation_vector) {
+  for (unsigned index = 0; index < points_.size(); ++index) {
+    points_[index] += translation_vector;
+  }
 }
 
 std::istream& operator>>(std::istream& in, Polygon& polygon) {

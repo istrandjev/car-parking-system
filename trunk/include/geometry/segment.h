@@ -23,6 +23,8 @@ class Segment {
   Point GetPoint(double fraction) const;
   Segment SubSegment(double start_fraction, double end_fraction) const;
 
+  double Length() const;
+
  public:
   geometry::Point A_, B_;
 };

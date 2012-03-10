@@ -9,6 +9,7 @@
 namespace geometry {
 
 class Segment;
+class Vector;
 
 // This class represents a 2D polygon.
 class Polygon {
@@ -46,9 +47,16 @@ class Polygon {
   // @return - a segment that represents the side with the given index.
   Segment GetSide(unsigned side_index) const;
 
+  // @return - a vector perpendicular to the side and point to the inside of
+  //    the polygon.
+  Vector GetSideNormal(unsigned side_index) const;
+
   // Checks if a point is contained within the boundary of the polygon. For
   // points lying on the boundary this method still returns true.
   bool ContainsPoint(const Point& point) const;
+
+  // Translates the plygon by the supplied "translation_vector".
+  void Translate(const Vector& translation_vector);
 
   friend std::istream& operator>>(std::istream& in, Polygon& polygon);
   friend std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
