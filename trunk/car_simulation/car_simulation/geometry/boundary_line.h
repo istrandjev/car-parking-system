@@ -13,6 +13,7 @@ class BoundaryLine {
   bool IsCrossable() const;
   void SetIsCrossable(bool crossable);
 
+  virtual double GetLength()  const = 0;
   virtual BoundingBox GetBoundingBox() const = 0;
 
  private:

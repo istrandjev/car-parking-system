@@ -8,6 +8,11 @@ StraightBoundaryLine::StraightBoundaryLine(const Segment& segment)
     : segment_(segment) {}
 
 // virtual
+double StraightBoundaryLine::GetLength()  const {
+  return segment_.Length();
+}
+
+// virtual
 BoundingBox StraightBoundaryLine::GetBoundingBox() const {
   return segment_.GetBoundingBox();  
 }

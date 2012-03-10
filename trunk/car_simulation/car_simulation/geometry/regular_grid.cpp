@@ -21,6 +21,14 @@ void GridElement::AddBoundaryLine(const BoundaryLine* boundary_line) {
   boundaryLines_.push_back(boundary_line);
 }
 
+void GridElement::RemoveBoundaryLine(const BoundaryLine* boundary_line) {
+  for (unsigned index = 0; index < boundaryLines_.size(); ++index) {
+    if (boundaryLines_[index] == boundary_line) {
+      boundaryLines_.erase(boundaryLines_.begin() + index);
+      break;
+    }
+  }
+}
 
 const std::vector<const RectangleObject*>& 
     GridElement::GetRectangleObjects() const {
@@ -68,6 +76,24 @@ void RegularGrid::AddBoundaryLine(const BoundaryLine* border) {
   for (int i = mini; i <= maxi; ++i) {
     for (int j = minj; j <= maxj; ++j) {
       grid_[i][j].AddBoundaryLine(border);
+    }
+  }
+}
+
+void RegularGrid::RemoveBoundaryLine(const BoundaryLine* border) {
+  BoundingBox bounding_box = border->GetBoundingBox();
+
+  int mini, maxi;
+  int minj, maxj;
+
+  GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
+      &mini, &minj);
+  GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
+      &maxi, &maxj);
+  
+  for (int i = mini; i <= maxi; ++i) {
+    for (int j = minj; j <= maxj; ++j) {
+      grid_[i][j].RemoveBoundaryLine(border);
     }
   }
 }

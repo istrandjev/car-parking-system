@@ -32,7 +32,6 @@ class RectangleObject {
   void SetIsObstacle(bool is_obstacle);
 
   Polygon GetBounds() const;
-  Polygon GetExpandedBounds(double expand) const;
   virtual BoundingBox GetBoundingBox() const;
 
   virtual bool IsDirected() const;

@@ -1,5 +1,7 @@
 #include "geometry/bounding_box.h"
 
+#include "utils/double_utils.h"
+
 namespace geometry {
 
 BoundingBox::BoundingBox() : empty_(true),
@@ -26,6 +28,16 @@ double BoundingBox::GetMinY() const {
 
 double BoundingBox::GetMaxY() const {
   return maxy_;
+}
+
+BoundingBox BoundingBox::GetExpanded(double value) {
+  return BoundingBox(minx_ - value, maxx_ + value,
+                     miny_ - value, maxy_ + value);
+}
+
+bool BoundingBox::Intersect(const BoundingBox& other) const {
+  return DoubleIntervalsOverlap(minx_, maxx_, other.minx_, other.maxx_) &&
+      DoubleIntervalsOverlap(miny_, maxy_, other.miny_, other.maxy_);
 }
 
 }  // namespace geometry

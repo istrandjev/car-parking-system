@@ -126,6 +126,9 @@
     <ClCompile Include="utils\intersection_handler.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="simulation\car_movement_handler.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="utils\intersection_handler.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation\car_movement_handler.h">
+      <Filter>Header Files\simulation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

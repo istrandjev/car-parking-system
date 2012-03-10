@@ -18,6 +18,10 @@ bool DoubleIsStrictlyBetween(double x, double min_val, double max_val);
 // @return true iff 'x' belongs to the closed interval [min_val, max_val].
 bool DoubleIsBetween(double x, double min_val, double max_val);
 
+// @return true iff the intervals [min1, max1] and [min2, max2] overlap.
+bool DoubleIntervalsOverlap(double min1, double max1,
+                            double min2, double max2);
+
 // @return true iff "lhs" is equal to "rhs" with double tolerance.
 bool DoubleEquals(double lhs, double rhs);
 

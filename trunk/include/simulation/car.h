@@ -1,5 +1,5 @@
-#ifndef CAR_H
-#define CAR_H
+#ifndef SIMULATION_CAR_H_
+#define SIMULATION_CAR_H_
 
 #include "geometry/point.h"
 #include "geometry/vector.h"
@@ -17,7 +17,11 @@ class Car {
   Car(double width, double length, double max_steering_angle);
 
   void SetCenter(const geometry::Point& center);
+  geometry::Point GetCenter() const;
   void SetDirection(const geometry::Vector& direction);
+  geometry::Vector GetDirection() const;
+
+  double GetCurrentSteeringAngle() const;
 
   void TurnLeft();
   void TurnRight();
@@ -54,4 +58,4 @@ class Car {
 
 }  // namespace simulation
 
-#endif  // CAR_H
+#endif  // SIMULATION_CAR_H_
