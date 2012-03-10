@@ -87,6 +87,7 @@
     <ClCompile Include="geometry\straight_boundary_line.cpp" />
     <ClCompile Include="handlers\event_handlers.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="simulation\car_movement_handler.cpp" />
     <ClCompile Include="utils\boundary_line_holder.cpp" />
     <ClCompile Include="utils\intersection_handler.cpp" />
     <ClCompile Include="visualize\glut_utils.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="geometry\regular_grid.h" />
     <ClInclude Include="geometry\straight_boundary_line.h" />
     <ClInclude Include="handlers\event_handlers.h" />
+    <ClInclude Include="simulation\car_movement_handler.h" />
     <ClInclude Include="utils\boundary_line_holder.h" />
     <ClInclude Include="utils\intersection_handler.h" />
     <ClInclude Include="visualize\glut_utils.h" />

@@ -9,6 +9,7 @@ namespace geometry {
 class StraightBoundaryLine : public BoundaryLine {
  public:
   StraightBoundaryLine(const Segment& segment);
+  virtual double GetLength()  const;  
   virtual BoundingBox GetBoundingBox() const;
   
   Segment GetSegment() const;

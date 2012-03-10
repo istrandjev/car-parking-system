@@ -26,8 +26,20 @@ void Car::SetCenter(const geometry::Point& center) {
   center_ = center;
 }
 
+geometry::Point Car::GetCenter() const {
+  return center_;
+}
+
 void Car::SetDirection(const geometry::Vector& direction) {
   direction_ = direction.Unit();
+}
+
+geometry::Vector Car::GetDirection() const {
+  return direction_;
+}
+
+double Car::GetCurrentSteeringAngle() const {
+  return current_steering_angle_;
 }
 
 void Car::Move(double meters_step) {

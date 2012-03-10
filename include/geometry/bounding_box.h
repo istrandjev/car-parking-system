@@ -7,12 +7,16 @@ class BoundingBox {
  public:
   BoundingBox();
   BoundingBox(double minx, double maxx, double miny, double maxy);
-  
+
   bool IsEmpty() const;
   double GetMinX() const;
   double GetMaxX() const;
   double GetMinY() const;
   double GetMaxY() const;
+
+  BoundingBox GetExpanded(double value);
+
+  bool Intersect(const BoundingBox& other) const;
 
  private:
   double minx_, maxx_;

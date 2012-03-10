@@ -12,7 +12,8 @@ class RectangleObject;
 class GridElement {
  public:
   void AddRectangleObject(const RectangleObject* rectangle_object);
-  void AddBoundaryLine(const BoundaryLine* boudnary_line);
+  void AddBoundaryLine(const BoundaryLine* boundary_line);
+  void RemoveBoundaryLine(const BoundaryLine* boundary_line);
 
   const std::vector<const RectangleObject*>& GetRectangleObjects() const;
   const std::vector<const BoundaryLine*>& GetBoudnaryLines() const;
@@ -27,6 +28,7 @@ class RegularGrid {
   RegularGrid(double minx, double maxx, double miny, double maxy);
   void AddRectangleObject(const RectangleObject* object);  
   void AddBoundaryLine(const BoundaryLine* border);
+  void RemoveBoundaryLine(const BoundaryLine* border);
 
   std::vector<const RectangleObject*> GetRectangleObjects(
       const BoundingBox& bounding_box) const;
@@ -35,7 +37,7 @@ class RegularGrid {
   std::vector<const BoundaryLine*> GetBoundaryLines(
       const BoundingBox& bounding_box) const;
   std::vector<const BoundaryLine*> GetBoundaryLines() const;
-       
+  
  private:
   void GetCellCoordinates(double x, double y, int* i, int* j) const;
 
