@@ -4,6 +4,7 @@
 #include "geometry/line.h"
 #include "geometry/point.h"
 #include "geometry/polygon.h"
+#include "geometry/rectangle_object.h"
 #include "utils/double_utils.h"
 
 #include <cmath>
@@ -42,11 +43,18 @@ double Car::GetCurrentSteeringAngle() const {
   return current_steering_angle_;
 }
 
-void Car::Move(double meters_step) {
+double Car::GetWidth() const {
+  return width_;
+}
+double Car::GetLength() const {
+  return length_;
+}
+
+geometry::Point Car::GetRotationCenter() const {
   int angle_sign = DoubleSign(current_steering_angle_);
+  
   if (angle_sign == 0) {
-    center_ = center_ + direction_.Unit() * meters_step;
-    return;
+    return center_;
   }
 
   geometry::Point fw_center, rw_center;
@@ -71,6 +79,17 @@ void Car::Move(double meters_step) {
     throw std::invalid_argument("current_steering_angle in "
         "Car::Move has incorrect value!");
   } 
+  return rotation_center;
+}
+
+void Car::Move(double meters_step) {
+  int angle_sign = DoubleSign(current_steering_angle_);
+  if (angle_sign == 0) {
+    center_ = center_ + direction_.Unit() * meters_step;
+    return;
+  }
+
+  geometry::Point rotation_center = GetRotationCenter();
 
   double rotation_angle = meters_step / rotation_center.GetDistance(center_) ;
   center_ = center_.Rotate(rotation_center, rotation_angle * angle_sign);
@@ -196,39 +215,32 @@ std::vector<geometry::Polygon> Car::GetWheels() const {
 
 std::vector<geometry::Polygon> Car::GetRotationGraphics() {
   std::vector<geometry::Polygon> res;
-  geometry::Point saved_center = center_;
-  geometry::Vector saved_direction = direction_;
+
   const double step = 3e-2;
-  for (double c = 0.0; c <= geometry::GeometryUtils::PI; c += step) {
-    res.push_back(GetBounds());
-    int angle_sign = DoubleSign(current_steering_angle_);
-    double fw_angle = current_steering_angle_ + 
-        geometry::GeometryUtils::PI * angle_sign * 0.5;
 
-    geometry::Vector fw_axis_vector = direction_.Rotate(fw_angle);
-    geometry::Vector rw_axis_vector = direction_.GetOrthogonal();
+  int angle_sign = DoubleSign(current_steering_angle_);
+  if (angle_sign != 0) {  
+    geometry::Point saved_center = center_;
+    geometry::Vector saved_direction = direction_;
+    for (double c = 0.0; c <= geometry::GeometryUtils::PI; c += step) {
+      res.push_back(GetBounds());
 
-    geometry::Point fw_center, rw_center;
-    if (angle_sign > 0) {
-      fw_center = GetFrontLeftWheelCenter();
-      rw_center = GetRearLeftWheelCenter();
-    } else {
-      fw_center = GetFrontRightWheelCenter();  
-      rw_center = GetRearRightWheelCenter();
+      geometry::Point rotation_center = GetRotationCenter();
+
+      center_ = center_.Rotate(rotation_center, step * angle_sign);
+      direction_ = direction_.Rotate(step * angle_sign);
     }
+    center_ = saved_center;
+    direction_ = saved_direction;
+  } else {
+    const double tip_length = 200.0;
 
-    geometry::Line fw_axis(fw_center, fw_axis_vector);
-    geometry::Line rw_axis(rw_center, rw_axis_vector);
-    geometry::Point rotation_center;
-    if (!fw_axis.Intersect(rw_axis, &rotation_center)) {
-      throw std::invalid_argument("current_steering_angle in "
-          "Car::Move has incorrect value!");
-    }
-    center_ = center_.Rotate(rotation_center, step * angle_sign);
-    direction_ = direction_.Rotate(step * angle_sign);
+    geometry::Point from = center_ + direction_.Unit() * (length_ * -0.5);
+    geometry::Point to =  from + direction_.Unit() * tip_length;
+
+    geometry::RectangleObject rectangle_object(from, to);
+    res.push_back(rectangle_object.GetBounds());
   }
-  center_ = saved_center;
-  direction_ = saved_direction;
   return res;
 }
 

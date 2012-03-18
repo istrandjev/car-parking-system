@@ -22,6 +22,10 @@ class Car {
   geometry::Vector GetDirection() const;
 
   double GetCurrentSteeringAngle() const;
+  double GetWidth() const;
+  double GetLength() const;
+
+  geometry::Point GetRotationCenter() const;
 
   void TurnLeft();
   void TurnRight();
