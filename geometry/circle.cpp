@@ -1,5 +1,6 @@
 #include "geometry/circle.h"
 
+#include "geometry/geometry_utils.h"
 #include "geometry/line.h"
 #include "geometry/point.h"
 #include "geometry/vector.h"
@@ -7,8 +8,34 @@
 
 namespace geometry {
 
+Circle::Circle() : radius_(0) {}
+
 Circle::Circle(const Point& center, double radius)
     : center_(center), radius_(radius) {}
+
+const Point& Circle::GetCenter() const {
+  return center_;
+}
+
+double Circle::GetRadius() const {
+  return radius_;
+}
+
+void Circle::SetRadius(double radius) {
+  radius_ = radius;
+}
+
+void Circle::SetCenter(const geometry::Point& center) {
+  center_ = center;
+}
+
+double Circle::GetAngle(const Point& point) const {
+  double angle = atan2(point.x - center_.x, point.y - center_.y);
+  if (DoubleIsGreater(0.0, angle)) {
+    angle += 2.0 * geometry::GeometryUtils::PI;
+  }
+  return angle;
+}
 
 std::vector<Point> Circle::Intersect(const Line& line) const {
   std::vector<Point> result;
@@ -31,14 +58,6 @@ std::vector<Point> Circle::Intersect(const Line& line) const {
     result.push_back(heel - parallel);
     return result;
   }
-}
-
-const Point& Circle::GetCenter() const {
-  return center_;
-}
-
-double Circle::GetRadius() const {
-  return radius_;
 }
 
 }  // namespace geometry  

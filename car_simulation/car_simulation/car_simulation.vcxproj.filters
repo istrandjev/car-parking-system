@@ -129,6 +129,9 @@
     <ClCompile Include="simulation\car_movement_handler.cpp">
       <Filter>Source Files\simulation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\geometry\polygon_intersection.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">

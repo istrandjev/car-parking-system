@@ -2,6 +2,8 @@
 
 #include "utils/double_utils.h"
 
+#include <algorithm>
+
 namespace geometry {
 
 BoundingBox::BoundingBox() : empty_(true),
@@ -38,6 +40,14 @@ BoundingBox BoundingBox::GetExpanded(double value) {
 bool BoundingBox::Intersect(const BoundingBox& other) const {
   return DoubleIntervalsOverlap(minx_, maxx_, other.minx_, other.maxx_) &&
       DoubleIntervalsOverlap(miny_, maxy_, other.miny_, other.maxy_);
+}
+
+BoundingBox BoundingBox::UnionWith(const BoundingBox& other) {
+  double minx = std::min(other.minx_, minx_);
+  double maxx = std::min(other.maxx_, maxx_);
+  double miny = std::min(other.miny_, miny_);
+  double maxy = std::min(other.maxy_, maxy_);
+  return BoundingBox(minx, maxx, miny, maxy);
 }
 
 }  // namespace geometry
