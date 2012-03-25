@@ -37,6 +37,13 @@ double Circle::GetAngle(const Point& point) const {
   return angle;
 }
 
+geometry::Point Circle::GetPoint(double angle) const {
+  geometry::Point result;
+  result.x = center_.x + cos(angle) * radius_;
+  result.y = center_.y + sin(angle) * radius_;
+  return result;
+}
+
 std::vector<Point> Circle::Intersect(const Line& line) const {
   std::vector<Point> result;
 

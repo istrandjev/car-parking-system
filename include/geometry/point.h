@@ -18,6 +18,8 @@ class Point {
   Point& operator-=(const Vector& vector);
   Point operator+(const Vector& vector) const;
   Point operator-(const Vector& vector) const;
+  bool operator==(const Point& other) const;
+  bool operator!=(const Point& other) const;
 
   Point Rotate(const Point& center, double angle) const;
 

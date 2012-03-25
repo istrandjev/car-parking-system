@@ -6,6 +6,7 @@
 namespace geometry {
 
 class BoundingBox;
+class Line;
 
 class Segment {
  public:
@@ -19,6 +20,9 @@ class Segment {
   bool Intersect(const Segment& other, double* this_fraction, 
       double* other_fraction) const;
   bool Intersect(const Segment& other, double* this_fraction) const;
+  bool Intersect(const Segment& other) const;
+
+  Line GetLine() const;
 
   Point GetPoint(double fraction) const;
   Segment SubSegment(double start_fraction, double end_fraction) const;

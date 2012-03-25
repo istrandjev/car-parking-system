@@ -3,9 +3,12 @@
 
 namespace geometry {
 
+class Point;
+
 class BoundingBox {
  public:
   BoundingBox();
+  BoundingBox(const geometry::Point& point);
   BoundingBox(double minx, double maxx, double miny, double maxy);
 
   bool IsEmpty() const;
@@ -16,9 +19,11 @@ class BoundingBox {
 
   BoundingBox GetExpanded(double value);
 
+  bool Contains(const geometry::Point& point) const;
   bool Intersect(const BoundingBox& other) const;
 
-  BoundingBox UnionWith(const BoundingBox& other);
+  void UnionWith(const BoundingBox& other);
+  void AddPoint(const geometry::Point& point);
 
  private:
   double minx_, maxx_;

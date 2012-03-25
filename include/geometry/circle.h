@@ -21,6 +21,7 @@ class Circle {
   void SetCenter(const geometry::Point& center);
 
   double GetAngle(const Point& point) const;
+  geometry::Point GetPoint(double angle) const;
 
   std::vector<Point> Intersect(const Line& line) const;
 
