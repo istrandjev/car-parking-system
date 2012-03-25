@@ -1,6 +1,7 @@
 #include "geometry/point.h"
 
 #include "geometry/vector.h"
+#include "utils/double_utils.h"
 
 #include <cmath>
 #include <iostream>
@@ -31,6 +32,14 @@ Point Point::operator-(const Vector& vector) const {
   Point result = *this;
   result -= vector;
   return result;
+}
+
+bool Point::operator==(const Point& other) const {
+  return DoubleEquals(x, other.x) && DoubleEquals(y, other.y);
+}
+
+bool Point::operator!=(const Point& other) const {
+  return !DoubleEquals(x, other.x) || !DoubleEquals(y, other.y);
 }
 
 Point Point::Rotate(const Point& center, double angle) const {

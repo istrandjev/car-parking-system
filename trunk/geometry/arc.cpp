@@ -1,10 +1,14 @@
 #include "geometry/arc.h"
 
+#include "geometry/bounding_box.h"
 #include "geometry/circle.h"
-#include "geometry/point.h"
 #include "geometry/geometry_utils.h"
+#include "geometry/line.h"
+#include "geometry/point.h"
+#include "geometry/segment.h"
 #include "utils/double_utils.h"
 
+#include <algorithm>
 #include <vector>
 
 namespace geometry {
@@ -48,15 +52,66 @@ std::vector<Point> Arc::Intersect(const Line& line) const {
   return result;
 }
 
+bool Arc::Intersect(const Segment& segment) const {
+  std::vector<Point> points = Intersect(segment.GetLine());
+
+  geometry::BoundingBox bounding_box = segment.GetBoundingBox();
+  for (unsigned index = 0; index < points.size(); ++index) {
+    if (bounding_box.Contains(points[index])) {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool Arc::Contains(const Point& point) const {
   double angle = circle_.GetAngle(point);
   if (DoubleIsGreaterOrEqual(endAngle_, startAngle_)) {
-    return DoubleIsGreaterOrEqual(angle, startAngle_) 
-        && DoubleIsGreaterOrEqual(endAngle_, angle);
+    return DoubleIsBetween(angle, startAngle_, endAngle_);
   } else {
-    return DoubleIsGreaterOrEqual(angle, endAngle_) 
-        && DoubleIsGreaterOrEqual(startAngle_, angle);
+    return DoubleIsBetween(angle, endAngle_, startAngle_);
   }
+}
+
+double Arc::GetStartAngle() const {
+  return startAngle_;
+}
+
+double Arc::GetEndAngle() const {
+  return endAngle_;
+}
+
+geometry::Point Arc::GetStartPoint() const {
+  return circle_.GetPoint(startAngle_);
+}
+  
+geometry::Point Arc::GetEndPoint() const {
+  return circle_.GetPoint(endAngle_);
+}
+
+double Arc::GetRadius() const {
+  return circle_.GetRadius();
+}
+
+Point Arc::GetCenter() const {
+  return circle_.GetCenter();
+}
+
+BoundingBox Arc::GetBoundingBox() const {
+  BoundingBox result(circle_.GetCenter());
+
+  result.AddPoint(circle_.GetPoint(startAngle_));
+  result.AddPoint(circle_.GetPoint(endAngle_));
+
+  const double& pi = geometry::GeometryUtils::PI;
+  for (double angle = -pi * 2.0; angle < pi * 2.0; angle += pi * 0.5) {
+    if (DoubleIsGreaterOrEqual(angle, startAngle_) &&
+        DoubleIsGreaterOrEqual(endAngle_, angle)) {
+      result.AddPoint(circle_.GetPoint(angle));    
+    }
+  }
+ 
+  return result; 
 }
 
 }  // namespace geometry

@@ -1,6 +1,7 @@
 #include "geometry/segment.h"
 
 #include "geometry/bounding_box.h"
+#include "geometry/line.h"
 #include "geometry/point.h"
 #include "geometry/vector.h"
 #include "utils/double_utils.h"
@@ -61,6 +62,15 @@ bool Segment::Intersect(const Segment& other, double* this_fraction,
 bool Segment::Intersect(const Segment& other, double* this_fraction) const {
   double other_fraction;
   return Intersect(other, this_fraction, &other_fraction);
+}
+
+bool Segment::Intersect(const Segment& other) const {
+  double other_fraction, this_fraction;
+  return Intersect(other, &this_fraction, &other_fraction);
+}
+
+Line Segment::GetLine() const {
+  return Line(A_, B_);
 }
 
 Point Segment::GetPoint(double fraction) const {

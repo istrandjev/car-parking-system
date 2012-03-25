@@ -5,8 +5,10 @@
 
 namespace geometry {
 
+class BoundingBox;
 class Line;
 class Point;
+class Segment;
 
 class Arc { 
  public:
@@ -17,7 +19,19 @@ class Arc {
       double angle);
 
   std::vector<Point> Intersect(const Line& line) const;
+  bool Intersect(const Segment& segment) const;
  
+  double GetStartAngle() const;
+  double GetEndAngle() const;
+
+  Point GetStartPoint() const;
+  Point GetEndPoint() const;
+
+  double GetRadius() const;
+  Point GetCenter() const;
+
+  BoundingBox GetBoundingBox() const;
+
  private:
   bool Contains(const Point& point) const;
 

@@ -10,6 +10,7 @@ namespace simulation {
 class Car;
 
 class CarMovementHandler {
+ public:
   static bool CarMovementPossibleByDistance(const Car& car, double distance,
       const utils::IntersectionHandler& intersection_handler);
   static bool CarMovementPossibleByAngle(const Car& car, double angle,
