@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\geometry\line.cpp" />
     <ClCompile Include="..\..\geometry\point.cpp" />
     <ClCompile Include="..\..\geometry\polygon.cpp" />
+    <ClCompile Include="..\..\geometry\polygon_intersection.cpp" />
     <ClCompile Include="..\..\geometry\rectangle_object.cpp" />
     <ClCompile Include="..\..\geometry\segement.cpp" />
     <ClCompile Include="..\..\geometry\vector.cpp" />

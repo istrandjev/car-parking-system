@@ -75,35 +75,6 @@ std::vector<const geometry::BoundaryLine*> IntersectionHandler::
   return grid_.GetBoundaryLines();
 }
 
-bool Intersect(const geometry::Polygon& polygon,
-               const geometry::Segment& segment,
-               std::pair<double, double>* intersection) {
-  double min_fraction, max_fraction;
-  min_fraction = 1.0;
-  max_fraction = 0.0;
-  if (polygon.ContainsPoint(segment.A())) {
-    min_fraction = 0.0;
-  }
-  if (polygon.ContainsPoint(segment.B())) {
-    max_fraction = 1.0;
-  }
-
-  for (unsigned index = 0; index < polygon.NumberOfSides(); ++index) {
-    double fraction;
-    if (segment.Intersect(polygon.GetSide(index), &fraction)) {
-      min_fraction = std::min(min_fraction, fraction);
-      max_fraction = std::max(max_fraction, fraction);
-    }
-  }
-
-  if (DoubleIsGreater(max_fraction, min_fraction)) {
-    intersection->first = min_fraction;
-    intersection->second = max_fraction;
-    return true;
-  }
-  return false;
-}
-
 void IntersectionHandler::AddBoundaryLinesForObject(
     const geometry::RectangleObject* object){
   const geometry::Polygon bounds = object->GetBounds();

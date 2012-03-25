@@ -12,6 +12,30 @@ namespace geometry {
 Arc::Arc(const Circle& circle, double start_angle, double end_angle) 
     : circle_(circle), startAngle_(start_angle), endAngle_(end_angle) {}
 
+Arc::Arc(const geometry::Point& center, const geometry::Point& from,
+    const geometry::Point& to) {
+  double radius = center.GetDistance(from);
+  circle_.SetCenter(center);
+  circle_.SetRadius(radius);
+
+  startAngle_ = circle_.GetAngle(from);
+  endAngle_ = circle_.GetAngle(to);
+}
+
+Arc::Arc(const geometry::Point& center, const geometry::Point& from,
+    double angle) {
+  double radius = center.GetDistance(from);
+  circle_.SetCenter(center);
+  circle_.SetRadius(radius);
+
+  startAngle_ = circle_.GetAngle(from);
+  if(DoubleIsGreater(angle, geometry::GeometryUtils::PI)) {
+    angle = geometry::GeometryUtils::PI;
+  }
+
+  endAngle_ = startAngle_ + angle;
+}
+
 std::vector<Point> Arc::Intersect(const Line& line) const {
   std::vector<Point> intersections = circle_.Intersect(line);
   std::vector<Point> result;
@@ -24,9 +48,8 @@ std::vector<Point> Arc::Intersect(const Line& line) const {
   return result;
 }
 
-
 bool Arc::Contains(const Point& point) const {
-  double angle = GetAngle(point);
+  double angle = circle_.GetAngle(point);
   if (DoubleIsGreaterOrEqual(endAngle_, startAngle_)) {
     return DoubleIsGreaterOrEqual(angle, startAngle_) 
         && DoubleIsGreaterOrEqual(endAngle_, angle);
@@ -34,15 +57,6 @@ bool Arc::Contains(const Point& point) const {
     return DoubleIsGreaterOrEqual(angle, endAngle_) 
         && DoubleIsGreaterOrEqual(startAngle_, angle);
   }
-}
-
-double Arc::GetAngle(const Point& point) const {
-  const geometry::Point& center = circle_.GetCenter();
-  double angle = atan2(point.x - center.x, point.y - center.y);
-  if (DoubleIsGreater(0.0, angle)) {
-    angle += 2.0 * geometry::GeometryUtils::PI;
-  }
-  return angle;
 }
 
 }  // namespace geometry

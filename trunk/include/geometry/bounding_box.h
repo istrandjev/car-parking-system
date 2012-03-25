@@ -18,6 +18,8 @@ class BoundingBox {
 
   bool Intersect(const BoundingBox& other) const;
 
+  BoundingBox UnionWith(const BoundingBox& other);
+
  private:
   double minx_, maxx_;
   double miny_, maxy_;

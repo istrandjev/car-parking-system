@@ -74,6 +74,21 @@ class Polygon {
 void Intersect(const Polygon& poly1, const Polygon& poly2,
   std::vector<Polygon>* intersection);
 
+// Intersects the polygon with the segment and returns the fractions in which
+// the intersection points divide the segment.
+// @param polygon - the polygon to be intersected
+// @param segment - the segment to check for intersection with the polygon
+// @param intersection - the fractions of the two intersections of the polygon
+//     with the segment. If there is no intersection remains unchanged. If
+//     there is a single intersection point the two fractions will be the same.
+//     Pass NULL if you only care if the segment intersects the polygon.
+// @return if the segment intersects the polygon (touching is also considered
+//     intersection).
+bool Intersect(const geometry::Polygon& polygon,
+               const geometry::Segment& segment,
+               std::pair<double, double>* intersection);
+
+
 std::istream& operator>>(std::istream& in, Polygon& polygon);
 std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 
