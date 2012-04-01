@@ -34,6 +34,7 @@ class Arc {
 
  private:
   bool Contains(const Point& point) const;
+  bool ContainsAngle(double angle) const;
 
  private:
   Circle circle_;

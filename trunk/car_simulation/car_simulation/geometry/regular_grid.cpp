@@ -166,7 +166,7 @@ void RegularGrid::GetCellCoordinates(double x, double y,
   if (*j >= HORIZONTAL_CELL_NUM) {
     *j = HORIZONTAL_CELL_NUM - 1;
   }
-  if (j < 0) {
+  if (*j < 0) {
     *j = 0;
   }
 }

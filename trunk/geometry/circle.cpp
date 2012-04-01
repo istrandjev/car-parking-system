@@ -31,10 +31,7 @@ void Circle::SetCenter(const geometry::Point& center) {
 
 double Circle::GetAngle(const Point& point) const {
   double angle = atan2(point.y - center_.y, point.x - center_.x);
-  if (DoubleIsGreater(0.0, angle)) {
-    angle += 2.0 * geometry::GeometryUtils::PI;
-  }
-  return angle;
+  return GeometryUtils::NormalizeAngle(angle);
 }
 
 geometry::Point Circle::GetPoint(double angle) const {

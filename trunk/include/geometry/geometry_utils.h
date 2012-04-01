@@ -50,6 +50,9 @@ class GeometryUtils {
   // Converts an angle in degrees to the same angle but in radians.
   static double DegreesToRadians(double degrees);
 
+  // Normalizes the angle to be in the interval [0, 2 * PI)
+  static double NormalizeAngle(double angle);
+
  public:
   static const double PI;
 
