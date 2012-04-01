@@ -43,6 +43,12 @@
     <Filter Include="Header Files\handlers">
       <UniqueIdentifier>{245c5c60-ebcd-4652-beb9-10a68e676089}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\unit tests">
+      <UniqueIdentifier>{9e1dad1b-43b8-436c-9cec-264b28728326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\unit tests">
+      <UniqueIdentifier>{a9547e36-34bc-4d22-a25a-ec10520a4426}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -132,6 +138,9 @@
     <ClCompile Include="..\..\geometry\polygon_intersection.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\unit_tests\geometry_utils_test.cpp">
+      <Filter>Source Files\unit tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -214,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="simulation\car_movement_handler.h">
       <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\unit_tests\test_base.h">
+      <Filter>Header Files\unit tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

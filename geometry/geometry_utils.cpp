@@ -64,4 +64,15 @@ double GeometryUtils::DegreesToRadians(double degrees) {
   return (degrees * PI) / 180.0;
 }
 
+// static
+double GeometryUtils::NormalizeAngle(double angle) {
+  if (DoubleIsGreater(0, angle)) {
+    return angle + ceil(-angle/ (PI * 2.0)) * PI * 2;
+  }
+  if (DoubleIsGreaterOrEqual(angle, 2 * PI)) {
+    return angle - ceil((angle - 2.0 * PI) / ( 2.0 * PI) + epsylon) * PI * 2;
+  }
+  return angle;
+}
+
 }  // namespace geometry
