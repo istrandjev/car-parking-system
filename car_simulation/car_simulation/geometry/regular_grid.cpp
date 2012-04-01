@@ -71,7 +71,7 @@ void RegularGrid::AddBoundaryLine(const BoundaryLine* border) {
 
   GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
       &mini, &minj);
-  GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
+  GetCellCoordinates(bounding_box.GetMaxX(), bounding_box.GetMaxY(),
       &maxi, &maxj);
   for (int i = mini; i <= maxi; ++i) {
     for (int j = minj; j <= maxj; ++j) {
