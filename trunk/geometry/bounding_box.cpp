@@ -71,9 +71,9 @@ void BoundingBox::UnionWith(const BoundingBox& other) {
   }
 
   minx_ = std::min(other.minx_, minx_);
-  maxx_ = std::min(other.maxx_, maxx_);
+  maxx_ = std::max(other.maxx_, maxx_);
   miny_ = std::min(other.miny_, miny_);
-  maxy_ = std::min(other.maxy_, maxy_); 
+  maxy_ = std::max(other.maxy_, maxy_); 
   empty_ = empty_ && other.empty_;
 }
 
@@ -82,7 +82,7 @@ void BoundingBox::AddPoint(const geometry::Point& point) {
     minx_ = std::min(minx_, point.x); 
     maxx_ = std::max(maxx_, point.x); 
     miny_ = std::min(miny_, point.y); 
-    maxy_ = std::min(maxy_, point.y);
+    maxy_ = std::max(maxy_, point.y);
   } else {
     minx_ = maxx_ = point.x;
     miny_ = maxy_ = point.y;

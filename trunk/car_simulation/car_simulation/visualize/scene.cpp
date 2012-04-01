@@ -3,9 +3,11 @@
 #include "geometry/boundary_line.h"
 #include "geometry/polygon.h"
 #include "geometry/directed_rectangle_object.h"
+#include "geometry/geometry_utils.h"
 #include "geometry/rectangle_object.h"
 #include "geometry/segment.h"
 #include "geometry/straight_boundary_line.h"
+#include "simulation/car_movement_handler.h"
 #include "utils/intersection_handler.h"
 #include "utils/object_holder.h"
 
@@ -203,9 +205,13 @@ void Scene::DrawCar(unsigned index) {
       ++wheel_index) {
     DrawPolygon(wheels[wheel_index]);
   }
-
-  glColor4f(0.5, 0.5, 0.0, 0.8);
   if (showTurnTip_) {
+    if (!simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
+        geometry::GeometryUtils::PI, *intersectionHandler_)) {
+      glColor4f(0.5, 0.0, 0.0, 0.8);    
+    } else {
+      glColor4f(0.5, 0.5, 0.0, 0.8);
+    }
     std::vector<geometry::Polygon> gr = cars_[index].GetRotationGraphics();
     for (unsigned index = 0; index < gr.size(); ++index) {
       DrawPolygon(gr[index]);

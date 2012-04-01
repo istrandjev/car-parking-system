@@ -165,6 +165,9 @@ bool SectionBetweenConcentricArcsContains(
     return false;
   }
 
+
+  // TODO(istrandjev): fix this to have real logic in it.
+  return true;
 }
 
 }  // namespace simulation
