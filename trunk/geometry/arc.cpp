@@ -35,8 +35,13 @@ Arc::Arc(const geometry::Point& center, const geometry::Point& from,
   circle_.SetCenter(center);
   circle_.SetRadius(radius);
 
-  startAngle_ = circle_.GetAngle(from);
-  endAngle_ = GeometryUtils::NormalizeAngle(startAngle_ + angle);
+  if (DoubleIsGreater(angle, 0)) {
+    startAngle_ = circle_.GetAngle(from);
+    endAngle_ = GeometryUtils::NormalizeAngle(startAngle_ + angle);
+  } else {
+    endAngle_ = circle_.GetAngle(from);
+    startAngle_ = GeometryUtils::NormalizeAngle(endAngle_ + angle);
+  }
 }
 
 std::vector<Point> Arc::Intersect(const Line& line) const {
@@ -73,7 +78,7 @@ bool Arc::ContainsAngle(double angle) const {
     return DoubleIsBetween(angle, startAngle_, endAngle_);
   } else {
     return DoubleIsBetween(angle, 0, endAngle_) ||
-     DoubleIsGreaterOrEqual(angle, endAngle_);
+     DoubleIsGreaterOrEqual(angle, startAngle_);
   }
 }
 

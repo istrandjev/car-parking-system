@@ -213,7 +213,8 @@ std::vector<geometry::Polygon> Car::GetWheels() const {
   return result;
 }
 
-std::vector<geometry::Polygon> Car::GetRotationGraphics() {
+std::vector<geometry::Polygon> Car::GetRotationGraphics(
+    double rotation_limit) {
   std::vector<geometry::Polygon> res;
 
   const double step = 3e-2;
@@ -222,7 +223,7 @@ std::vector<geometry::Polygon> Car::GetRotationGraphics() {
   if (angle_sign != 0) {  
     geometry::Point saved_center = center_;
     geometry::Vector saved_direction = direction_;
-    for (double c = 0.0; c <= geometry::GeometryUtils::PI; c += step) {
+    for (double c = 0.0; c <= rotation_limit; c += step) {
       res.push_back(GetBounds());
 
       geometry::Point rotation_center = GetRotationCenter();

@@ -11,6 +11,7 @@ class CurrentState {
   static bool movingTo;
   static bool addingNewLine;
   static geometry::Point lastMousePosition;
+  static bool debugFlag;
 };
 
 }  // namespace utils

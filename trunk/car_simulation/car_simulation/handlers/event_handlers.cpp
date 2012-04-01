@@ -3,6 +3,7 @@
 #include "geometry/point.h"
 #include "geometry/rectangle_object.h"
 #include "geometry/vector.h"
+#include "utils/current_state.h"
 #include "utils/object_holder.h"
 #include "utils/user_input_handler.h"
 #include "visualize/scene.h"
@@ -115,6 +116,9 @@ void HandleKeyboardEvents() {
   }
   if (UserInputHandler::IsRegularKeyPressed('s')) {
     visualize::Scene::TranslateDown();
+  }
+  if (UserInputHandler::IsRegularKeyPressed('e')) {
+    CurrentState::debugFlag = !CurrentState::debugFlag;
   }
 }
 

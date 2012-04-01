@@ -9,6 +9,7 @@
 #include "geometry/straight_boundary_line.h"
 #include "geometry/vector.h"
 #include "simulation/car.h"
+#include "utils/current_state.h"
 #include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
 
@@ -72,9 +73,16 @@ bool CarMovementHandler::CarMovementPossibleByAngle(const Car& car, double angle
 
   geometry::Point center = car.GetRotationCenter();
   geometry::Polygon bounds = car.GetBounds();
+  geometry::Vector direction = car.GetDirection();
   std::vector<geometry::Arc> arcs;
   for (unsigned index = 0; index < bounds.NumberOfVertices(); ++index) {
-    arcs.push_back(geometry::Arc(center, bounds.GetPoint(index), angle));
+    const geometry::Point& point = bounds.GetPoint(index); 
+    geometry::Vector temp(center, point);
+    double actual_angle = angle;
+    if (DoubleIsGreater(0, temp.CrossProduct(direction))) {
+      actual_angle = -actual_angle;
+    }
+    arcs.push_back(geometry::Arc(center, point, actual_angle));
     bounding_box.UnionWith(arcs[index].GetBoundingBox());
   }
 

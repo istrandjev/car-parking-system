@@ -206,13 +206,15 @@ void Scene::DrawCar(unsigned index) {
     DrawPolygon(wheels[wheel_index]);
   }
   if (showTurnTip_) {
+    const double rotation_limit = geometry::GeometryUtils::PI * 0.5;
     if (!simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
-        geometry::GeometryUtils::PI, *intersectionHandler_)) {
+        rotation_limit, *intersectionHandler_)) {
       glColor4f(0.5, 0.0, 0.0, 0.8);    
     } else {
       glColor4f(0.5, 0.5, 0.0, 0.8);
     }
-    std::vector<geometry::Polygon> gr = cars_[index].GetRotationGraphics();
+    std::vector<geometry::Polygon> gr =
+        cars_[index].GetRotationGraphics(rotation_limit);
     for (unsigned index = 0; index < gr.size(); ++index) {
       DrawPolygon(gr[index]);
     }
