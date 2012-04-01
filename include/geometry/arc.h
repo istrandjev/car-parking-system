@@ -29,6 +29,7 @@ class Arc {
 
   double GetRadius() const;
   Point GetCenter() const;
+  const Circle& GetCircle() const;
 
   BoundingBox GetBoundingBox() const;
 

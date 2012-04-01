@@ -106,6 +106,10 @@ Point Arc::GetCenter() const {
   return circle_.GetCenter();
 }
 
+const Circle& Arc::GetCircle() const {
+  return circle_;
+}
+
 BoundingBox Arc::GetBoundingBox() const {
   BoundingBox result(circle_.GetCenter());
 
