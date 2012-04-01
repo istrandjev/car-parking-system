@@ -173,9 +173,63 @@ bool SectionBetweenConcentricArcsContains(
     return false;
   }
 
+  const double pi = geometry::GeometryUtils::PI;
 
-  // TODO(istrandjev): fix this to have real logic in it.
-  return true;
+  double start1 = arc1.GetStartAngle();
+  double end1 = arc1.GetEndAngle();
+  if (DoubleIsGreater(start1, end1)) {
+    end1 += pi * 2.0;
+  }
+  double start2 = arc2.GetStartAngle();
+  double end2 = arc2.GetEndAngle();
+  if (DoubleIsGreater(start2, end2)) {
+    end2 += pi * 2.0;
+  }
+
+  double begin_angle = std::max(start1, start2);
+  double end_angle = std::min(end1, end2);
+  if (DoubleIsGreaterOrEqual(begin_angle, end_angle)) {
+    return false;
+  }
+  
+  double angle = atan2(point.y - center.y, point.x - center.x);
+  angle = geometry::GeometryUtils::NormalizeAngle(angle);
+
+  // Check if the point is within the common interval of angles for 
+  // the two arcs.
+  if (DoubleIsBetween(angle, begin_angle, end_angle) ||
+      DoubleIsBetween(angle + 2.0 * pi, begin_angle, end_angle)) {
+    return true;
+  }
+
+  // Check if the triangle in the begining of the two arcs contains the point.
+  geometry::Point A1 = arc1.GetStartPoint();
+  geometry::Point B1 = arc2.GetStartPoint();
+  geometry::Point C1;
+  if (DoubleIsGreater(start1, start2)) {
+    C1 = arc2.GetCircle().GetPoint(start1);
+  } else {
+    C1 = arc1.GetCircle().GetPoint(start2);
+  }
+
+  if (geometry::GeometryUtils::TriangleContains(A1, B1, C1, point)) {
+    return true;
+  }
+
+  // Check if the triangle at the end of the two arcs contains the point.
+  geometry::Point A2 = arc1.GetEndPoint();
+  geometry::Point B2 = arc2.GetEndPoint();
+  geometry::Point C2;
+  if (DoubleIsGreater(end1, end2)) {
+    C2 = arc1.GetCircle().GetPoint(end2);
+  } else {
+    C2 = arc2.GetCircle().GetPoint(end1);
+  }
+
+  if (geometry::GeometryUtils::TriangleContains(A2, B2, C2, point)) {
+    return true;
+  }
+  return false;
 }
 
 }  // namespace simulation

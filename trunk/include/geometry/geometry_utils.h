@@ -47,6 +47,10 @@ class GeometryUtils {
   // @return - true iff X lies on the line AB.
   static bool LiesOnLine(const Point& A, const Point& B, const Point& X);
 
+  // @return true iff the triangle ABC contains the point X.
+  static bool TriangleContains(const Point& A, const Point& B, const Point& C,
+      const Point& X);
+
   // Converts an angle in degrees to the same angle but in radians.
   static double DegreesToRadians(double degrees);
 

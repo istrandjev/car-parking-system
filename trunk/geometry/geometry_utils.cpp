@@ -59,6 +59,14 @@ int GeometryUtils::GetSemiPlaneSign(const Point& A, const Point& B,
   }
 }
 
+// static 
+bool GeometryUtils::TriangleContains(const Point& A, const Point& B, const Point& C,
+      const Point& X) {
+  int s = GetSemiPlaneSign(A, B, C);
+  return GetSemiPlaneSign(A, B, X) == s && GetSemiPlaneSign(B, C, X) == s &&
+      GetSemiPlaneSign(C, A, X) == s;
+}
+
 // static
 double GeometryUtils::DegreesToRadians(double degrees) {
   return (degrees * PI) / 180.0;
