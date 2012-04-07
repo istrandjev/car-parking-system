@@ -213,7 +213,26 @@ std::vector<geometry::Polygon> Car::GetWheels() const {
   return result;
 }
 
-std::vector<geometry::Polygon> Car::GetRotationGraphics(
+std::vector<geometry::Polygon> Car::GetRotationGraphicsByDistance(
+    double distance_limit) {
+  std::vector<geometry::Polygon> res;
+  if (DoubleSign(current_steering_angle_) == 0) {
+
+    geometry::Point from = center_ + direction_.Unit() * (length_ * -0.5);
+    geometry::Point to =  from + direction_.Unit() * (distance_limit + length_);
+
+    geometry::RectangleObject rectangle_object(from, to);
+    res.push_back(rectangle_object.GetBounds());
+    return res;
+  } else {
+    geometry::Point rotation_center = GetRotationCenter();
+    double radius = rotation_center.GetDistance(center_);
+    double angle = distance_limit / radius;
+    return GetRotationGraphicsByAngle(angle);
+  }
+}
+
+std::vector<geometry::Polygon> Car::GetRotationGraphicsByAngle(
     double rotation_limit) {
   std::vector<geometry::Polygon> res;
 
@@ -223,24 +242,19 @@ std::vector<geometry::Polygon> Car::GetRotationGraphics(
   if (angle_sign != 0) {  
     geometry::Point saved_center = center_;
     geometry::Vector saved_direction = direction_;
-    for (double c = 0.0; c <= rotation_limit; c += step) {
+    for (double c = 0.0; c <= 1.0; c += step) {
       res.push_back(GetBounds());
 
       geometry::Point rotation_center = GetRotationCenter();
 
-      center_ = center_.Rotate(rotation_center, step * angle_sign);
-      direction_ = direction_.Rotate(step * angle_sign);
+      center_ = center_.Rotate(rotation_center, step * rotation_limit * angle_sign);
+      direction_ = direction_.Rotate(step * rotation_limit * angle_sign);
     }
     center_ = saved_center;
     direction_ = saved_direction;
   } else {
-    const double tip_length = 200.0;
-
-    geometry::Point from = center_ + direction_.Unit() * (length_ * -0.5);
-    geometry::Point to =  from + direction_.Unit() * tip_length;
-
-    geometry::RectangleObject rectangle_object(from, to);
-    res.push_back(rectangle_object.GetBounds());
+    const double default_distance = 20.0;
+    return GetRotationGraphicsByDistance(default_distance);
   }
   return res;
 }

@@ -41,7 +41,7 @@ bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double di
 
   geometry::Vector direction = car.GetDirection().Unit();
   geometry::Point from = car.GetCenter() - direction * car.GetLength() * 0.5;
-  geometry::Point to = from + direction * (distance + car.GetLength() * 0.5);
+  geometry::Point to = from + direction * (distance + car.GetLength());
 
   geometry::RectangleObject ro(from, to, car.GetWidth());
 
