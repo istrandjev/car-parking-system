@@ -8,6 +8,7 @@
 #include "geometry/segment.h"
 #include "geometry/straight_boundary_line.h"
 #include "simulation/car_movement_handler.h"
+#include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
 #include "utils/object_holder.h"
 
@@ -207,14 +208,27 @@ void Scene::DrawCar(unsigned index) {
   }
   if (showTurnTip_) {
     const double rotation_limit = geometry::GeometryUtils::PI * 0.5;
-    if (!simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
-        rotation_limit, *intersectionHandler_)) {
-      glColor4f(0.5, 0.0, 0.0, 0.8);    
-    } else {
+
+    //if (!simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
+    //    rotation_limit, *intersectionHandler_)) {
+    //  
+    //}
+    std::vector<geometry::Polygon> gr;
+    const double distance_limit = 20.0;
+    if (simulation::CarMovementHandler::CarMovementPossibleByDistance(car, 
+        distance_limit, *intersectionHandler_)) {
       glColor4f(0.5, 0.5, 0.0, 0.8);
+      gr = cars_[index].GetRotationGraphicsByDistance(distance_limit);
+    } else if (!DoubleIsZero(car.GetCurrentSteeringAngle()) &&
+        simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
+            rotation_limit, *intersectionHandler_)) {
+      glColor4f(0.5, 0.5, 0.0, 0.8);
+      gr = cars_[index].GetRotationGraphicsByAngle(rotation_limit);
+    } else {
+      glColor4f(0.5, 0.0, 0.0, 0.8);
+      gr = cars_[index].GetRotationGraphicsByDistance(distance_limit);
     }
-    std::vector<geometry::Polygon> gr =
-        cars_[index].GetRotationGraphics(rotation_limit);
+    
     for (unsigned index = 0; index < gr.size(); ++index) {
       DrawPolygon(gr[index]);
     }
