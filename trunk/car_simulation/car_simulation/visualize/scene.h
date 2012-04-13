@@ -15,6 +15,10 @@ namespace utils {
 class IntersectionHandler;
 }  // namespace utils
 
+namespace simulation {
+class CarMovementHandler;  
+}  // namespace simulation
+
 namespace visualize {
 
 // This class is used to represent the scene. It actually holds the set of
@@ -54,8 +58,9 @@ public:
   static void SetObjectHolder(utils::ObjectHolder* object_holder);
   static utils::ObjectHolder* GetObjectHolder();
   
-  static void SetIntersectionHandler(utils::IntersectionHandler*
-      intersection_handler);
+  static void SetCarMovementHandler(
+      simulation::CarMovementHandler* car_movement_handler);
+
   static utils::IntersectionHandler* GetIntersectionHandler();
 
   static void TransformDrawingPane();
@@ -77,7 +82,7 @@ public:
   static void SetColorForPolygon(unsigned index);
  
  private:
-  static utils::IntersectionHandler* intersectionHandler_;
+  static simulation::CarMovementHandler* carMovementHandler_;
   static utils::ObjectHolder* objectHolder_;
   static std::vector<simulation::Car> cars_;
 

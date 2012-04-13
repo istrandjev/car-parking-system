@@ -27,7 +27,7 @@ void Car::SetCenter(const geometry::Point& center) {
   center_ = center;
 }
 
-geometry::Point Car::GetCenter() const {
+const geometry::Point& Car::GetCenter() const {
   return center_;
 }
 
@@ -35,7 +35,7 @@ void Car::SetDirection(const geometry::Vector& direction) {
   direction_ = direction.Unit();
 }
 
-geometry::Vector Car::GetDirection() const {
+const geometry::Vector& Car::GetDirection() const {
   return direction_;
 }
 

@@ -2,6 +2,7 @@
 #include "geometry/point.h"
 #include "geometry/vector.h"
 #include "handlers/event_handlers.h"
+#include "simulation/car_movement_handler.h"
 #include "utils/boundary_line_holder.h"
 #include "utils/intersection_handler.h"
 #include "utils/object_holder.h"
@@ -52,7 +53,8 @@ int main(int argc, char ** argv)
       MIN_Y_COORDINATE, MAX_Y_COORDINATE,
       &boundary_lines_holder);
   intersection_handler.Init(object_holder);
-  visualize::Scene::SetIntersectionHandler(&intersection_handler);
+  simulation::CarMovementHandler movement_handler(&intersection_handler);
+  visualize::Scene::SetCarMovementHandler(&movement_handler);
 
   utils::InitializeHandlers();
   visualize::initGlut(argc, argv);

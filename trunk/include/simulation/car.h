@@ -17,9 +17,9 @@ class Car {
   Car(double width, double length, double max_steering_angle);
 
   void SetCenter(const geometry::Point& center);
-  geometry::Point GetCenter() const;
+  const geometry::Point& GetCenter() const;
   void SetDirection(const geometry::Vector& direction);
-  geometry::Vector GetDirection() const;
+  const geometry::Vector& GetDirection() const;
 
   double GetCurrentSteeringAngle() const;
   double GetWidth() const;
