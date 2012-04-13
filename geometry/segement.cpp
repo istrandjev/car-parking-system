@@ -73,9 +73,19 @@ Line Segment::GetLine() const {
   return Line(A_, B_);
 }
 
+Point Segment::GetMiddle() const {
+  return GetPoint(0.5);
+}
+
 Point Segment::GetPoint(double fraction) const {
   return Point(A_.x * (1.0 - fraction) + B_.x * fraction,
                A_.y * (1.0 - fraction) + B_.y * fraction);
+}
+
+Line Segment::GetSimmetral() const {
+  Point middle = GetMiddle();
+  Vector orthogonal = Vector(A_, B_).GetOrthogonal();
+  return Line(middle, orthogonal);
 }
 
 Segment Segment::SubSegment(double start_fraction, double end_fraction) const {

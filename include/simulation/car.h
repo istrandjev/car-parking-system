@@ -8,6 +8,7 @@
 
 namespace geometry {
 class Polygon;
+class Line;
 }  // namespace geometry
 
 namespace simulation {
@@ -27,6 +28,9 @@ class Car {
 
   geometry::Point GetRotationCenter() const;
 
+  bool CanBeRotationCenter(const geometry::Point& center,
+                           double& steering_angle) const;
+
   void TurnLeft();
   void TurnRight();
 
@@ -45,6 +49,8 @@ class Car {
   geometry::Point GetFrontRightWheelCenter() const;
   geometry::Point GetRearLeftWheelCenter() const;
   geometry::Point GetRearRightWheelCenter() const;
+
+  geometry::Line GetRearWheelsAxis() const;
 
   geometry::Polygon GetFrontLeftWheel() const;
   geometry::Polygon GetFrontRightWheel() const;

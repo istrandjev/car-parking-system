@@ -1,7 +1,10 @@
 #include "geometry/geometry_utils.h"
 
 #include "geometry/point.h"
+#include "geometry/vector.h"
 #include "utils/double_utils.h"
+
+#include <cmath>
 
 namespace geometry {
 
@@ -80,6 +83,25 @@ double GeometryUtils::NormalizeAngle(double angle) {
   if (DoubleIsGreaterOrEqual(angle, 2 * PI)) {
     return angle - ceil((angle - 2.0 * PI) / ( 2.0 * PI) + epsylon) * PI * 2;
   }
+  return angle;
+}
+
+double GeometryUtils::GetAngleBetweenVectors(const Vector &v1,
+                                             const Vector &v2) {
+  double len1 = v1.Length();
+  double len2 = v2.Length();
+  if (DoubleIsZero(len1) || DoubleIsZero(len2)) {
+    return 0.0;
+  }
+
+  double dot_product = v1.DotProduct(v2);
+  double cosine = dot_product / (len1 * len2);
+  double angle = acos(cosine);
+
+  if (DoubleIsGreater(0, v1.CrossProduct(v2))) {
+    angle = 2.0 * PI - angle;
+  }
+
   return angle;
 }
 
