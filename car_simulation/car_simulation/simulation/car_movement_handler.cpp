@@ -27,16 +27,24 @@ bool SectionBetweenConcentricArcsContains(
     const geometry::Arc& arc1, const geometry::Arc& arc2,
     const geometry::Point& point);
 
+CarMovementHandler::CarMovementHandler(
+    const utils::IntersectionHandler* intersection_handler)
+    : intersectionHandler_(intersection_handler) {}
+
+const utils::IntersectionHandler* 
+    CarMovementHandler::GetIntersectionHandler() const {
+  return intersectionHandler_;
+}
+
 // static
-bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double distance,
-      const utils::IntersectionHandler& intersection_handler) {
+bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double distance) {
   if (!DoubleIsZero(car.GetCurrentSteeringAngle())) {
     geometry::Point rotation_center = car.GetRotationCenter();
     geometry::Point center = car.GetCenter();
     double radius = rotation_center.GetDistance(center);
 
     double angle = distance / radius;
-    return CarMovementPossibleByAngle(car, angle, intersection_handler);
+    return CarMovementPossibleByAngle(car, angle);
   }
 
   geometry::Vector direction = car.GetDirection().Unit();
@@ -47,7 +55,7 @@ bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double di
 
   geometry::BoundingBox bounding_box = ro.GetBoundingBox();
   std::vector<const geometry::BoundaryLine*> lines = 
-      intersection_handler.GetBoundaryLines(bounding_box);
+      intersectionHandler_->GetBoundaryLines(bounding_box);
 
   geometry::Polygon bounds = ro.GetBounds();
   for (unsigned index = 0; index < lines.size(); ++index) {
@@ -60,8 +68,7 @@ bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double di
   return true;
 }
 
-bool CarMovementHandler::CarMovementPossibleByAngle(const Car& car, double angle,
-      const utils::IntersectionHandler& intersection_handler) {
+bool CarMovementHandler::CarMovementPossibleByAngle(const Car& car, double angle) {
   if (DoubleIsZero(car.GetCurrentSteeringAngle())) {
     return true;
   } 
@@ -87,7 +94,7 @@ bool CarMovementHandler::CarMovementPossibleByAngle(const Car& car, double angle
   }
 
   std::vector<const geometry::BoundaryLine*> lines =
-      intersection_handler.GetBoundaryLines(bounding_box);
+      intersectionHandler_->GetBoundaryLines(bounding_box);
 
   std::vector<geometry::Segment> segments;
   for (unsigned index = 0 ; index < lines.size(); ++index) {
@@ -232,4 +239,21 @@ bool SectionBetweenConcentricArcsContains(
   return false;
 }
 
+// static
+bool CarMovementHandler::SingleManueverBetweenStates(const Car& car1, const Car& car2,
+      double& steering_angle, double& distance) {
+  const geometry::Vector& dir1 = car1.GetDirection();
+  const geometry::Vector& dir2 = car2.GetDirection();
+
+  geometry::Vector vector(car1.GetCenter(), car2.GetCenter());
+  
+  if (DoubleIsZero(dir1.CrossProduct(dir2)) && DoubleIsZero(vector.CrossProduct(dir1))) {
+    if (DoubleIsGreaterOrEqual(0, dir1.DotProduct(dir2))) {
+      return false;
+    }
+    double temp_distance = car1.GetCenter().GetDistance(car2.GetCenter());
+
+  }
+  return true;
+}
 }  // namespace simulation

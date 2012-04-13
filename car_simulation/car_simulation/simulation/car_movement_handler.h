@@ -1,9 +1,7 @@
 #ifndef SIMUALTION_CAR_MOVEMENT_HANDLER_H_
 #define SIMUALTION_CAR_MOVEMENT_HANDLER_H_
 
-namespace utils {
-class IntersectionHandler;
-}  // namespace utils
+#include "utils/intersection_handler.h"
 
 namespace simulation {
 
@@ -11,10 +9,19 @@ class Car;
 
 class CarMovementHandler {
  public:
-  static bool CarMovementPossibleByDistance(const Car& car, double distance,
-      const utils::IntersectionHandler& intersection_handler);
-  static bool CarMovementPossibleByAngle(const Car& car, double angle,
-      const utils::IntersectionHandler& intersection_handler);
+  CarMovementHandler(const utils::IntersectionHandler* intersection_handler);
+
+  const utils::IntersectionHandler* GetIntersectionHandler() const;
+  
+  bool CarMovementPossibleByDistance(const Car& car, double distance);
+
+  bool CarMovementPossibleByAngle(const Car& car, double angle);
+
+  bool SingleManueverBetweenStates(const Car& pos1, const Car& pos2,
+      double& steering_angle, double& distance);
+ 
+ private:
+  const utils::IntersectionHandler* intersectionHandler_;
 };
 
 }  // namespace simulation

@@ -30,7 +30,7 @@ static const double SCALE_FACTOR = 10;
 // static declarations
 std::vector<simulation::Car> Scene::cars_;
 utils::ObjectHolder* Scene::objectHolder_ = NULL;
-utils::IntersectionHandler* Scene::intersectionHandler_ = NULL;
+simulation::CarMovementHandler* Scene::carMovementHandler_ = NULL;
 
 bool Scene::showTurnTip_ = false;
 
@@ -119,14 +119,9 @@ utils::ObjectHolder* Scene::GetObjectHolder() {
 }
 
 // static
-void Scene::SetIntersectionHandler(utils::IntersectionHandler*
-    intersection_handler) {
-  intersectionHandler_ = intersection_handler;
-}
-
-// static
-utils::IntersectionHandler* Scene::GetIntersectionHandler() {
-  return intersectionHandler_;
+void Scene::SetCarMovementHandler(simulation::CarMovementHandler*
+    car_movement_handler) {
+  carMovementHandler_ = car_movement_handler;
 }
 
 void Scene::ResetCar(unsigned index) {
@@ -209,19 +204,14 @@ void Scene::DrawCar(unsigned index) {
   if (showTurnTip_) {
     const double rotation_limit = geometry::GeometryUtils::PI * 0.5;
 
-    //if (!simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
-    //    rotation_limit, *intersectionHandler_)) {
-    //  
-    //}
     std::vector<geometry::Polygon> gr;
     const double distance_limit = 20.0;
-    if (simulation::CarMovementHandler::CarMovementPossibleByDistance(car, 
-        distance_limit, *intersectionHandler_)) {
+    if (carMovementHandler_->CarMovementPossibleByDistance(
+          car, distance_limit)) {
       glColor4f(0.5, 0.5, 0.0, 0.8);
       gr = cars_[index].GetRotationGraphicsByDistance(distance_limit);
     } else if (!DoubleIsZero(car.GetCurrentSteeringAngle()) &&
-        simulation::CarMovementHandler::CarMovementPossibleByAngle(car, 
-            rotation_limit, *intersectionHandler_)) {
+        carMovementHandler_->CarMovementPossibleByAngle(car, rotation_limit)) {
       glColor4f(0.5, 0.5, 0.0, 0.8);
       gr = cars_[index].GetRotationGraphicsByAngle(rotation_limit);
     } else {
@@ -340,7 +330,7 @@ void Scene::DrawDirectionalTips(
 // static
 void Scene::DrawBorderLines() {
   std::vector<const geometry::BoundaryLine*> boundary_lines =
-      intersectionHandler_->GetBoundaryLines();
+      carMovementHandler_->GetIntersectionHandler()->GetBoundaryLines();
 
   glLineStipple(0.1, 0xffff);
   glEnable(GL_LINE_STIPPLE);
