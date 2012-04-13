@@ -4,7 +4,9 @@
 #include "geometry/bounding_box.h"
 #include "geometry/boundary_line.h"
 #include "geometry/geometry_utils.h"
+#include "geometry/line.h"
 #include "geometry/polygon.h"
+#include "geometry/segment.h"
 #include "geometry/rectangle_object.h"
 #include "geometry/straight_boundary_line.h"
 #include "geometry/vector.h"
@@ -240,20 +242,50 @@ bool SectionBetweenConcentricArcsContains(
 }
 
 // static
-bool CarMovementHandler::SingleManueverBetweenStates(const Car& car1, const Car& car2,
-      double& steering_angle, double& distance) {
+bool CarMovementHandler::SingleManueverBetweenStates(
+        const Car& car1, const Car& car2,
+        double& steering_angle, double& distance) {
   const geometry::Vector& dir1 = car1.GetDirection();
   const geometry::Vector& dir2 = car2.GetDirection();
 
-  geometry::Vector vector(car1.GetCenter(), car2.GetCenter());
+  const geometry::Point& center1 = car1.GetCenter();
+  const geometry::Point& center2 = car2.GetCenter();
+
+  geometry::Vector vector(center1, center1);
   
-  if (DoubleIsZero(dir1.CrossProduct(dir2)) && DoubleIsZero(vector.CrossProduct(dir1))) {
+  if (DoubleIsZero(dir1.CrossProduct(dir2)) &&
+          DoubleIsZero(vector.CrossProduct(dir1))) {
     if (DoubleIsGreaterOrEqual(0, dir1.DotProduct(dir2))) {
       return false;
     }
-    double temp_distance = car1.GetCenter().GetDistance(car2.GetCenter());
+    double temp_distance = center1.GetDistance(center2);
 
+    if (!CarMovementPossibleByDistance(car1, temp_distance)) {
+        return false;
+    } else {
+        steering_angle = 0.0;
+        distance = temp_distance;
+    }
   }
-  return true;
+
+  geometry::Segment segment1(center1, center2);
+  geometry::Segment segment2(center1 + dir1, center2 + dir2);
+
+  geometry::Line sim1 = segment1.GetSimmetral();
+  geometry::Line sim2 = segment2.GetSimmetral();
+
+  geometry::Point intersection;
+  if (!sim1.Intersect(sim2, &intersection)) {
+    return false;
+  }
+
+  double angle;
+  if (!car1.CanBeRotationCenter(intersection, angle)) {
+    return false;
+  } else {
+    steering_angle = angle;
+    distance = geometry::Arc(intersection, center1, center2).GetLength();
+    return true;
+  }
 }
 }  // namespace simulation

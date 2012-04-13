@@ -110,6 +110,10 @@ const Circle& Arc::GetCircle() const {
   return circle_;
 }
 
+double Arc::GetLength() const {
+  return GetRadius() * fabs(GetEndAngle()- GetStartAngle());
+}
+
 BoundingBox Arc::GetBoundingBox() const {
   BoundingBox result(circle_.GetCenter());
 

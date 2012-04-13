@@ -3,9 +3,10 @@
 #ifndef INCLUDE_GEOMETRY_GEOMETRY_UTILS_H_
 #define INCLUDE_GEOMETRY_GEOMETRY_UTILS_H_
 
-#include "geometry/point.h"
-
 namespace geometry {
+
+class Point;
+class Vector;
 
 class GeometryUtils {
  public:
@@ -57,6 +58,10 @@ class GeometryUtils {
   // Normalizes the angle to be in the interval [0, 2 * PI)
   static double NormalizeAngle(double angle);
 
+  // Returns the angle between the two vectors. Will be a value in the interval
+  // [0, 2 * PI).
+  static double GetAngleBetweenVectors(const Vector &v1,
+                                       const Vector& v2);
  public:
   static const double PI;
 

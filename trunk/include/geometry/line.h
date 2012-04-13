@@ -13,6 +13,7 @@ class Line {
 
   bool Intersect(const Line& other, Point* intersection) const;
   Vector Normal() const;
+  Vector GetCollinearVector() const;
 
   double GetOrientedDistanceFromPoint(const Point& A) const;
   double GetDistanceFromPoint(const Point& A) const;

@@ -82,6 +82,47 @@ geometry::Point Car::GetRotationCenter() const {
   return rotation_center;
 }
 
+bool Car::CanBeRotationCenter(const geometry::Point &center,
+                              double &steering_angle) const {
+  geometry::Line rear_axis = GetRearWheelsAxis();
+  if(!DoubleIsZero(rear_axis.GetDistanceFromPoint(center))) {
+    return false;
+  }
+
+  const geometry::Point& fl = GetFrontLeftWheelCenter();
+  const geometry::Point& fr = GetFrontRightWheelCenter();
+  const geometry::Point& rl = GetRearLeftWheelCenter();
+  const geometry::Point& rr = GetRearRightWheelCenter();
+
+  if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
+      rl, fl, rr, center, true)) {
+    geometry::Vector turn_vector(center, fl);
+    geometry::Vector rear_axis_vector(center, rl);
+    double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
+        turn_vector, rear_axis_vector);
+    if (DoubleIsBetween(angle, 0, steering_angle)) {
+      steering_angle = angle;
+      return true;
+    } else {
+      return false;
+    }
+  } else if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
+                rr, fr, rl, center, true)) {
+    geometry::Vector turn_vector(center, fr);
+    geometry::Vector rear_axis_vector(center, rr);
+    double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
+        turn_vector, rear_axis_vector);
+    if (DoubleIsBetween(angle, 0, steering_angle)) {
+      steering_angle = angle;
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
 void Car::Move(double meters_step) {
   int angle_sign = DoubleSign(current_steering_angle_);
   if (angle_sign == 0) {
@@ -128,6 +169,10 @@ geometry::Point Car::GetRearLeftWheelCenter() const {
 geometry::Point Car::GetRearRightWheelCenter() const {
   return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION +
       direction_.GetOrthogonal() * width_ * 0.5;
+}
+
+geometry::Line Car::GetRearWheelsAxis() const {
+  return geometry::Line(GetRearLeftWheelCenter(), GetRearRightWheelCenter());
 }
 
 geometry::Polygon Car::GetBounds() const {

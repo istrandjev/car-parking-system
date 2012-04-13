@@ -31,6 +31,7 @@ class Arc {
   Point GetCenter() const;
   const Circle& GetCircle() const;
 
+  double GetLength() const;
   BoundingBox GetBoundingBox() const;
 
  private:

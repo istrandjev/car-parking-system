@@ -24,7 +24,10 @@ class Segment {
 
   Line GetLine() const;
 
+  Point GetMiddle() const;
   Point GetPoint(double fraction) const;
+  Line GetSimmetral() const;
+
   Segment SubSegment(double start_fraction, double end_fraction) const;
 
   double Length() const;

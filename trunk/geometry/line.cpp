@@ -24,6 +24,10 @@ Vector Line::Normal() const {
   return Vector(A_, B_);
 }
 
+Vector Line::GetCollinearVector() const {
+  return Vector(B_, -A_);
+}
+
 double Line::GetOrientedDistanceFromPoint(const Point& A) const {
   return (A.x * A_ + A.y * B_ + C_) / Normal().Length();
 }
