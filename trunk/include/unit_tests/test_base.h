@@ -4,9 +4,10 @@
 #include "utils/double_utils.h"
 
 #define ASSERT(STATEMENT) if (!(STATEMENT)) {\
-  fprintf(stderr, "%s(%d): Assertion failed: "#STATEMENT ,\
+  fprintf(stderr, "%s(%d): Assertion failed: "#STATEMENT"\n" ,\
       __FILE__, __LINE__);\
   }
+
 #define ASSERT_EQUALS(X, Y) ASSERT(X == Y)
 #define ASSERT_NOT_EQUALS(X, Y) ASSERT(X != Y)
 #define ASSERT_DOUBLE_EQUALS(X, Y) ASSERT(DoubleEquals(X, Y))

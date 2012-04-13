@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{811FBE47-0186-47E9-8ABC-6A05DD24FFCA}</ProjectGuid>
+    <RootNamespace>unit_tester</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\bs\Desktop\projects\diplomna\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\geometry\arc.h" />
+    <ClInclude Include="..\..\include\geometry\bounding_box.h" />
+    <ClInclude Include="..\..\include\geometry\circle.h" />
+    <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\geometry_utils.h" />
+    <ClInclude Include="..\..\include\geometry\line.h" />
+    <ClInclude Include="..\..\include\geometry\point.h" />
+    <ClInclude Include="..\..\include\geometry\polygon.h" />
+    <ClInclude Include="..\..\include\geometry\rectangle_object.h" />
+    <ClInclude Include="..\..\include\geometry\segment.h" />
+    <ClInclude Include="..\..\include\geometry\vector.h" />
+    <ClInclude Include="..\..\include\simulation\car.h" />
+    <ClInclude Include="..\..\include\unit_tests\test_base.h" />
+    <ClInclude Include="..\..\include\utils\current_state.h" />
+    <ClInclude Include="..\..\include\utils\delay.h" />
+    <ClInclude Include="..\..\include\utils\double_utils.h" />
+    <ClInclude Include="..\..\include\utils\object_holder.h" />
+    <ClInclude Include="..\..\include\utils\scoped_ptr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\geometry\arc.cpp" />
+    <ClCompile Include="..\..\geometry\bounding_box.cpp" />
+    <ClCompile Include="..\..\geometry\circle.cpp" />
+    <ClCompile Include="..\..\geometry\directed_rectangle_object.cpp" />
+    <ClCompile Include="..\..\geometry\geometry_utils.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Documents and Settings\bs\Desktop\projects\diplomna\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\line.cpp" />
+    <ClCompile Include="..\..\geometry\point.cpp" />
+    <ClCompile Include="..\..\geometry\polygon.cpp" />
+    <ClCompile Include="..\..\geometry\polygon_intersection.cpp" />
+    <ClCompile Include="..\..\geometry\rectangle_object.cpp" />
+    <ClCompile Include="..\..\geometry\segement.cpp" />
+    <ClCompile Include="..\..\geometry\vector.cpp" />
+    <ClCompile Include="..\..\simulation\car.cpp" />
+    <ClCompile Include="..\..\unit_tests\geometry_utils_test.cpp" />
+    <ClCompile Include="..\..\utils\current_state.cpp" />
+    <ClCompile Include="..\..\utils\delay.cpp" />
+    <ClCompile Include="..\..\utils\double_utils.cpp" />
+    <ClCompile Include="..\..\utils\object_holder.cpp" />
+    <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
