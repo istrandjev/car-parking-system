@@ -141,6 +141,9 @@
     <ClCompile Include="simulation\car_positions_graph.cpp">
       <Filter>Source Files\simulation</Filter>
     </ClCompile>
+    <ClCompile Include="simulation\car_positions_graph_router.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -231,6 +234,9 @@
       <Filter>Header Files\simulation</Filter>
     </ClInclude>
     <ClInclude Include="simulation\car_positions_graph.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation\car_positions_graph_router.h">
       <Filter>Header Files\simulation</Filter>
     </ClInclude>
   </ItemGroup>

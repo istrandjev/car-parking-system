@@ -92,6 +92,7 @@
     <ClCompile Include="simulation\car_movement_handler.cpp" />
     <ClCompile Include="simulation\car_positions_container.cpp" />
     <ClCompile Include="simulation\car_positions_graph.cpp" />
+    <ClCompile Include="simulation\car_positions_graph_router.cpp" />
     <ClCompile Include="utils\boundary_line_holder.cpp" />
     <ClCompile Include="utils\intersection_handler.cpp" />
     <ClCompile Include="visualize\glut_utils.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="simulation\car_movement_handler.h" />
     <ClInclude Include="simulation\car_positions_container.h" />
     <ClInclude Include="simulation\car_positions_graph.h" />
+    <ClInclude Include="simulation\car_positions_graph_router.h" />
     <ClInclude Include="utils\boundary_line_holder.h" />
     <ClInclude Include="utils\intersection_handler.h" />
     <ClInclude Include="visualize\glut_utils.h" />
