@@ -69,3 +69,9 @@ C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/object_holder.cpp
 C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/object_holder_serialization.cpp
 C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/user_input_handler.cpp
 resources/input.in
+car_simulation/car_simulation/simulation/car_positions_container.h
+car_simulation/car_simulation/simulation/car_positions_container.cpp
+car_simulation/car_simulation/simulation/car_positions_graph.h
+car_simulation/car_simulation/simulation/car_manuever.h
+car_simulation/car_simulation/simulation/car_manuever.cpp
+car_simulation/car_simulation/simulation/car_positions_graph.cpp

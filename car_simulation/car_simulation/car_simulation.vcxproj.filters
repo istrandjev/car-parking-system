@@ -132,6 +132,15 @@
     <ClCompile Include="..\..\geometry\polygon_intersection.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
+    <ClCompile Include="simulation\car_positions_container.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="simulation\car_manuever.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="simulation\car_positions_graph.cpp">
+      <Filter>Source Files\simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -213,6 +222,15 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="simulation\car_movement_handler.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation\car_positions_container.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation\car_manuever.h">
+      <Filter>Header Files\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation\car_positions_graph.h">
       <Filter>Header Files\simulation</Filter>
     </ClInclude>
   </ItemGroup>
