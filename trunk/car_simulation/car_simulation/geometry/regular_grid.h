@@ -39,7 +39,7 @@ class RegularGrid {
   std::vector<const BoundaryLine*> GetBoundaryLines() const;
   
  private:
-  void GetCellCoordinates(double x, double y, int* i, int* j) const;
+  void GetCellCoordinates(double x, double y, int& i, int& j) const;
 
  private:
   std::vector<std::vector<GridElement> > grid_;

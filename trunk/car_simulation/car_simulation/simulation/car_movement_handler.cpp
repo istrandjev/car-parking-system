@@ -11,6 +11,7 @@
 #include "geometry/straight_boundary_line.h"
 #include "geometry/vector.h"
 #include "simulation/car.h"
+#include "simulation/car_manuever.h"
 #include "utils/current_state.h"
 #include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
@@ -39,7 +40,8 @@ const utils::IntersectionHandler*
 }
 
 // static
-bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double distance) {
+bool CarMovementHandler::CarMovementPossibleByDistance(
+    const Car& car, double distance) const {
   if (!DoubleIsZero(car.GetCurrentSteeringAngle())) {
     geometry::Point rotation_center = car.GetRotationCenter();
     geometry::Point center = car.GetCenter();
@@ -70,7 +72,8 @@ bool CarMovementHandler::CarMovementPossibleByDistance(const Car& car, double di
   return true;
 }
 
-bool CarMovementHandler::CarMovementPossibleByAngle(const Car& car, double angle) {
+bool CarMovementHandler::CarMovementPossibleByAngle(
+    const Car& car, double angle) const {
   if (DoubleIsZero(car.GetCurrentSteeringAngle())) {
     return true;
   } 
@@ -244,7 +247,7 @@ bool SectionBetweenConcentricArcsContains(
 // static
 bool CarMovementHandler::SingleManueverBetweenStates(
         const Car& car1, const Car& car2,
-        double& steering_angle, double& distance) {
+        CarManuever& manuever) const {
   const geometry::Vector& dir1 = car1.GetDirection();
   const geometry::Vector& dir2 = car2.GetDirection();
 
@@ -263,8 +266,9 @@ bool CarMovementHandler::SingleManueverBetweenStates(
     if (!CarMovementPossibleByDistance(car1, temp_distance)) {
         return false;
     } else {
-        steering_angle = 0.0;
-        distance = temp_distance;
+        manuever.SetSteeringAngle(0.0);
+        manuever.SetDistance(temp_distance);
+        manuever.SetRotationCenter(geometry::Point());
     }
   }
 
@@ -283,8 +287,10 @@ bool CarMovementHandler::SingleManueverBetweenStates(
   if (!car1.CanBeRotationCenter(intersection, angle)) {
     return false;
   } else {
-    steering_angle = angle;
-    distance = geometry::Arc(intersection, center1, center2).GetLength();
+    manuever.SetSteeringAngle(angle);
+    manuever.SetDistance(geometry::Arc(
+        intersection, center1, center2).GetLength());
+    manuever.SetRotationCenter(intersection);
     return true;
   }
 }

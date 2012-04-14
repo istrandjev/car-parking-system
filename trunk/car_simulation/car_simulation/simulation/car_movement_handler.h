@@ -6,6 +6,7 @@
 namespace simulation {
 
 class Car;
+class CarManuever;
 
 class CarMovementHandler {
  public:
@@ -13,12 +14,12 @@ class CarMovementHandler {
 
   const utils::IntersectionHandler* GetIntersectionHandler() const;
   
-  bool CarMovementPossibleByDistance(const Car& car, double distance);
+  bool CarMovementPossibleByDistance(const Car& car, double distance) const;
 
-  bool CarMovementPossibleByAngle(const Car& car, double angle);
+  bool CarMovementPossibleByAngle(const Car& car, double angle) const;
 
   bool SingleManueverBetweenStates(const Car& pos1, const Car& pos2,
-      double& steering_angle, double& distance);
+      CarManuever& manuever) const;
  
  private:
   const utils::IntersectionHandler* intersectionHandler_;
