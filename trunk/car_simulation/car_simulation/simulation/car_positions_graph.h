@@ -10,12 +10,16 @@ namespace simulation {
 class CarMovementHandler;
 class Car;
 
+typedef std::pair<int, CarManuever> GraphEdge;
+
 class CarPositionsGraph {
  public:
   CarPositionsGraph(const CarMovementHandler* movement_handler);
 
   void AddPosition(const Car& position);
   void ConstructGraph();
+
+  const std::vector<std::vector<GraphEdge> >& GetGraph() const;
 
  private:
   void GetPositionNeighbours(int position_index,

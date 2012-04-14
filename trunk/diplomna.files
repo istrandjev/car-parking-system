@@ -75,3 +75,5 @@ car_simulation/car_simulation/simulation/car_positions_graph.h
 car_simulation/car_simulation/simulation/car_manuever.h
 car_simulation/car_simulation/simulation/car_manuever.cpp
 car_simulation/car_simulation/simulation/car_positions_graph.cpp
+car_simulation/car_simulation/simulation/car_positions_graph_router.h
+car_simulation/car_simulation/simulation/car_positions_graph_router.cpp
