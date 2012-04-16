@@ -16,7 +16,8 @@ class IntersectionHandler;
 }  // namespace utils
 
 namespace simulation {
-class CarMovementHandler;  
+class CarMovementHandler;
+class CarManueverHandler;
 }  // namespace simulation
 
 namespace visualize {
@@ -30,14 +31,14 @@ public:
   static void Draw();
 
   static void ResetCar(unsigned index);
-  static void AddCar(double width, double length, double max_steering_angle);
-  static void AddCar(double width, double length, double max_steering_angle, 
-      const geometry::Point& center, const geometry::Point& second_point);
+  static void AddCar(const simulation::Car& car);
 
   static void TurnCarLeft(unsigned index);
   static void TurnCarRight(unsigned index);
 
   static void Move(bool forward);
+
+  static void Tick();
 
   // Functions to translate the scene.
   static void TranslateLeft();
@@ -61,6 +62,9 @@ public:
   static void SetCarMovementHandler(
       simulation::CarMovementHandler* car_movement_handler);
 
+  static void SetCarManueverHandler(
+      simulation::CarManueverHandler* car_manuever_handler);
+
   static utils::IntersectionHandler* GetIntersectionHandler();
 
   static void TransformDrawingPane();
@@ -68,7 +72,7 @@ public:
   static void ShowHideTurnTip();
 
  private:
-  static void DrawCar(unsigned index);
+  static void DrawCar(const simulation::Car& car);
   static void DrawObjects();
   static void DrawSelected(const geometry::Polygon& polygon);
   static void DrawObjectsFromContainer(
@@ -84,6 +88,7 @@ public:
  private:
   static simulation::CarMovementHandler* carMovementHandler_;
   static utils::ObjectHolder* objectHolder_;
+  static simulation::CarManueverHandler* carManueverHandler_;
   static std::vector<simulation::Car> cars_;
 
   static double xTranslation, yTranslation, zTranslation;

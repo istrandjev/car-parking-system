@@ -76,7 +76,8 @@ void display()
 }
 
 void idle() {
-  glutPostRedisplay();   
+  glutPostRedisplay();
+  Scene::Tick();
   delay(0.002);
 }
 

@@ -14,21 +14,27 @@ CarPositionsGraphRouter::CarPositionsGraphRouter(
     const CarPositionsGraph *graph) : graph_(graph) {}
 
 std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
-    int from_index, const std::vector<int>& end_indices) const {
+    int from_index) const {
+
   const vector<vector<GraphEdge> >& graph = graph_->GetGraph();
   int n = static_cast<int>(graph.size());
-  vector<double> dist(n, -1.0);
 
+  const vector<int>& end_indices = graph_->GetFinalPositions();
   vector<bool> end_position(n, false);
   for (unsigned i = 0 ; i < end_indices.size(); ++i) {
     end_position[i] = true;
   }
-  vector<bool> visited(n, false);
-  vector<pair<int, int> > parent(n);
-  priority_queue<pair<double, int> > q;
 
+  vector<double> dist(n, -1.0);
+  dist[from_index] = 0.0;
+
+  priority_queue<pair<double, int> > q;
   q.push(make_pair(0, from_index));
+
+  vector<pair<int, int> > parent(n);
   parent[from_index] = make_pair(from_index, 0);
+
+  vector<bool> visited(n, false);
 
   int end_index = -1;
   while (!q.empty()) {

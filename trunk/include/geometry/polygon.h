@@ -10,6 +10,7 @@ namespace geometry {
 
 class Segment;
 class Vector;
+class BoundingBox;
 
 // This class represents a 2D polygon.
 class Polygon {
@@ -50,6 +51,9 @@ class Polygon {
   // @return - a vector perpendicular to the side and point to the inside of
   //    the polygon.
   Vector GetSideNormal(unsigned side_index) const;
+
+  // @return - the bounding box of the polygon.
+  BoundingBox GetBoundingBox() const;
 
   // Checks if a point is contained within the boundary of the polygon. For
   // points lying on the boundary this method still returns true.

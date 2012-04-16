@@ -18,7 +18,12 @@ const std::vector<int> &CarPosition::GetPositions() const {
 
 CarPositionsContainer::CarPositionsContainer(
     double minx, double maxx, double miny, double maxy)
-  : minx_(minx), maxx_(maxx), miny_(miny), maxy_(maxy) {}
+  : minx_(minx), maxx_(maxx), miny_(miny), maxy_(maxy) {
+  positionsGrid_.resize(VERTICAL_CELL_NUM);
+  for (int i = 0; i < VERTICAL_CELL_NUM; ++i) {
+    positionsGrid_[i].resize(HORIZONTAL_CELL_NUM);
+  }   
+}
 
 CarPositionsContainer::~CarPositionsContainer() {
   for (unsigned i = 0; i < positions_.size(); ++i) {

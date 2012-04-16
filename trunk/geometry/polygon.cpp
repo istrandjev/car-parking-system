@@ -1,5 +1,6 @@
 #include "geometry/polygon.h"
 
+#include "geometry/bounding_box.h"
 #include "geometry/geometry_utils.h"
 #include "geometry/point.h"
 #include "geometry/segment.h"
@@ -79,6 +80,14 @@ Vector Polygon::GetSideNormal(unsigned side_index) const {
   } else {
     return Vector(-side_vector.y, side_vector.x);  
   }
+}
+
+BoundingBox Polygon::GetBoundingBox() const {
+  geometry::BoundingBox bounding_box;
+  for (unsigned i = 0; i < points_.size(); ++i) {
+    bounding_box.AddPoint(points_[i]);
+  }
+  return bounding_box;
 }
 
 bool Polygon::ContainsPoint(const Point& point) const {
