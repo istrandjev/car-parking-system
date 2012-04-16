@@ -259,7 +259,7 @@ std::vector<geometry::Polygon> Car::GetWheels() const {
 }
 
 std::vector<geometry::Polygon> Car::GetRotationGraphicsByDistance(
-    double distance_limit) {
+    double distance_limit) const {
   std::vector<geometry::Polygon> res;
   if (DoubleSign(current_steering_angle_) == 0) {
 
@@ -278,25 +278,19 @@ std::vector<geometry::Polygon> Car::GetRotationGraphicsByDistance(
 }
 
 std::vector<geometry::Polygon> Car::GetRotationGraphicsByAngle(
-    double rotation_limit) {
+    double rotation_limit) const {
   std::vector<geometry::Polygon> res;
 
   const double step = 3e-2;
-
+  Car temp(*this);
   int angle_sign = DoubleSign(current_steering_angle_);
   if (angle_sign != 0) {  
-    geometry::Point saved_center = center_;
-    geometry::Vector saved_direction = direction_;
     for (double c = 0.0; c <= 1.0; c += step) {
-      res.push_back(GetBounds());
-
-      geometry::Point rotation_center = GetRotationCenter();
-
-      center_ = center_.Rotate(rotation_center, step * rotation_limit * angle_sign);
-      direction_ = direction_.Rotate(step * rotation_limit * angle_sign);
+      res.push_back(temp.GetBounds());
+      geometry::Point rotation_center = temp.GetRotationCenter();
+      temp.SetCenter(temp.GetCenter().Rotate(rotation_center, step * rotation_limit * angle_sign));
+      temp.SetDirection(temp.GetDirection().Rotate(step * rotation_limit * angle_sign));
     }
-    center_ = saved_center;
-    direction_ = saved_direction;
   } else {
     const double default_distance = 20.0;
     return GetRotationGraphicsByDistance(default_distance);

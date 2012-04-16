@@ -41,8 +41,10 @@ class Car {
 
   std::vector<geometry::Polygon> GetWheels() const;
   
-  std::vector<geometry::Polygon> GetRotationGraphicsByAngle(double rotation_limit);
-  std::vector<geometry::Polygon> GetRotationGraphicsByDistance(double distance_limit);
+  std::vector<geometry::Polygon> GetRotationGraphicsByAngle(
+      double rotation_limit) const;
+  std::vector<geometry::Polygon> GetRotationGraphicsByDistance(
+      double distance_limit) const;
  
  private:
   geometry::Point GetFrontLeftWheelCenter() const;

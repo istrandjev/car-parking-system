@@ -8,6 +8,7 @@
 #include "geometry/segment.h"
 #include "geometry/straight_boundary_line.h"
 #include "simulation/car_movement_handler.h"
+#include "simulation/car_manuever_handler.h"
 #include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
 #include "utils/object_holder.h"
@@ -31,6 +32,7 @@ static const double SCALE_FACTOR = 10;
 std::vector<simulation::Car> Scene::cars_;
 utils::ObjectHolder* Scene::objectHolder_ = NULL;
 simulation::CarMovementHandler* Scene::carMovementHandler_ = NULL;
+simulation::CarManueverHandler* Scene::carManueverHandler_ = NULL;
 
 bool Scene::showTurnTip_ = false;
 
@@ -124,13 +126,18 @@ void Scene::SetCarMovementHandler(simulation::CarMovementHandler*
   carMovementHandler_ = car_movement_handler;
 }
 
+void Scene::SetCarManueverHandler(
+    simulation::CarManueverHandler *car_manuever_handler) {
+  carManueverHandler_ = car_manuever_handler;
+}
+
 void Scene::ResetCar(unsigned index) {
   cars_[index].Reset();
 }
 
 // static 
-void Scene::AddCar(double width, double length, double max_steering_angle) {
-  cars_.push_back(simulation::Car(width, length, max_steering_angle));
+void Scene::AddCar(const simulation::Car& car) {
+  cars_.push_back(car);
 }
 
 // static
@@ -155,20 +162,18 @@ void Scene::Move(bool forward) {
 }
 
 // static
-void Scene::AddCar(double width, double length, double max_steering_angle,
-    const geometry::Point& center, const geometry::Point& second_point) {
-  cars_.push_back(simulation::Car(width, length, max_steering_angle));
-  cars_.back().SetCenter(center);
-  cars_.back().SetDirection(geometry::Vector(center, second_point));
+void Scene::Tick() {
+  carManueverHandler_->MoveForward(METERS_PER_STEP);
 }
 
 // static 
 void Scene::Draw() {
   DrawObjects();
 
-  for (unsigned index = 0; index < cars_.size(); ++index) {
-    DrawCar(index);
-  }
+//  for (unsigned index = 0; index < cars_.size(); ++index) {
+//    DrawCar(cars_[index]);
+//  }
+  DrawCar(carManueverHandler_->GetCurrentPosition());
   DrawBorderLines();
 }
 
@@ -189,8 +194,7 @@ void Scene::ShowHideTurnTip() {
 }
 
 // static
-void Scene::DrawCar(unsigned index) {
-  const simulation::Car& car = cars_[index];
+void Scene::DrawCar(const simulation::Car &car) {
   glColor4f(0.5, 0.5, 0.5, 1.0);
   DrawPolygon(car.GetBounds());
   
@@ -209,14 +213,14 @@ void Scene::DrawCar(unsigned index) {
     if (carMovementHandler_->CarMovementPossibleByDistance(
           car, distance_limit)) {
       glColor4f(0.5, 0.5, 0.0, 0.8);
-      gr = cars_[index].GetRotationGraphicsByDistance(distance_limit);
+      gr = car.GetRotationGraphicsByDistance(distance_limit);
     } else if (!DoubleIsZero(car.GetCurrentSteeringAngle()) &&
         carMovementHandler_->CarMovementPossibleByAngle(car, rotation_limit)) {
       glColor4f(0.5, 0.5, 0.0, 0.8);
-      gr = cars_[index].GetRotationGraphicsByAngle(rotation_limit);
+      gr = car.GetRotationGraphicsByAngle(rotation_limit);
     } else {
       glColor4f(0.5, 0.0, 0.0, 0.8);
-      gr = cars_[index].GetRotationGraphicsByDistance(distance_limit);
+      gr = car.GetRotationGraphicsByDistance(distance_limit);
     }
     
     for (unsigned index = 0; index < gr.size(); ++index) {

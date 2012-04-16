@@ -270,6 +270,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
         manuever.SetSteeringAngle(0.0);
         manuever.SetDistance(temp_distance);
         manuever.SetRotationCenter(geometry::Point());
+        return true;
     }
   }
 

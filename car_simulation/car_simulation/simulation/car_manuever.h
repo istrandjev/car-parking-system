@@ -27,6 +27,8 @@ class CarManuever {
  void SetBeginPosition(const simulation::Car& begin_position);
  simulation::Car GetBeginPosition() const;
 
+ simulation::Car GetPosition(double distance) const;
+
 private:
   double steeringAngle_;
   double distance_;

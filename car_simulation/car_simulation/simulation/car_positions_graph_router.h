@@ -13,8 +13,7 @@ class CarPositionsGraphRouter {
  public:
   CarPositionsGraphRouter(const CarPositionsGraph* graph);
 
-  std::vector<CarManuever> GetRoute(
-      int from_index, const std::vector<int>& end_indices) const;
+  std::vector<CarManuever> GetRoute(int from_index) const;
 
  private:
   const CarPositionsGraph* graph_;

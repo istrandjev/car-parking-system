@@ -16,9 +16,10 @@ class CarPositionsGraph {
  public:
   CarPositionsGraph(const CarMovementHandler* movement_handler);
 
-  void AddPosition(const Car& position);
+  void AddPosition(bool final, const Car& position);
   void ConstructGraph();
 
+  const std::vector<int>& GetFinalPositions() const;
   const std::vector<std::vector<GraphEdge> >& GetGraph() const;
 
  private:
@@ -27,6 +28,7 @@ class CarPositionsGraph {
 
  private:
   std::vector<std::vector<std::pair<int, CarManuever> > > graph_;
+  std::vector<int> final_;
   CarPositionsContainer positionsContainer_;
   const CarMovementHandler* movementHandler_;
 };
