@@ -266,6 +266,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
     if (!CarMovementPossibleByDistance(car1, temp_distance)) {
         return false;
     } else {
+        manuever.SetBeginPosition(car1);
         manuever.SetSteeringAngle(0.0);
         manuever.SetDistance(temp_distance);
         manuever.SetRotationCenter(geometry::Point());
@@ -287,6 +288,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
   if (!car1.CanBeRotationCenter(intersection, angle)) {
     return false;
   } else {
+    manuever.SetBeginPosition(car1);
     manuever.SetSteeringAngle(angle);
     manuever.SetDistance(geometry::Arc(
         intersection, center1, center2).GetLength());

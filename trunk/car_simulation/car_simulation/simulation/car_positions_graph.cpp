@@ -26,6 +26,11 @@ void CarPositionsGraph::ConstructGraph() {
   }
 }
 
+const std::vector<std::vector<GraphEdge> >&
+    CarPositionsGraph::GetGraph() const {
+  return graph_;
+}
+
 void CarPositionsGraph::GetPositionNeighbours(
     int position_index, std::vector<std::pair<int, CarManuever> >& neighbours) {
   int number_of_vertices = positionsContainer_.GetNumberOfPositions();
