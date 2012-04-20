@@ -38,12 +38,12 @@ class Polygon {
   unsigned NumberOfSides() const;
 
   // @return the point in the polygon with the specified index.
-  inline const Point& GetPoint(unsigned index) const;
+  const Point& GetPoint(unsigned index) const;
 
   // @return - the point in the polygon with the specified index. The difference
   //     with the above version is that point number N is considered to be point
   //     0 point N + 1 is point 1 and so on.
-  inline const Point& GetPointCyclic(int index) const;
+  const Point& GetPointCyclic(int index) const;
 
   // @return - a segment that represents the side with the given index.
   Segment GetSide(unsigned side_index) const;

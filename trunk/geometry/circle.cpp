@@ -6,6 +6,8 @@
 #include "geometry/vector.h"
 #include "utils/double_utils.h"
 
+#include <cmath>
+
 namespace geometry {
 
 Circle::Circle() : radius_(0) {}

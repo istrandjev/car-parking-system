@@ -4,6 +4,7 @@
 #include "geometry/rectangle_object.h"
 
 #include <fstream>
+#include <stdexcept>
 #include <string>
 
 namespace utils {
@@ -22,9 +23,9 @@ geometry::RectangleObject* RectangleObjectFactory(
 }
 
 void ObjectHolder::DumpToFile(const std::string& file_path) const {
-  std::ofstream out(file_path);
+  std::ofstream out(file_path.c_str());
   if (!out) {
-    throw std::exception("Could not open the file to serialize into.");
+    throw std::runtime_error("Could not open the file to serialize into.");
     return;
   }
 
@@ -45,9 +46,9 @@ void ObjectHolder::DumpToFile(const std::string& file_path) const {
 }
 
 void ObjectHolder::ParseFromFile(const std::string& file_path) {
-  std::ifstream in(file_path);
+  std::ifstream in(file_path.c_str());
   if (!in) {
-    throw std::exception("Could not open file to parse.");
+    throw std::runtime_error("Could not open file to parse.");
     return;
   }
 

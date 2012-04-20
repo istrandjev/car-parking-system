@@ -6,6 +6,8 @@
 #include <glut.h>
 #include <vector>
 
+#include <cmath>
+
 namespace utils {
 
 static const int CLICK_TOLERANCE = 1;

@@ -4,6 +4,7 @@
 #include "utils/double_utils.h"
 
 #include <cmath>
+#include <stdexcept>
 #include <iostream>
 #include <sstream>
 #include <string>

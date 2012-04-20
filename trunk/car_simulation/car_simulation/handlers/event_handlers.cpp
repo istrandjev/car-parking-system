@@ -8,9 +8,9 @@
 #include "utils/user_input_handler.h"
 #include "visualize/scene.h"
 
-#include <AntTweakBar.h>
 #include <glut.h>
 
+#include <cmath>
 #include <cstdlib>
 
 
@@ -45,11 +45,9 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
 }
 
 void KeyPressed(unsigned char c, int x, int y) {
-  if (!TwEventKeyboardGLUT(c, x , y)) {
-    UserInputHandler::PressRegularKey(c, x, y);
-    if (c == 't') {
-      visualize::Scene::ShowHideTurnTip();
-    }
+  UserInputHandler::PressRegularKey(c, x, y);
+  if (c == 't') {
+    visualize::Scene::ShowHideTurnTip();
   }
 }
 
@@ -58,9 +56,7 @@ void KeyReleased(unsigned char c, int x, int y) {
 }
 
 void SpecialKeyPressed(int c, int x, int y) {
-  if (!TwEventSpecialGLUT(c, x, y)) {
-    UserInputHandler::PressSpecialKey(c, x, y);
-  }
+  UserInputHandler::PressSpecialKey(c, x, y);
 }
 
 void SpecialKeyReleased(int c, int x, int y) {
@@ -68,27 +64,23 @@ void SpecialKeyReleased(int c, int x, int y) {
 }
 
 void MousePressFunc(int button, int state, int x, int y) {
-  if (!TwEventMouseButtonGLUT(button, state, x, y)) {
-    if (state == GLUT_DOWN) {
-      if (button == GLUT_LEFT_BUTTON) {
-        UserInputHandler::PressLeftMouse(x, y);
-      } else {
-        UserInputHandler::PressRightMouse(x, y);
-      }
-    } else if (state = GLUT_UP) {
-      if (button == GLUT_LEFT_BUTTON) {
-        UserInputHandler::ReleaseLeftMouse(x, y);
-      } else {
-        UserInputHandler::ReleaseRightMouse(x, y);
-      }
+  if (state == GLUT_DOWN) {
+    if (button == GLUT_LEFT_BUTTON) {
+      UserInputHandler::PressLeftMouse(x, y);
+    } else {
+      UserInputHandler::PressRightMouse(x, y);
+    }
+  } else if (state = GLUT_UP) {
+    if (button == GLUT_LEFT_BUTTON) {
+     UserInputHandler::ReleaseLeftMouse(x, y);
+    } else {
+      UserInputHandler::ReleaseRightMouse(x, y);
     }
   }
 }
 
 void MouseMoveFunc(int x, int y) {
-  if (!TwEventMouseMotionGLUT(x, y)) {
-    UserInputHandler::MoveMouse(x, y);
-  }
+  UserInputHandler::MoveMouse(x, y);
 }
 
 void HandleKeyboardEvents() {

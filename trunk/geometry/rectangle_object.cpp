@@ -11,6 +11,8 @@
 #include <string>
 #include <sstream>
 
+#include <cmath>
+
 namespace geometry {
 
 static const double DEFAULT_WIDTH = 2.0;
