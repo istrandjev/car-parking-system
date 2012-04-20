@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace geometry {
 
@@ -26,7 +27,7 @@ void Polygon::Normalize() {
   }
 
   if (DoubleIsGreater(0.0, total_area)) {
-    reverse(points_.begin(), points_.end());
+    std::reverse(points_.begin(), points_.end());
   }
 }
 

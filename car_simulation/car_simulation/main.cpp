@@ -19,6 +19,7 @@
 #include <fstream>
 #include <glut.h>
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ simulation::Car* car;
 void ReadInput(utils::ObjectHolder* object_holder) {
   ifstream in(DEFAULT_INPUT_LOCATION);
   if (!in) {
-    std::exception("Could not open the input file");
+     throw std::runtime_error("Could not open the input file");
   }
   double width, length, max_steering_angle;
   in >> width >> length >> max_steering_angle;

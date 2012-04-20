@@ -4,6 +4,8 @@
 #include "geometry/vector.h"
 #include "utils/double_utils.h"
 
+#include <cmath>
+
 namespace geometry {
 
 Line::Line(const Point& A, const Point& B) {

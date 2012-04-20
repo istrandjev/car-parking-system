@@ -5,6 +5,7 @@
 #include "simulation/car_positions_graph.h"
 #include "utils/double_utils.h"
 
+#include <algorithm>
 #include <queue>
 
 using namespace std;
@@ -22,7 +23,7 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
   const vector<int>& end_indices = graph_->GetFinalPositions();
   vector<bool> end_position(n, false);
   for (unsigned i = 0 ; i < end_indices.size(); ++i) {
-    end_position[i] = true;
+    end_position[end_indices[i]] = true;
   }
 
   vector<double> dist(n, -1.0);

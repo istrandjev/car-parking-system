@@ -8,6 +8,7 @@
 #include "utils/double_utils.h"
 
 #include <cmath>
+#include <stdexcept>
 
 namespace simulation {
 

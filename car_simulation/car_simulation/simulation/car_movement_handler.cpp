@@ -16,6 +16,9 @@
 #include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
 
+#include <cmath>
+#include <stdexcept>
+
 namespace simulation {
 
 bool IntersectsSectionBetweenConcentricArcs(
@@ -174,7 +177,7 @@ bool SectionBetweenConcentricArcsContains(
     const geometry::Point& point) {
   geometry::Point center = arc1.GetCenter();
   if (center != arc2.GetCenter()) {
-    throw new std::invalid_argument("The arcs are not concentric!");
+    throw std::invalid_argument("The arcs are not concentric!");
   }
 
   double r1 = arc1.GetRadius();

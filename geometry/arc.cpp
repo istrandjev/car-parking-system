@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <cmath>
+
 namespace geometry {
 
 Arc::Arc(const Circle& circle, double start_angle, double end_angle) 
