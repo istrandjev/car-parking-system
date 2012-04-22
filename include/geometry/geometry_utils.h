@@ -7,6 +7,7 @@ namespace geometry {
 
 class Point;
 class Vector;
+class Line;
 
 class GeometryUtils {
  public:
@@ -62,6 +63,10 @@ class GeometryUtils {
   // [0, 2 * PI).
   static double GetAngleBetweenVectors(const Vector &v1,
                                        const Vector& v2);
+
+  // Returns the bisectrice of the angle <)ABC
+  static Line GetBisectrice(const Point& A, const Point& B, const Point& C);
+
  public:
   static const double PI;
 

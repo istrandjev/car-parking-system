@@ -8,32 +8,36 @@ namespace simulation {
 
 class CarManuever {
  public:
-  CarManuever(const simulation::Car& begin_position,
-              const geometry::Point& rotation_center,
-              double steering_angle,
-              double distance);
-  CarManuever(const simulation::Car& begin_position, double distance);
+  CarManuever(const simulation::Car& begin_position);
   CarManuever();
 
-  void SetSteeringAngle(double steering_angle);
-  double GetSteeringAngle() const;
+  void SetInitialStraightSectionDistance(double distance);
+  double GetInitialStraightSectionDistance() const;
 
-  void SetDistance(double distance);
-  double GetDistance() const;
+  void SetFinalStraightSectionDistance(double distance);
+  double GetFinalStraightSectionDistance() const;
 
- void SetRotationCenter(const geometry::Point& center);
- const geometry::Point& GetRotationCenter() const;
+  void SetTurnAngle(double angle);
+  double GetTurnAngle() const;
 
- void SetBeginPosition(const simulation::Car& begin_position);
- simulation::Car GetBeginPosition() const;
+  void SetRotationCenter(const geometry::Point& center);
+  const geometry::Point& GetRotationCenter() const;
 
- simulation::Car GetPosition(double distance) const;
+  void SetBeginPosition(const simulation::Car& begin_position);
+  simulation::Car GetBeginPosition() const;
 
-private:
-  double steeringAngle_;
-  double distance_;
-  simulation::Car beginPosition_;
+  simulation::Car GetPosition(double distance) const;
+
+  double GetTotalDistance() const;
+
+ private:
+  double initialStraightSectionLength_;
+  double finalStraightSectionLength_;
+  double turnAngle_;
+  double turnRadius_;
   geometry::Point rotationCenter_;
+  
+  simulation::Car beginPosition_;
 };
 }  // namespace simulation
 #endif // SIMULATION_CAR_MANUEVER_H
