@@ -84,4 +84,8 @@ std::istream& operator>>(std::istream& in, Vector& vector) {
   return in;
 }
 
+std::ostream& operator<<(std::ostream& out, const Vector& v) {
+  out << "(" << v.x << ", " << v.y << ")";
+  return out;
+}
 }  // namespace geometry

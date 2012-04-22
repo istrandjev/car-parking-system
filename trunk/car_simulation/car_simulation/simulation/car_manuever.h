@@ -4,6 +4,8 @@
 #include "geometry/point.h"
 #include "simulation/car.h"
 
+#include <iostream>
+
 namespace simulation {
 
 class CarManuever {
@@ -30,6 +32,9 @@ class CarManuever {
 
   double GetTotalDistance() const;
 
+  friend std::ostream& operator<<(
+      std::ostream& out, const CarManuever& manuever);
+
  private:
   double initialStraightSectionLength_;
   double finalStraightSectionLength_;
@@ -39,5 +44,6 @@ class CarManuever {
   
   simulation::Car beginPosition_;
 };
+
 }  // namespace simulation
 #endif // SIMULATION_CAR_MANUEVER_H

@@ -4,6 +4,7 @@
 #include "geometry/point.h"
 #include "geometry/vector.h"
 
+#include <iostream>
 #include <vector>
 
 namespace geometry {
@@ -28,8 +29,7 @@ class Car {
 
   geometry::Point GetRotationCenter() const;
 
-  bool CanBeRotationCenter(const geometry::Point& center,
-                           double& steering_angle) const;
+  bool CanBeRotationCenter(const geometry::Point& center) const;
 
   void TurnLeft();
   void TurnRight();
@@ -46,13 +46,15 @@ class Car {
   std::vector<geometry::Polygon> GetRotationGraphicsByDistance(
       double distance_limit) const;
  
+  geometry::Line GetRearWheelsAxis() const;
+
  private:
   geometry::Point GetFrontLeftWheelCenter() const;
   geometry::Point GetFrontRightWheelCenter() const;
   geometry::Point GetRearLeftWheelCenter() const;
   geometry::Point GetRearRightWheelCenter() const;
 
-  geometry::Line GetRearWheelsAxis() const;
+  
 
   geometry::Polygon GetFrontLeftWheel() const;
   geometry::Polygon GetFrontRightWheel() const;
@@ -60,7 +62,9 @@ class Car {
   geometry::Polygon GetRearRightWheel() const;
   geometry::Polygon GetWheel(const geometry::Point& center, 
       const geometry::Vector& direction) const;
- 
+
+  friend std::ostream& operator<<(std::ostream& out, const Car& car);
+
  private:
   geometry::Point center_;
   geometry::Vector direction_;

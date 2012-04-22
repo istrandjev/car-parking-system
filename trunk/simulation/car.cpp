@@ -73,7 +73,6 @@ geometry::Point Car::GetRotationCenter() const {
   geometry::Vector fw_axis_vector = direction_.Rotate(fw_angle);
   geometry::Vector rw_axis_vector = direction_.GetOrthogonal();
 
-  double temp = geometry::GeometryUtils::GetAngleBetweenVectors(rw_axis_vector, fw_axis_vector *-1.0);
   geometry::Line fw_axis(fw_center, fw_axis_vector);
   geometry::Line rw_axis(rw_center, rw_axis_vector);
   geometry::Point rotation_center;
@@ -81,19 +80,15 @@ geometry::Point Car::GetRotationCenter() const {
     throw std::invalid_argument("current_steering_angle in "
         "Car::Move has incorrect value!");
   } 
-  geometry::Vector boza(rotation_center, fw_center);
-  double tmp = geometry::GeometryUtils::GetAngleBetweenVectors(boza, rw_axis_vector);
   return rotation_center;
 }
 
-bool Car::CanBeRotationCenter(const geometry::Point &center,
-                              double &steering_angle) const {
+bool Car::CanBeRotationCenter(const geometry::Point &center) const {
   geometry::Line rear_axis = GetRearWheelsAxis();
   if(!DoubleIsZero(rear_axis.GetDistanceFromPoint(center))) {
     return false;
   }
 
-  std::cerr << "Passed this check\n";
   const geometry::Point& fl = GetFrontLeftWheelCenter();
   const geometry::Point& fr = GetFrontRightWheelCenter();
   const geometry::Point& rl = GetRearLeftWheelCenter();
@@ -109,12 +104,7 @@ bool Car::CanBeRotationCenter(const geometry::Point &center,
     if (DoubleIsGreater(angle, pi)) {
       angle = pi * 2.0 -  angle;
     }
-    if (DoubleIsBetween(angle, 0, max_steering_angle_)) {
-      steering_angle = angle;
-      return true;
-    } else {
-      return false;
-    }
+    return DoubleIsBetween(angle, 0, max_steering_angle_);
   } else if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
                 rr, fr, rl, center, true)) {
     geometry::Vector turn_vector(center, fr);
@@ -124,12 +114,7 @@ bool Car::CanBeRotationCenter(const geometry::Point &center,
     if (DoubleIsGreater(angle, pi)) {
       angle = pi * 2.0 -  angle;
     }
-    if (DoubleIsBetween(angle, 0, max_steering_angle_)) {
-      steering_angle = angle;
-      return true;
-    } else {
-      return false;
-    }
+    return DoubleIsBetween(angle, 0, max_steering_angle_);
   } else {
     return false;
   }
@@ -314,6 +299,14 @@ void  Car::Reset() {
   center_ = geometry::Point(0, 0);
   direction_ = geometry::Vector(0, 1);
   current_steering_angle_ = 0;
+}
+
+std::ostream& operator <<(std::ostream &out, const Car &car) {
+  out << "Center: " << car.center_ << "direction: " << car.direction_ << "\n";
+  out << "current steering angle(maximum steering angle): "
+      << car.current_steering_angle_ << "(" << car.max_steering_angle_ << ")\n";
+  out << "width:" << car.width_ << " length: " << car.length_ << "\n";
+  return out;
 }
 
 }  // namespace simulation

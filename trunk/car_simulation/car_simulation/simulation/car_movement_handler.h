@@ -3,6 +3,10 @@
 
 #include "utils/intersection_handler.h"
 
+namespace geometry {
+class Point;
+}  // namespace geometry
+
 namespace simulation {
 
 class Car;
@@ -21,6 +25,10 @@ class CarMovementHandler {
   bool SingleManueverBetweenStates(const Car& pos1, const Car& pos2,
       CarManuever& manuever) const;
  
+ private:
+  bool ConstructManuever(const Car& car1, const Car& car2,
+                         const geometry::Point& rotation_center,
+                         CarManuever& manuever) const;
  private:
   const utils::IntersectionHandler* intersectionHandler_;
 };
