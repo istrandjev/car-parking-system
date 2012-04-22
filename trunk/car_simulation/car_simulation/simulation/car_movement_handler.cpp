@@ -270,9 +270,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
         return false;
     } else {
         manuever.SetBeginPosition(car1);
-        manuever.SetSteeringAngle(0.0);
-        manuever.SetDistance(temp_distance);
-        manuever.SetRotationCenter(geometry::Point());
+        manuever.SetInitialStraightSectionDistance(temp_distance);
         return true;
     }
   }
@@ -293,9 +291,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
     return false;
   } else {
     manuever.SetBeginPosition(car1);
-    manuever.SetSteeringAngle(angle);
-    manuever.SetDistance(geometry::Arc(
-        intersection, center1, center2).GetLength());
+    manuever.SetTurnAngle(angle);
     manuever.SetRotationCenter(intersection);
     return true;
   }

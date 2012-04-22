@@ -15,20 +15,26 @@ simulation::Car CarManueverHandler::GetCurrentPosition() const {
 }
 
 void CarManueverHandler::MoveForward(double distance) {
+  if (currentManueverIndex_ >= manuevers_.size()) {
+    return;
+  }
+
   const simulation::CarManuever& manuever = manuevers_[currentManueverIndex_];
-  if (DoubleIsGreaterOrEqual(manuever.GetDistance(),
-                             currentDistance_ + distance)) {
+  double total_distance = manuever.GetTotalDistance();
+
+  if (DoubleIsGreaterOrEqual(total_distance, currentDistance_ + distance)) {
     currentDistance_ += distance;
   } else {
     if (currentManueverIndex_ + 1 == manuevers_.size()) {
-      currentDistance_ = manuever.GetDistance();
+      currentDistance_ = total_distance;
       return;
     } else {
       ++currentManueverIndex_;
     }
-    distance -= manuever.GetDistance() - currentDistance_;
+    distance -= total_distance - currentDistance_;
     while (currentManueverIndex_ < manuevers_.size()) {
-      double current_distance = manuevers_[currentManueverIndex_].GetDistance();
+      double current_distance = 
+          manuevers_[currentManueverIndex_].GetTotalDistance();
       if (DoubleIsGreaterOrEqual(current_distance, distance)) {
         currentDistance_ = distance;
         break;
@@ -39,7 +45,7 @@ void CarManueverHandler::MoveForward(double distance) {
     }
     if (currentManueverIndex_ == manuevers_.size()) {
       currentManueverIndex_--;
-      currentDistance_ = manuevers_[currentManueverIndex_].GetDistance();
+      currentDistance_ = manuevers_[currentManueverIndex_].GetTotalDistance();
     }
   }
 }
@@ -56,7 +62,8 @@ void CarManueverHandler::MoveBackward(double distance) {
     }
     distance -= currentDistance_;
     while (currentManueverIndex_ >= 0) {
-      double current_distance = manuevers_[currentManueverIndex_].GetDistance();
+      double current_distance = 
+          manuevers_[currentManueverIndex_].GetTotalDistance();
       if (DoubleIsGreaterOrEqual(current_distance, distance)) {
         currentDistance_ = current_distance - distance;
         break;

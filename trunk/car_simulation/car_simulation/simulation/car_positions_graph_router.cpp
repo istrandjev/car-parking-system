@@ -55,7 +55,7 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
     }
 
     for (unsigned i = 0; i < graph[index].size(); ++i) {
-      double new_dist = d + graph[index][i].second.GetDistance();
+      double new_dist = d + graph[index][i].second.GetTotalDistance();
       int neighbour_index = graph[index][i].first;
       if (visited[neighbour_index]) {
         continue;

@@ -1,5 +1,6 @@
 #include "geometry/geometry_utils.h"
 
+#include "geometry/line.h"
 #include "geometry/point.h"
 #include "geometry/vector.h"
 #include "utils/double_utils.h"
@@ -103,6 +104,14 @@ double GeometryUtils::GetAngleBetweenVectors(const Vector &v1,
   }
 
   return angle;
+}
+
+Line GeometryUtils::GetBisectrice(
+    const Point& A, const Point& B, const Point& C) {
+  Vector v1(B, A);
+  Vector v2(B, C);
+  Point temp = B + v1.Unit() + v2.Unit();
+  return Line(B, temp);
 }
 
 }  // namespace geometry

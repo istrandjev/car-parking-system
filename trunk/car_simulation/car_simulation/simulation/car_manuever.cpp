@@ -6,39 +6,46 @@
 namespace simulation {
 
 CarManuever::CarManuever(
-    const simulation::Car& begin_position,
-    const geometry::Point& rotation_center,
-    double steering_angle,
-    double distance)
+    const simulation::Car& begin_position)
         : beginPosition_(begin_position),
-          rotationCenter_(rotation_center),
-          steeringAngle_(steering_angle),
-          distance_(distance) {}
-
-CarManuever::CarManuever(
-    const simulation::Car& begin_position, double distance)
-  : beginPosition_(begin_position), steeringAngle_(0.0), distance_(distance) {}
+          turnAngle_(0.0),
+          turnRadius_(0.0),
+          initialStraightSectionLength_(0.0),
+          finalStraightSectionLength_(0.0) {}
 
 CarManuever::CarManuever()
-  : beginPosition_(0.0, 0.0, 0.0), steeringAngle_(0.0), distance_(0.0) {}
+  : beginPosition_(0.0, 0.0, 0.0),
+    turnAngle_(0.0),
+    turnRadius_(0.0),
+    initialStraightSectionLength_(0.0),
+    finalStraightSectionLength_(0.0) {}
 
-void CarManuever::SetSteeringAngle(double steering_angle) {
-  steeringAngle_ = steering_angle;
+void CarManuever::SetInitialStraightSectionDistance(double distance) {
+  initialStraightSectionLength_ = distance;
 }
 
-double CarManuever::GetSteeringAngle() const {
-  return steeringAngle_;
+double CarManuever::GetInitialStraightSectionDistance() const {
+  return initialStraightSectionLength_;
 }
 
-void CarManuever::SetDistance(double distance) {
-  distance_ = distance;
+void CarManuever::SetFinalStraightSectionDistance(double distance) {
+  finalStraightSectionLength_ = distance;
 }
 
-double CarManuever::GetDistance() const {
-  return distance_;
+double CarManuever::GetFinalStraightSectionDistance() const {
+  return finalStraightSectionLength_;
+}
+
+void CarManuever::SetTurnAngle(double angle) {
+  turnAngle_ = angle;
+}
+
+double CarManuever::GetTurnAngle() const {
+  return turnAngle_;
 }
 
 void CarManuever::SetRotationCenter(const geometry::Point& center) {
+  turnRadius_ = center.GetDistance(beginPosition_.GetCenter());
   rotationCenter_ = center;
 }
 
@@ -55,30 +62,48 @@ simulation::Car CarManuever::GetBeginPosition() const {
 }
 
 simulation::Car CarManuever::GetPosition(double distance) const {
-  if (DoubleIsGreater(distance, distance_)) {
-    distance = distance_;
+  double turn_distance = turnRadius_ * turnAngle_;
+  double total_distance = initialStraightSectionLength_ + turn_distance +
+      finalStraightSectionLength_;
+  if (DoubleIsGreater(distance, total_distance)) {
+    distance = total_distance;
   }
 
   if (DoubleIsGreaterOrEqual(0.0, distance)) {
     return beginPosition_;
   }
 
-  if (DoubleIsZero(GetSteeringAngle())) {  // moving forward
-    simulation::Car result = beginPosition_;
-    geometry::Point center = beginPosition_.GetCenter();
-    center += beginPosition_.GetDirection().Unit() * distance;
-    result.SetCenter(center);
+  simulation::Car result = beginPosition_;
+
+  geometry::Point center = result.GetCenter();
+  geometry::Vector direction = result.GetDirection().Unit();
+
+  if (DoubleIsGreaterOrEqual(initialStraightSectionLength_, distance)) {
+    result.SetCenter(center + direction * distance);
     return result;
-  } else {  // doing a turn
-    simulation::Car result = beginPosition_;
-    geometry::Point center = beginPosition_.GetCenter();
-    double radius = rotationCenter_.GetDistance(center);
-    double angle = distance / radius;
+  }
+
+  distance -= initialStraightSectionLength_;
+
+  if (DoubleIsGreaterOrEqual(turn_distance, distance)) {
+    double angle = distance / turnRadius_;
     result.SetCenter(center.Rotate(rotationCenter_, angle));
-    geometry::Vector direction = beginPosition_.GetDirection();
     result.SetDirection(direction.Rotate(angle));
     return result;
   }
+
+  direction = direction.Rotate(turnAngle_);
+  center = center.Rotate(rotationCenter_, turnAngle_);
+  distance -= turn_distance;
+
+  result.SetCenter(center + direction * distance);
+  result.SetDirection(direction);
+  return result;
+}
+
+double CarManuever::GetTotalDistance() const {
+  return initialStraightSectionLength_ + turnAngle_ * turnRadius_ +
+      finalStraightSectionLength_;
 }
 
 }  // namespace simulation
