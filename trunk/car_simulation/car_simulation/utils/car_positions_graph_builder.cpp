@@ -39,7 +39,7 @@ void CarPositionsGraphBuilder::CreateCarPositionsGraph(
   graph->ConstructGraph();
 }
 
-static const double METERS_STEP = 1.7;
+static const double METERS_STEP = 0.5;
 
 void CarPositionsGraphBuilder::AddPositionsForObject(
     const geometry::RectangleObject* object, bool final,
@@ -74,7 +74,7 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
     for (unsigned j = 0; j < x_fractions.size();++j) {
       geometry::Point center = origin + ox * x_fractions[j] +
            oy * y_fractions[i];
-      for (double angle = 0.0; angle < 1.9 * pi; angle += angle_step) {
+      for (double angle = 0; angle < 1.9 * pi; angle += angle_step) {
         simulation::Car car_position(car_);
         car_position.SetCenter(center);
         car_position.SetDirection(ox.Rotate(angle));

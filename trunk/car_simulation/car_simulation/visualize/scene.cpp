@@ -163,17 +163,22 @@ void Scene::Move(bool forward) {
 
 // static
 void Scene::Tick() {
-  carManueverHandler_->MoveForward(METERS_PER_STEP);
+  if (carManueverHandler_ != 0) {
+    carManueverHandler_->MoveForward(METERS_PER_STEP);
+  }
 }
 
 // static 
 void Scene::Draw() {
   DrawObjects();
 
-//  for (unsigned index = 0; index < cars_.size(); ++index) {
-//    DrawCar(cars_[index]);
-//  }
-  DrawCar(carManueverHandler_->GetCurrentPosition());
+  if (carManueverHandler_ == NULL) {
+    for (unsigned index = 0; index < cars_.size(); ++index) {
+      DrawCar(cars_[index]);
+    }
+  } else { 
+    DrawCar(carManueverHandler_->GetCurrentPosition());
+  }
   DrawBorderLines();
 }
 

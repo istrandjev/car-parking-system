@@ -78,9 +78,6 @@
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\utils\user_input_handler.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="handlers\tw_handler.cpp">
       <Filter>Source Files\handlers</Filter>
     </ClCompile>
@@ -92,6 +89,24 @@
     </ClCompile>
     <ClCompile Include="visualize\scene.cpp">
       <Filter>Source Files\visualize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\arc.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\bounding_box.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\circle.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\polygon_intersection.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\geometry\segement.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\user_input_handler.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +160,18 @@
     </ClInclude>
     <ClInclude Include="visualize\scene.h">
       <Filter>Header Files\visualize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\geometry\arc.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\geometry\bounding_box.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\geometry\circle.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\geometry\segment.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

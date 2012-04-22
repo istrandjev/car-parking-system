@@ -82,7 +82,6 @@
     <ClCompile Include="..\..\utils\double_utils.cpp" />
     <ClCompile Include="..\..\utils\object_holder.cpp" />
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp" />
-    <ClCompile Include="..\..\utils\user_input_handler.cpp" />
     <ClCompile Include="geometry\boundary_line.cpp" />
     <ClCompile Include="geometry\regular_grid.cpp" />
     <ClCompile Include="geometry\straight_boundary_line.cpp" />
@@ -97,6 +96,7 @@
     <ClCompile Include="utils\boundary_line_holder.cpp" />
     <ClCompile Include="utils\car_positions_graph_builder.cpp" />
     <ClCompile Include="utils\intersection_handler.cpp" />
+    <ClCompile Include="utils\user_input_handler.cpp" />
     <ClCompile Include="visualize\glut_utils.cpp" />
     <ClCompile Include="visualize\scene.cpp" />
   </ItemGroup>

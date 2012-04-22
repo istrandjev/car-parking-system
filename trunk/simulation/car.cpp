@@ -73,6 +73,7 @@ geometry::Point Car::GetRotationCenter() const {
   geometry::Vector fw_axis_vector = direction_.Rotate(fw_angle);
   geometry::Vector rw_axis_vector = direction_.GetOrthogonal();
 
+  double temp = geometry::GeometryUtils::GetAngleBetweenVectors(rw_axis_vector, fw_axis_vector *-1.0);
   geometry::Line fw_axis(fw_center, fw_axis_vector);
   geometry::Line rw_axis(rw_center, rw_axis_vector);
   geometry::Point rotation_center;
@@ -80,6 +81,8 @@ geometry::Point Car::GetRotationCenter() const {
     throw std::invalid_argument("current_steering_angle in "
         "Car::Move has incorrect value!");
   } 
+  geometry::Vector boza(rotation_center, fw_center);
+  double tmp = geometry::GeometryUtils::GetAngleBetweenVectors(boza, rw_axis_vector);
   return rotation_center;
 }
 
@@ -90,18 +93,23 @@ bool Car::CanBeRotationCenter(const geometry::Point &center,
     return false;
   }
 
+  std::cerr << "Passed this check\n";
   const geometry::Point& fl = GetFrontLeftWheelCenter();
   const geometry::Point& fr = GetFrontRightWheelCenter();
   const geometry::Point& rl = GetRearLeftWheelCenter();
   const geometry::Point& rr = GetRearRightWheelCenter();
 
+  const double pi = geometry::GeometryUtils::PI;
   if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
       rl, fl, rr, center, true)) {
     geometry::Vector turn_vector(center, fl);
     geometry::Vector rear_axis_vector(center, rl);
     double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
-        turn_vector, rear_axis_vector);
-    if (DoubleIsBetween(angle, 0, steering_angle)) {
+        rear_axis_vector, turn_vector);
+    if (DoubleIsGreater(angle, pi)) {
+      angle = pi * 2.0 -  angle;
+    }
+    if (DoubleIsBetween(angle, 0, max_steering_angle_)) {
       steering_angle = angle;
       return true;
     } else {
@@ -113,7 +121,10 @@ bool Car::CanBeRotationCenter(const geometry::Point &center,
     geometry::Vector rear_axis_vector(center, rr);
     double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
         turn_vector, rear_axis_vector);
-    if (DoubleIsBetween(angle, 0, steering_angle)) {
+    if (DoubleIsGreater(angle, pi)) {
+      angle = pi * 2.0 -  angle;
+    }
+    if (DoubleIsBetween(angle, 0, max_steering_angle_)) {
       steering_angle = angle;
       return true;
     } else {
@@ -153,22 +164,22 @@ void Car::TurnRight() {
 }
 
 geometry::Point Car::GetFrontLeftWheelCenter() const {
-  return center_ + direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION -
-      direction_.GetOrthogonal() * width_ * 0.5;
-}
-
-geometry::Point Car::GetFrontRightWheelCenter() const {
   return center_ + direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION +
       direction_.GetOrthogonal() * width_ * 0.5;
 }
 
+geometry::Point Car::GetFrontRightWheelCenter() const {
+  return center_ + direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION -
+      direction_.GetOrthogonal() * width_ * 0.5;
+}
+
 geometry::Point Car::GetRearLeftWheelCenter() const {
-  return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION -
+  return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION +
       direction_.GetOrthogonal() * width_ * 0.5;
 }
 
 geometry::Point Car::GetRearRightWheelCenter() const {
-  return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION +
+  return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION -
       direction_.GetOrthogonal() * width_ * 0.5;
 }
 
