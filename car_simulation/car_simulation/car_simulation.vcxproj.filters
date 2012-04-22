@@ -84,9 +84,6 @@
     <ClCompile Include="..\..\utils\object_holder_serialization.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\utils\user_input_handler.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\simulation\car.cpp">
       <Filter>Source Files\simulation</Filter>
     </ClCompile>
@@ -148,6 +145,9 @@
       <Filter>Source Files\simulation</Filter>
     </ClCompile>
     <ClCompile Include="utils\car_positions_graph_builder.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\user_input_handler.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>

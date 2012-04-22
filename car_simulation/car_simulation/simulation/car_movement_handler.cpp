@@ -251,8 +251,8 @@ bool SectionBetweenConcentricArcsContains(
 bool CarMovementHandler::SingleManueverBetweenStates(
         const Car& car1, const Car& car2,
         CarManuever& manuever) const {
-  const geometry::Vector& dir1 = car1.GetDirection();
-  const geometry::Vector& dir2 = car2.GetDirection();
+  const geometry::Vector& dir1 = car1.GetDirection().Unit();
+  const geometry::Vector& dir2 = car2.GetDirection().Unit();
 
   const geometry::Point& center1 = car1.GetCenter();
   const geometry::Point& center2 = car2.GetCenter();
