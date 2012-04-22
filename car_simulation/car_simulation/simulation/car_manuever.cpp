@@ -87,7 +87,7 @@ simulation::Car CarManuever::GetPosition(double distance) const {
 
   if (DoubleIsGreaterOrEqual(turn_distance, distance)) {
     double angle = distance / turnRadius_;
-    result.SetCenter(center.Rotate(rotationCenter_, angle));
+    result.SetCenter(result.GetCenter().Rotate(rotationCenter_, angle));
     result.SetDirection(direction.Rotate(angle));
     return result;
   }
@@ -106,4 +106,17 @@ double CarManuever::GetTotalDistance() const {
       finalStraightSectionLength_;
 }
 
+std::ostream& operator<<(std::ostream& out, const CarManuever& manuever) {
+  out << "Initial position: " << manuever.beginPosition_ << "\n";
+  out << "Initial straight segment length: "
+      << manuever.initialStraightSectionLength_ << "\n";
+
+  out << "Turn angle: " << manuever.turnAngle_
+      << "Turn radius:" << manuever.turnRadius_ << "\n";
+
+  out << "Rotation center: " << manuever.rotationCenter_ << "\n";
+  out << "Final straight segment length: "
+      << manuever.finalStraightSectionLength_;
+  return out;
+}
 }  // namespace simulation

@@ -75,6 +75,11 @@ int main(int argc, char ** argv)
   cout << "The graph is constructed now\n";
   simulation::CarPositionsGraphRouter router(&graph);
   vector<simulation::CarManuever> route = router.GetRoute(0);
+  cerr << "Number of manuevers found" << route.size() << endl;
+  for (unsigned i = 0; i < route.size(); ++i) {
+    cerr << "Manuever [" << i << "]:\n";
+    cerr << route[i] << endl;
+  }
   simulation::CarManueverHandler manuever_handler(route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
 

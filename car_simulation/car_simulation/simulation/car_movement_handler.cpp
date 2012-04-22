@@ -257,43 +257,97 @@ bool CarMovementHandler::SingleManueverBetweenStates(
   const geometry::Point& center1 = car1.GetCenter();
   const geometry::Point& center2 = car2.GetCenter();
 
-  geometry::Vector vector(center1, center1);
-  
-  if (DoubleIsZero(dir1.CrossProduct(dir2)) &&
-          DoubleIsZero(vector.CrossProduct(dir1))) {
-    if (DoubleIsGreaterOrEqual(0, dir1.DotProduct(dir2))) {
+  if (DoubleIsZero(dir1.CrossProduct(dir2))) {
+    geometry::Vector vector(center1, center2);
+
+    // All four points lie on the same line
+    if (DoubleIsZero(vector.CrossProduct(dir1))) {
+      // Opposite directions - no solution
+      if (DoubleIsGreaterOrEqual(0, dir1.DotProduct(dir2))) {
+        return false;
+      }
+
+      double temp_distance = center1.GetDistance(center2);
+      if (!CarMovementPossibleByDistance(car1, temp_distance)) {
+          return false;
+      } else {
+          manuever.SetBeginPosition(car1);
+          manuever.SetInitialStraightSectionDistance(temp_distance);
+          return true;
+      }
+    }
+
+    // Same direction - no solution
+    if (DoubleIsGreaterOrEqual(dir1.DotProduct(dir2), 0)) {
       return false;
     }
-    double temp_distance = center1.GetDistance(center2);
 
-    if (!CarMovementPossibleByDistance(car1, temp_distance)) {
-        return false;
-    } else {
-        manuever.SetBeginPosition(car1);
-        manuever.SetInitialStraightSectionDistance(temp_distance);
-        return true;
-    }
+    geometry::Segment central(center1, center2);
+    geometry::Line l(central.GetMiddle(), dir1);
+    geometry::Point rotation_center;
+    l.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
+    return ConstructManuever(car1, car2, rotation_center, manuever);
   }
 
-  geometry::Segment segment1(center1, center2);
-  geometry::Segment segment2(center1 + dir1, center2 + dir2);
+  geometry::Line l1(center1, dir1);
+  geometry::Line l2(center2, dir2);
 
-  geometry::Line sim1 = segment1.GetSimmetral();
-  geometry::Line sim2 = segment2.GetSimmetral();
+  // Avoid the case when center1 or center2 is the intersection
+  if (DoubleIsZero(l1.GetDistanceFromPoint(center2)) ||
+      DoubleIsZero(l2.GetDistanceFromPoint(center1))) {
+    return false;
+  }
 
   geometry::Point intersection;
-  if (!sim1.Intersect(sim2, &intersection)) {
+  l1.Intersect(l2, &intersection);
+  geometry::Line bisectrics = geometry::GeometryUtils::GetBisectrice(
+        intersection + dir1, intersection, intersection + dir2);
+
+  geometry::Point rotation_center;
+  bisectrics.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
+  return ConstructManuever(car1, car2, rotation_center, manuever);
+}
+
+bool CarMovementHandler::ConstructManuever(
+    const Car &car1, const Car &car2,
+    const geometry::Point &rotation_center,
+    CarManuever &manuever) const {
+  if (!car1.CanBeRotationCenter(rotation_center)) {
     return false;
   }
 
-  double angle;
-  if (!car1.CanBeRotationCenter(intersection, angle)) {
+  const geometry::Point& center1 = car1.GetCenter();
+  const geometry::Point& center2 = car2.GetCenter();
+  const geometry::Vector& dir2 = car2.GetDirection();
+  const geometry::Vector& dir1 = car1.GetDirection();
+
+  double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
+        dir1, dir2);
+
+  if (!CarMovementPossibleByAngle(car1, angle)) {
     return false;
-  } else {
-    manuever.SetBeginPosition(car1);
-    manuever.SetTurnAngle(angle);
-    manuever.SetRotationCenter(intersection);
-    return true;
   }
+
+  Car after_turn = car1;
+  after_turn.SetDirection(dir2);
+  geometry::Point center = center1.Rotate(rotation_center, angle);
+  geometry::Vector vec(center, center2);
+  
+  if (DoubleIsGreaterOrEqual(0, vec.DotProduct(dir2))) {
+    return false;
+  }
+
+  after_turn.SetCenter(center);
+  double distance = center.GetDistance(center2);
+  if (!CarMovementPossibleByDistance(after_turn, distance)) {
+    return false;
+  }
+
+  manuever.SetBeginPosition(car1);
+  manuever.SetTurnAngle(angle);
+  manuever.SetRotationCenter(rotation_center);
+  manuever.SetFinalStraightSectionDistance(distance);
+  return true;
 }
+
 }  // namespace simulation

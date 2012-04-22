@@ -31,7 +31,7 @@ class Point {
 };
 
 std::istream& operator>>(std::istream& in, Point& point);
-std::ostream& operator<<(std::ostream& out, Point& point);
+std::ostream& operator<<(std::ostream& out, const Point& point);
 
 }  // namespace geometry
 #endif  // INCLUDE_GEOMETRY_POINT_H_

@@ -32,6 +32,7 @@ class Vector {
 };
 
 std::istream& operator>>(std::istream& in, Vector& vector);
+std::ostream& operator<<(std::ostream& out, const Vector& v);
 
 }  // namespace geometry
 #endif  // INCLUDE_GEOMETRY_VECTOR_H_
