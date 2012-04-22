@@ -112,6 +112,9 @@ void HandleKeyboardEvents() {
   if (UserInputHandler::IsRegularKeyPressed('e')) {
     CurrentState::debugFlag = !CurrentState::debugFlag;
   }
+  if (UserInputHandler::IsRegularKeyPressed(' ')) {
+    visualize::Scene::RestartAnimation();
+  }
 }
 
 }  // namespace utils

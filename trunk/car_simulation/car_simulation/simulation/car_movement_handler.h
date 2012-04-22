@@ -21,7 +21,8 @@ class CarMovementHandler {
   bool CarMovementPossibleByDistance(const Car& car, double distance) const;
 
   bool CarMovementPossibleByAngle(const Car& car, double angle) const;
-
+  bool CarMovementPossibleByAngle(const Car& car, double angle,
+                                  const geometry::Point& rotation_center) const;
   bool SingleManueverBetweenStates(const Car& pos1, const Car& pos2,
       CarManuever& manuever) const;
  

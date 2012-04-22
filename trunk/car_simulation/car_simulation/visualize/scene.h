@@ -71,6 +71,8 @@ public:
 
   static void ShowHideTurnTip();
 
+  static void RestartAnimation();
+
  private:
   static void DrawCar(const simulation::Car& car);
   static void DrawObjects();
@@ -83,8 +85,8 @@ public:
 
   // Sets the current drawing color according to the polygon index. Tries to 
   // choose as differentiable colors as possible.
-  static void SetColorForPolygon(unsigned index);
- 
+  static void SetColorForPolygon(unsigned index); 
+
  private:
   static simulation::CarMovementHandler* carMovementHandler_;
   static utils::ObjectHolder* objectHolder_;

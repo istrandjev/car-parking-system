@@ -362,4 +362,10 @@ void Scene::DrawBorderLines() {
   glDisable(GL_LINE_STIPPLE);
 }
 
+void Scene::RestartAnimation() {
+  if (carManueverHandler_ != NULL) {
+    carManueverHandler_->MoveTo(0.0);
+  }
+}
+
 }  // namespace visualize
