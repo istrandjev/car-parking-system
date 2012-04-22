@@ -79,25 +79,31 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
     const Car& car, double angle) const {
   if (DoubleIsZero(car.GetCurrentSteeringAngle())) {
     return true;
-  } 
+  }
+
+  return CarMovementPossibleByAngle(car, angle, car.GetRotationCenter());
+}
+
+bool CarMovementHandler::CarMovementPossibleByAngle(
+    const Car &car, double angle,
+    const geometry::Point &rotation_center) const {
   if (DoubleIsGreater(angle, geometry::GeometryUtils::PI * 2.0)) {
     angle = geometry::GeometryUtils::PI * 2.0;
   }
-  
+
   geometry::BoundingBox bounding_box;
 
-  geometry::Point center = car.GetRotationCenter();
   geometry::Polygon bounds = car.GetBounds();
   geometry::Vector direction = car.GetDirection();
   std::vector<geometry::Arc> arcs;
   for (unsigned index = 0; index < bounds.NumberOfVertices(); ++index) {
-    const geometry::Point& point = bounds.GetPoint(index); 
-    geometry::Vector temp(center, point);
+    const geometry::Point& point = bounds.GetPoint(index);
+    geometry::Vector temp(rotation_center, point);
     double actual_angle = angle;
     if (DoubleIsGreater(0, temp.CrossProduct(direction))) {
       actual_angle = -actual_angle;
     }
-    arcs.push_back(geometry::Arc(center, point, actual_angle));
+    arcs.push_back(geometry::Arc(rotation_center, point, actual_angle));
     bounding_box.UnionWith(arcs[index].GetBoundingBox());
   }
 
@@ -112,9 +118,9 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
   }
 
   for (unsigned index1 = 0; index1 < bounds.NumberOfVertices(); ++index1) {
-    for (unsigned index2 = index1 + 1; index2 < bounds.NumberOfVertices(); 
+    for (unsigned index2 = index1 + 1; index2 < bounds.NumberOfVertices();
         ++index2) {
-      if (IntersectsSectionBetweenConcentricArcs(arcs[index1], arcs[index2], 
+      if (IntersectsSectionBetweenConcentricArcs(arcs[index1], arcs[index2],
           segments)) {
         return false;
       }
@@ -301,7 +307,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
   geometry::Point intersection;
   l1.Intersect(l2, &intersection);
   geometry::Line bisectrics = geometry::GeometryUtils::GetBisectrice(
-        intersection + dir1, intersection, intersection + dir2);
+        intersection - dir1, intersection, intersection + dir2);
 
   geometry::Point rotation_center;
   bisectrics.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
