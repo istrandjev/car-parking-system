@@ -80,6 +80,16 @@ int main(int argc, char ** argv)
     cerr << "Manuever [" << i << "]:\n";
     cerr << route[i] << endl;
   }
+  simulation::CarManuever man;
+  simulation::Car temp(*car);
+  temp.SetCenter(geometry::Point(-2.0, -8.1));
+  temp.SetDirection(geometry::Vector(-1, 0));
+  
+  bool ivo = movement_handler.SingleManueverBetweenStates(*car, temp, man);
+  cout << "Ivo? " << ivo << endl;
+  if (ivo) {
+    cout << "Manuever: " << man << endl;
+  }
   simulation::CarManueverHandler manuever_handler(route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
 

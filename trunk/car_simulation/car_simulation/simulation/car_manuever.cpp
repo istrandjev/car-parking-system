@@ -3,6 +3,8 @@
 #include "simulation/car.h"
 #include "utils/double_utils.h"
 
+#include <cmath>
+
 namespace simulation {
 
 CarManuever::CarManuever(
@@ -62,7 +64,7 @@ simulation::Car CarManuever::GetBeginPosition() const {
 }
 
 simulation::Car CarManuever::GetPosition(double distance) const {
-  double turn_distance = turnRadius_ * turnAngle_;
+  double turn_distance = fabs(turnRadius_ * turnAngle_);
   double total_distance = initialStraightSectionLength_ + turn_distance +
       finalStraightSectionLength_;
   if (DoubleIsGreater(distance, total_distance)) {
@@ -87,6 +89,9 @@ simulation::Car CarManuever::GetPosition(double distance) const {
 
   if (DoubleIsGreaterOrEqual(turn_distance, distance)) {
     double angle = distance / turnRadius_;
+    if (DoubleIsGreater(0.0, turnAngle_)) {
+      angle *= -1.0;
+    }
     result.SetCenter(result.GetCenter().Rotate(rotationCenter_, angle));
     result.SetDirection(direction.Rotate(angle));
     return result;

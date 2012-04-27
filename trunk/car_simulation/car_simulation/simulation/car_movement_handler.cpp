@@ -330,7 +330,11 @@ bool CarMovementHandler::ConstructManuever(
   double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
         dir1, dir2);
 
-  if (!CarMovementPossibleByAngle(car1, angle)) {
+  const double pi = geometry::GeometryUtils::PI;
+  if (DoubleIsGreater(angle, pi)) {
+    angle = 2.0 * pi - angle;
+  }
+  if (!CarMovementPossibleByAngle(car1, angle, rotation_center)) {
     return false;
   }
 
@@ -350,7 +354,7 @@ bool CarMovementHandler::ConstructManuever(
   }
 
   manuever.SetBeginPosition(car1);
-  manuever.SetTurnAngle(angle);
+  manuever.SetTurnAngle(-angle);
   manuever.SetRotationCenter(rotation_center);
   manuever.SetFinalStraightSectionDistance(distance);
   return true;

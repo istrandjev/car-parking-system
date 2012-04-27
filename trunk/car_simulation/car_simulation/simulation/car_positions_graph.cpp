@@ -25,6 +25,7 @@ void CarPositionsGraph::AddPosition(bool final, const Car &position) {
 }
 
 void CarPositionsGraph::ConstructGraph() {
+  std::cout << "Number of positions to build graph from: " << positionsContainer_.GetNumberOfPositions() << std::endl;
   int number_of_vertices = positionsContainer_.GetNumberOfPositions();
   graph_.resize(number_of_vertices);
 
