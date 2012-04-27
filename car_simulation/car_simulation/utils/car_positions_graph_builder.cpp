@@ -39,7 +39,7 @@ void CarPositionsGraphBuilder::CreateCarPositionsGraph(
   graph->ConstructGraph();
 }
 
-static const double METERS_STEP = 1.5;
+static const double METERS_STEP = 1.0;
 
 void CarPositionsGraphBuilder::AddPositionsForObject(
     const geometry::RectangleObject* object, bool final,
