@@ -98,7 +98,10 @@ bool Polygon::ContainsPoint(const Point& point) const {
   for (unsigned index = 0; index < points_.size(); ++index) {
     if (GeometryUtils::LiesOnLine(GetPoint(index), GetPointCyclic(index + 1),
                                   point)) {
-      return true;
+      geometry::BoundingBox bb;
+      bb.AddPoint(GetPoint(index));
+      bb.AddPoint(GetPointCyclic(index + 1));
+      return bb.Contains(point);
     }
   }
 
