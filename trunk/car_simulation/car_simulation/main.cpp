@@ -67,13 +67,12 @@ int main(int argc, char ** argv)
   intersection_handler.Init(object_holder);
   simulation::CarMovementHandler movement_handler(&intersection_handler);
   visualize::Scene::SetCarMovementHandler(&movement_handler);
-  /*
+  
   simulation::CarPositionsGraph graph(&movement_handler);
   graph.AddPosition(false, *car);
   utils::CarPositionsGraphBuilder builder(object_holder, intersection_handler, *car);
   builder.CreateCarPositionsGraph(&graph);
   cout << "The graph is constructed now\n";
-  
   simulation::CarPositionsGraphRouter router(&graph);
   vector<simulation::CarManuever> route = router.GetRoute(0);
   cerr << "Number of manuevers found" << route.size() << endl;
@@ -81,13 +80,12 @@ int main(int argc, char ** argv)
     cerr << "Manuever [" << i << "]:\n";
     cerr << route[i] << endl;
   }
-  
+
   simulation::CarManueverHandler manuever_handler(route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
-  */
+
   utils::InitializeHandlers();
   visualize::initGlut(argc, argv);
-
 
   // Run GLUT main loop.
   glutMainLoop();

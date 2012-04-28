@@ -100,7 +100,8 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
     const geometry::Point& point = bounds.GetPoint(index);
     geometry::Vector temp(rotation_center, point);
     double actual_angle = angle;
-    if (DoubleIsGreater(0, temp.CrossProduct(direction))) {
+    if (DoubleIsGreater(0, temp.CrossProduct(direction)) &&
+        DoubleIsGreater(actual_angle, 0)) {
       actual_angle = -actual_angle;
     }
     arcs.push_back(geometry::Arc(rotation_center, point, actual_angle));
@@ -332,7 +333,7 @@ bool CarMovementHandler::ConstructManuever(
 
   const double pi = geometry::GeometryUtils::PI;
   if (DoubleIsGreater(angle, pi)) {
-    angle = 2.0 * pi - angle;
+    angle = angle - 2*pi;
   }
   if (!CarMovementPossibleByAngle(car1, angle, rotation_center)) {
     return false;
@@ -354,7 +355,7 @@ bool CarMovementHandler::ConstructManuever(
   }
 
   manuever.SetBeginPosition(car1);
-  manuever.SetTurnAngle(-angle);
+  manuever.SetTurnAngle(angle);
   manuever.SetRotationCenter(rotation_center);
   manuever.SetFinalStraightSectionDistance(distance);
   return true;
