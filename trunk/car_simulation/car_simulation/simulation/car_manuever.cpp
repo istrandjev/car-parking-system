@@ -64,7 +64,7 @@ simulation::Car CarManuever::GetBeginPosition() const {
 }
 
 simulation::Car CarManuever::GetPosition(double distance) const {
-  double turn_distance = fabs(turnRadius_ * turnAngle_);
+  double turn_distance = GetTurnDistance();
   double total_distance = initialStraightSectionLength_ + turn_distance +
       finalStraightSectionLength_;
   if (DoubleIsGreater(distance, total_distance)) {
@@ -106,8 +106,12 @@ simulation::Car CarManuever::GetPosition(double distance) const {
   return result;
 }
 
+double CarManuever::GetTurnDistance() const {
+  return fabs(turnAngle_ * turnRadius_);
+}
+
 double CarManuever::GetTotalDistance() const {
-  return initialStraightSectionLength_ + turnAngle_ * turnRadius_ +
+  return initialStraightSectionLength_ + GetTurnDistance() +
       finalStraightSectionLength_;
 }
 

@@ -30,6 +30,7 @@ class CarManuever {
 
   simulation::Car GetPosition(double distance) const;
 
+  double GetTurnDistance() const;
   double GetTotalDistance() const;
 
   friend std::ostream& operator<<(
