@@ -244,31 +244,6 @@ void Scene::DrawObjects() {
 
   glColor4f(0.0, 0.0, 0.0, 0.5);
   DrawObjectsFromContainer(objectHolder_->GetObstacles());
-
-  if (objectHolder_->HasSelected()) {
-    DrawSelected(objectHolder_->GetSelected()->GetBounds());
-  }
-}
-
-// static
-void Scene::DrawSelected(const geometry::Polygon& polygon) {
-  const double SELECTION_LENGTH = 0.4;
-  glLineStipple(0.1, 0xf88f);
-  glEnable(GL_LINE_STIPPLE);
-  glColor3f(0.0, 0.0, 0.8);
-
-  glBegin(GL_LINE_STRIP);
-  for (unsigned index = 0; index <= polygon.NumberOfVertices(); ++index) {
-    const geometry::Point& prev = polygon.GetPointCyclic(index - 1);
-    const geometry::Point& cur = polygon.GetPointCyclic(index);
-    const geometry::Point& next = polygon.GetPointCyclic(index + 1);
-    geometry::Point point = cur;
-    point += (geometry::Vector(prev, cur).Unit() * SELECTION_LENGTH);
-    point += (geometry::Vector(next, cur).Unit() * SELECTION_LENGTH);
-    glVertex2f(point.x, point.y);
-  }
-  glEnd();
-  glDisable(GL_LINE_STIPPLE);
 }
 
 // static

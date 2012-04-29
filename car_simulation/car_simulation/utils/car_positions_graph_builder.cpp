@@ -79,7 +79,7 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
         car_position.SetCenter(center);
         car_position.SetDirection(ox.Rotate(angle));
         if (CarPositionIsPossible(car_position)) {
-          graph->AddPosition(final, car_position);
+          graph->AddPosition(final, car_position, object);
         }
       }
     }

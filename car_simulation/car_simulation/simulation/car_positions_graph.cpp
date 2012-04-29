@@ -14,11 +14,12 @@ CarPositionsGraph::CarPositionsGraph(const CarMovementHandler *movement_handler)
   : movementHandler_(movement_handler),
   positionsContainer_(MIN_X_COORDINATE, MAX_X_COORDINATE, MIN_Y_COORDINATE, MAX_Y_COORDINATE) {}
 
-void CarPositionsGraph::AddPosition(bool final, const Car &position) {
+void CarPositionsGraph::AddPosition(bool final, const Car &position,
+                                    const geometry::RectangleObject* object) {
   if (final) {
     final_.push_back(positionsContainer_.GetNumberOfPositions());
   }
-  positionsContainer_.AddCarPosition(position);
+  positionsContainer_.AddCarPosition(position, object);
   if (positionsContainer_.GetNumberOfPositions() % 1000 == 0) {
     std::cout << "The size is now:" << positionsContainer_.GetNumberOfPositions() << std::endl;
   }

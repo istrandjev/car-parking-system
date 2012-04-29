@@ -21,55 +21,37 @@ class ObjectHolder {
   ~ObjectHolder();
   void DeleteObjects();
 
+  geometry::RectangleObject* AddTwoWayRoadSegment(
+      const geometry::Point& from, const geometry::Point& to);
 
-  bool HasSelected();
-  void AddRoadSegment(const geometry::Point& from, const geometry::Point& to);
-  void AddParkingLot(const geometry::Point& from, const geometry::Point& to);
-  void AddObstacle(const geometry::Point& from, const geometry::Point& to);
-  void AddObjectOfCurrentType(const geometry::Point& from,
-      const geometry::Point& to);
+  geometry::RectangleObject* AddOneWayRoadSegment(
+      const geometry::Point& from, const geometry::Point& to);
 
-  bool Select(const geometry::Point& location);
+  geometry::RectangleObject* AddParkingLot(
+      const geometry::Point& from, const geometry::Point& to);
+
+  geometry::RectangleObject* AddObstacle(
+      const geometry::Point& from, const geometry::Point& to);
+
+  bool FindAndDelete(geometry::RectangleObject* object);
+
+  void GetObectsForLocation(const geometry::Point& location,
+      RectangleObjectContainer* container);
 
   const RectangleObjectContainer& GetRoadSegments() const;
   const RectangleObjectContainer& GetParkingLots() const;
   const RectangleObjectContainer& GetObstacles() const;
 
-  void SelectNext();
-  void SelectPrevious();
-
-  void FinalizeSelected();
-  bool IsSelectedFinalized() const;
-
-  geometry::RectangleObject* GetSelected();
-  void DeleteSelected();
-
-  void TranslatedSelectedUp();
-  void TranslatedSelectedDown();
-  void TranslatedSelectedLeft();
-  void TranslatedSelectedRight();
-
-  void IncreaseSelectedWidth();
-  void DecreaseSelectedWidth();
-
-  void AddSibling();
-
   void DumpToFile(const std::string& file_path) const;
   void ParseFromFile(const std::string& file_path);
 
- public:
-  enum ObjectType {
-    ROAD_SEGMENT,
-    PARKING_LOT,
-    OBSTACLE
-  };
-  ObjectType currentType;
-
  private:
-  void AddRectangleObjectToContainer(geometry::RectangleObject* object,
-      RectangleObjectContainer* container);
-  void AddSelectedFromContainer(const geometry::Point& location,
-      RectangleObjectContainer* container);
+
+  static void GetObectsForLocationFromContainer(
+      const geometry::Point& location,
+      const RectangleObjectContainer* container,
+      RectangleObjectContainer* location_objects);
+
   static bool FindAndDeleteFromContainer(geometry::RectangleObject* object,
       RectangleObjectContainer* container);
 
@@ -77,9 +59,6 @@ class ObjectHolder {
   RectangleObjectContainer roadSegments_;
   RectangleObjectContainer parkingLots_;
   RectangleObjectContainer obstacles_;
-  std::vector<geometry::RectangleObject*> selected_;
-  unsigned selectedIndex_;
-  bool selectedIsFianlized_;
 };
 
 }  // namespace utils

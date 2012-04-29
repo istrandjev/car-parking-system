@@ -5,6 +5,11 @@
 #include "simulation/car_positions_container.h"
 
 #include <vector>
+
+namespace geometry {
+class RectangleObject;
+}  // namespace geometry
+
 namespace simulation {
 
 class CarMovementHandler;
@@ -16,7 +21,8 @@ class CarPositionsGraph {
  public:
   CarPositionsGraph(const CarMovementHandler* movement_handler);
 
-  void AddPosition(bool final, const Car& position);
+  void AddPosition(bool final, const Car& position,
+                   const geometry::RectangleObject* object);
   void ConstructGraph();
 
   const std::vector<int>& GetFinalPositions() const;

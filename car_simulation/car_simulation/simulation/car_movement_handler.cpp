@@ -118,9 +118,8 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
     segments.push_back(line->GetSegment());
   }
 
-  for (unsigned index1 = 0; index1 < bounds.NumberOfVertices(); ++index1) {
-    for (unsigned index2 = index1 + 1; index2 < bounds.NumberOfVertices();
-        ++index2) {
+  for (unsigned index1 = 0; index1 < arcs.size(); ++index1) {
+    for (unsigned index2 = index1 + 1; index2 < arcs.size(); ++index2) {
       if (IntersectsSectionBetweenConcentricArcs(arcs[index1], arcs[index2],
           segments)) {
         return false;
@@ -254,6 +253,8 @@ bool SectionBetweenConcentricArcsContains(
   return false;
 }
 
+static const double ROTATION_RADIUS_LIMIT = 2000;
+
 // static
 bool CarMovementHandler::SingleManueverBetweenStates(
         const Car& car1, const Car& car2,
@@ -312,6 +313,12 @@ bool CarMovementHandler::SingleManueverBetweenStates(
 
   geometry::Point rotation_center;
   bisectrics.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
+
+  if (DoubleIsGreater(rotation_center.GetDistance(center1),
+                      ROTATION_RADIUS_LIMIT)) {
+    return false;
+  }
+
   return ConstructManuever(car1, car2, rotation_center, manuever);
 }
 
