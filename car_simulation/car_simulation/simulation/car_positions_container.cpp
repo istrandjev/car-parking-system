@@ -36,7 +36,18 @@ void CarPositionsContainer::AddCarPosition(
   int i, j;
   GetCellCoordinates(position.GetCenter(), i, j);
   positionsGrid_[i][j].AddCarPosition(positions_.size());
-  positionObjectMap_.push_back(object);
+
+  unsigned object_index = 0;
+  std::map<const geometry::RectangleObject*, unsigned>::iterator it =
+      objectsMap_.find(object);
+  if (it == objectsMap_.end()) {
+    object_index = objects_.size();
+    objectsMap_.insert(std::make_pair(object, object_index));
+    objects_.push_back(object);
+  } else {
+    object_index = it->second;
+  }
+  positionObjectMap_.push_back(object_index);
   positions_.push_back(new Car(position));
 }
 

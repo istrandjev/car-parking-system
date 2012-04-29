@@ -1,6 +1,7 @@
 #ifndef SIMUALTION_CAR_POSITIONS_CONTAINER_H
 #define SIMUALTION_CAR_POSITIONS_CONTAINER_H
 
+#include <map>
 #include <vector>
 
 namespace geometry {
@@ -44,8 +45,13 @@ class CarPositionsContainer {
 
  private:
   std::vector<Car*> positions_;
-  std::vector<const geometry::RectangleObject*> positionObjectMap_;
+  std::vector<unsigned> positionObjectMap_;
+  std::map<const geometry::RectangleObject*, unsigned> objectsMap_;
+  std::vector<const geometry::RectangleObject*> objects_;
+
   std::vector<std::vector<CarPosition> > positionsGrid_;
+
+
   double minx_, maxx_;
   double miny_, maxy_;
 };
