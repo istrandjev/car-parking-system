@@ -313,8 +313,9 @@ void Scene::DrawDirectionalTips(
 
 // static
 void Scene::DrawBorderLines() {
-  std::vector<const geometry::BoundaryLine*> boundary_lines =
-      carMovementHandler_->GetIntersectionHandler()->GetBoundaryLines();
+  std::vector<const geometry::BoundaryLine*> boundary_lines;
+  carMovementHandler_->GetIntersectionHandler()->
+      GetBoundaryLines(boundary_lines);
 
   glLineStipple(0.1, 0xffff);
   glEnable(GL_LINE_STIPPLE);

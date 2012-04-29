@@ -47,6 +47,7 @@ const utils::IntersectionHandler*
 // static
 bool CarMovementHandler::CarMovementPossibleByDistance(
     const Car& car, double distance) const {
+  BENCHMARK_STR(bm1, "place1");
   if (!DoubleIsZero(car.GetCurrentSteeringAngle())) {
     geometry::Point rotation_center = car.GetRotationCenter();
     geometry::Point center = car.GetCenter();
@@ -55,7 +56,7 @@ bool CarMovementHandler::CarMovementPossibleByDistance(
     double angle = distance / radius;
     return CarMovementPossibleByAngle(car, angle);
   }
-
+  BENCHMARK_STR(bm2, "place2");
   geometry::Vector direction = car.GetDirection().Unit();
   geometry::Point from = car.GetCenter() - direction * car.GetLength() * 0.5;
   geometry::Point to = from + direction * (distance + car.GetLength());
@@ -63,10 +64,15 @@ bool CarMovementHandler::CarMovementPossibleByDistance(
   geometry::RectangleObject ro(from, to, car.GetWidth());
 
   geometry::BoundingBox bounding_box = ro.GetBoundingBox();
-  std::vector<const geometry::BoundaryLine*> lines = 
-      intersectionHandler_->GetBoundaryLines(bounding_box);
-
+  BENCHMARK_STR(bm4, "place4");
+  std::vector<const geometry::BoundaryLine*> lines;
+  {
+      BENCHMARK_STR(bm, "getting the lines");
+      intersectionHandler_->GetBoundaryLines(bounding_box, lines);
+  }
+  BENCHMARK_STR(bm11, "place11");
   geometry::Polygon bounds = ro.GetBounds();
+  BENCHMARK_STR(bm3, "place3");
   for (unsigned index = 0; index < lines.size(); ++index) {
     const geometry::StraightBoundaryLine* line =
         dynamic_cast<const geometry::StraightBoundaryLine*>(lines[index]);
@@ -110,8 +116,8 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
     bounding_box.UnionWith(arcs[index].GetBoundingBox());
   }
 
-  std::vector<const geometry::BoundaryLine*> lines =
-      intersectionHandler_->GetBoundaryLines(bounding_box);
+  std::vector<const geometry::BoundaryLine*> lines;
+  intersectionHandler_->GetBoundaryLines(bounding_box, lines);
 
   std::vector<geometry::Segment> segments;
   for (unsigned index = 0 ; index < lines.size(); ++index) {
@@ -261,8 +267,7 @@ static const double ROTATION_RADIUS_LIMIT = 2000;
 bool CarMovementHandler::SingleManueverBetweenStates(
         const Car& car1, const Car& car2,
         CarManuever& manuever) const {
-
-  utils::Benchmark bm(__FUNCTION__);
+  BENCHMARK(bm);
   const geometry::Vector& dir1 = car1.GetDirection().Unit();
   const geometry::Vector& dir2 = car2.GetDirection().Unit();
 
@@ -271,7 +276,8 @@ bool CarMovementHandler::SingleManueverBetweenStates(
 
   if (DoubleIsZero(dir1.CrossProduct(dir2))) {
     geometry::Vector vector(center1, center2);
-    utils::Benchmark bm1(std::string(__FUNCTION__) + "Case 1");
+    BENCHMARK_STR(bm1, "Case 1");
+    
     // All four points lie on the same line
     if (DoubleIsZero(vector.CrossProduct(dir1))) {
       // Opposite directions - no solution
@@ -300,7 +306,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
     l.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
     return ConstructManuever(car1, car2, rotation_center, manuever);
   }
-  utils::Benchmark bm2(std::string(__FUNCTION__) + "Case 2");
+  BENCHMARK_STR(bm2, "Case 2");
   geometry::Line l1(center1, dir1);
   geometry::Line l2(center2, dir2);
 
@@ -330,7 +336,7 @@ bool CarMovementHandler::ConstructManuever(
     const Car &car1, const Car &car2,
     const geometry::Point &rotation_center,
     CarManuever &manuever) const {
-  utils::Benchmark bm(__FUNCTION__);
+  BENCHMARK(bm);
   if (!car1.CanBeRotationCenter(rotation_center)) {
     return false;
   }
@@ -340,29 +346,33 @@ bool CarMovementHandler::ConstructManuever(
   const geometry::Vector& dir2 = car2.GetDirection();
   const geometry::Vector& dir1 = car1.GetDirection();
 
-  double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
-        dir1, dir2);
+  BENCHMARK_STR(bm1, "Case 1");
 
+ double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
+        dir1, dir2);
   const double pi = geometry::GeometryUtils::PI;
   if (DoubleIsGreater(angle, pi)) {
     angle = angle - 2*pi;
   }
-  if (!CarMovementPossibleByAngle(car1, angle, rotation_center)) {
-    return false;
-  }
 
   Car after_turn = car1;
   after_turn.SetDirection(dir2);
+ 
   geometry::Point center = center1.Rotate(rotation_center, angle);
   geometry::Vector vec(center, center2);
   
   if (DoubleIsGreaterOrEqual(0, vec.DotProduct(dir2))) {
     return false;
   }
-
+  BENCHMARK_STR(bm3, "Case 3");
   after_turn.SetCenter(center);
   double distance = center.GetDistance(center2);
   if (!CarMovementPossibleByDistance(after_turn, distance)) {
+    return false;
+  }
+
+  BENCHMARK_STR(bm2, "Case 2");
+  if (!CarMovementPossibleByAngle(car1, angle, rotation_center)) {
     return false;
   }
 

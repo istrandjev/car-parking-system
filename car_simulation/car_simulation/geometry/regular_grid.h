@@ -13,14 +13,17 @@ class GridElement {
  public:
   void AddRectangleObject(const RectangleObject* rectangle_object);
   void AddBoundaryLine(const BoundaryLine* boundary_line);
+  void AddOriginatingBoundaryLine(const BoundaryLine* boundary_line);
   void RemoveBoundaryLine(const BoundaryLine* boundary_line);
 
   const std::vector<const RectangleObject*>& GetRectangleObjects() const;
-  const std::vector<const BoundaryLine*>& GetBoudnaryLines() const;
+  const std::vector<const BoundaryLine*>& GetAllBoudnaryLines() const;
+  const std::vector<const BoundaryLine*>& GetOriginatingBoudnaryLines() const;
 
  private:
   std::vector<const RectangleObject*> rectangleObjects_;
-  std::vector<const BoundaryLine*> boundaryLines_;
+  std::vector<const BoundaryLine*> allBoundaryLines_;
+  std::vector<const BoundaryLine*> originatingBoundaryLines_;
 };
 
 class RegularGrid {
@@ -34,9 +37,9 @@ class RegularGrid {
       const BoundingBox& bounding_box) const;
   std::vector<const RectangleObject*> GetRectangleObjects() const;
 
-  std::vector<const BoundaryLine*> GetBoundaryLines(
-      const BoundingBox& bounding_box) const;
-  std::vector<const BoundaryLine*> GetBoundaryLines() const;
+  void GetBoundaryLines(const BoundingBox& bounding_box,
+                        std::vector<const BoundaryLine*>& result) const;
+  void GetBoundaryLines(std::vector<const BoundaryLine*>& result) const;
   
  private:
   void GetCellCoordinates(double x, double y, int& i, int& j) const;

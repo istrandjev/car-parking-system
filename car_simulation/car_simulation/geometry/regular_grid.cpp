@@ -10,21 +10,35 @@
 
 namespace geometry {
 
-static const int VERTICAL_CELL_NUM = 20;
-static const int HORIZONTAL_CELL_NUM = 30;
+static const int VERTICAL_CELL_NUM = 80;
+static const int HORIZONTAL_CELL_NUM = 120;
 
 void GridElement::AddRectangleObject(const RectangleObject* rectangle_object) {
   rectangleObjects_.push_back(rectangle_object);
 }
 
 void GridElement::AddBoundaryLine(const BoundaryLine* boundary_line) {
-  boundaryLines_.push_back(boundary_line);
+  allBoundaryLines_.push_back(boundary_line);
+}
+
+void GridElement::AddOriginatingBoundaryLine(
+    const BoundaryLine* boundary_line) {
+  allBoundaryLines_.push_back(boundary_line);
+  originatingBoundaryLines_.push_back(boundary_line);
 }
 
 void GridElement::RemoveBoundaryLine(const BoundaryLine* boundary_line) {
-  for (unsigned index = 0; index < boundaryLines_.size(); ++index) {
-    if (boundaryLines_[index] == boundary_line) {
-      boundaryLines_.erase(boundaryLines_.begin() + index);
+  for (unsigned index = 0; index < allBoundaryLines_.size(); ++index) {
+    if (allBoundaryLines_[index] == boundary_line) {
+      allBoundaryLines_[index] = allBoundaryLines_.back();
+      allBoundaryLines_.pop_back();
+      break;
+    }
+  }
+  for (unsigned index = 0; index < originatingBoundaryLines_.size(); ++index) {
+    if (originatingBoundaryLines_[index] == boundary_line) {
+      originatingBoundaryLines_[index] = originatingBoundaryLines_.back();
+      originatingBoundaryLines_.pop_back();
       break;
     }
   }
@@ -35,10 +49,15 @@ const std::vector<const RectangleObject*>&
   return rectangleObjects_;    
 }
 
-const std::vector<const BoundaryLine*>& GridElement::GetBoudnaryLines() const {
-  return boundaryLines_;
+const std::vector<const BoundaryLine*>&
+    GridElement::GetAllBoudnaryLines() const {
+  return allBoundaryLines_;
 }
 
+const std::vector<const BoundaryLine*>&
+    GridElement::GetOriginatingBoudnaryLines() const {
+  return originatingBoundaryLines_;
+}
 
 RegularGrid::RegularGrid(double minx, double maxx, double miny, double maxy)
     : minx_(minx), maxx_(maxx), miny_(miny), maxy_(maxy) {
@@ -75,7 +94,11 @@ void RegularGrid::AddBoundaryLine(const BoundaryLine* border) {
       maxi, maxj);
   for (int i = mini; i <= maxi; ++i) {
     for (int j = minj; j <= maxj; ++j) {
-      grid_[i][j].AddBoundaryLine(border);
+      if (i == mini || j == minj) {
+        grid_[i][j].AddOriginatingBoundaryLine(border);
+      } else {
+        grid_[i][j].AddBoundaryLine(border);
+      }
     }
   }
 }
@@ -125,8 +148,9 @@ std::vector<const RectangleObject*> RegularGrid::GetRectangleObjects() const {
 }
 
 
-std::vector<const BoundaryLine*> RegularGrid::GetBoundaryLines(
-    const BoundingBox& bounding_box) const {
+void RegularGrid::GetBoundaryLines(const BoundingBox& bounding_box,
+    std::vector<const BoundaryLine*>& result) const {
+  result.clear();
   int mini, maxi;
   int minj, maxj;
   GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
@@ -134,23 +158,24 @@ std::vector<const BoundaryLine*> RegularGrid::GetBoundaryLines(
   GetCellCoordinates(bounding_box.GetMaxX(), bounding_box.GetMaxY(),
       maxi, maxj);
 
-  std::set<const BoundaryLine*> boundary_lines;
-  
   for (int i = mini; i <= maxi; ++i) {
     for (int j = minj; j <= maxj; ++j) {
-      std::vector<const BoundaryLine*> lines =
-          grid_[i][j].GetBoudnaryLines();
-      boundary_lines.insert(lines.begin(), lines.end());
+      if (i == mini || j == minj) {
+        const std::vector<const BoundaryLine*>& lines =
+          grid_[i][j].GetAllBoudnaryLines();
+        result.insert(result.end(), lines.begin(), lines.end());
+      } else {
+        const std::vector<const BoundaryLine*>& lines =
+          grid_[i][j].GetOriginatingBoudnaryLines();
+        result.insert(result.end(), lines.begin(), lines.end());
+      }
     }
   }
-
-  return std::vector<const BoundaryLine*>(
-      boundary_lines.begin(), boundary_lines.end());
 }
 
-std::vector<const BoundaryLine*> RegularGrid::GetBoundaryLines() const {
+void RegularGrid::GetBoundaryLines(std::vector<const BoundaryLine*>& result) const {
   geometry::BoundingBox bounding_box(minx_, maxx_, miny_, maxy_);
-  return GetBoundaryLines(bounding_box);
+  GetBoundaryLines(bounding_box, result);
 }
 
 void RegularGrid::GetCellCoordinates(double x, double y,

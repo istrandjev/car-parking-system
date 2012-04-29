@@ -1,0 +1,33 @@
+Now working on vertex: 14499
+Total edges: 422531
+Time consumed so far:451.125
+### Dumping benchmark info ###
+simulation::CarMovementHandler::CarMovementPossibleByDistance [getting the lines
+]: 24.31
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place11]: 40.103
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place1]: 111.753
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place2]: 102.24
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place3]: 22.764
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place4]: 83.753
+simulation::CarMovementHandler::ConstructManuever: 354.902
+simulation::CarMovementHandler::ConstructManuever [Case 1]: 297.744
+simulation::CarMovementHandler::ConstructManuever [Case 2]: 159.878
+simulation::CarMovementHandler::ConstructManuever [Case 3]: 283.496
+simulation::CarMovementHandler::SingleManueverBetweenStates: 424.452
+simulation::CarMovementHandler::SingleManueverBetweenStates [Case 2]: 393.22
+The graph is constructed now
+Number of manuevers found0
+### Dumping benchmark info ###
+simulation::CarMovementHandler::CarMovementPossibleByDistance [getting the lines
+]: 24.31
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place11]: 40.103
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place1]: 111.753
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place2]: 102.24
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place3]: 22.764
+simulation::CarMovementHandler::CarMovementPossibleByDistance [place4]: 83.753
+simulation::CarMovementHandler::ConstructManuever: 354.902
+simulation::CarMovementHandler::ConstructManuever [Case 1]: 297.744
+simulation::CarMovementHandler::ConstructManuever [Case 2]: 159.878
+simulation::CarMovementHandler::ConstructManuever [Case 3]: 283.496
+simulation::CarMovementHandler::SingleManueverBetweenStates: 424.452
+simulation::CarMovementHandler::SingleManueverBetweenStates [Case 2]: 393.22

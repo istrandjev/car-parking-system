@@ -95,7 +95,7 @@ int main(int argc, char ** argv)
   simulation::CarManueverHandler manuever_handler(route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
   utils::Benchmark::DumpBenchmarkingInfo();
-
+  
   utils::InitializeHandlers();
   visualize::initGlut(argc, argv);
 
