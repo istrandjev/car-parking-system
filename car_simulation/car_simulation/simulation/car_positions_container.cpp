@@ -36,7 +36,7 @@ void CarPositionsContainer::AddCarPosition(
   int i, j;
   GetCellCoordinates(position.GetCenter(), i, j);
   positionsGrid_[i][j].AddCarPosition(positions_.size());
-  positionObjectMap_[positions_.size()] = object;
+  positionObjectMap_.push_back(object);
   positions_.push_back(new Car(position));
 }
 
