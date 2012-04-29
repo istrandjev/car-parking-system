@@ -150,6 +150,9 @@
     <ClCompile Include="utils\user_input_handler.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\utils\benchmark.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\directed_rectangle_object.h">
@@ -249,6 +252,9 @@
       <Filter>Header Files\simulation</Filter>
     </ClInclude>
     <ClInclude Include="utils\car_positions_graph_builder.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\utils\benchmark.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>

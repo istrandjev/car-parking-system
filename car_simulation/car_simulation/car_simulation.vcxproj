@@ -77,6 +77,7 @@
     <ClCompile Include="..\..\geometry\segement.cpp" />
     <ClCompile Include="..\..\geometry\vector.cpp" />
     <ClCompile Include="..\..\simulation\car.cpp" />
+    <ClCompile Include="..\..\utils\benchmark.cpp" />
     <ClCompile Include="..\..\utils\current_state.cpp" />
     <ClCompile Include="..\..\utils\delay.cpp" />
     <ClCompile Include="..\..\utils\double_utils.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="..\..\include\geometry\segment.h" />
     <ClInclude Include="..\..\include\geometry\vector.h" />
     <ClInclude Include="..\..\include\simulation\car.h" />
+    <ClInclude Include="..\..\include\utils\benchmark.h" />
     <ClInclude Include="..\..\include\utils\current_state.h" />
     <ClInclude Include="..\..\include\utils\delay.h" />
     <ClInclude Include="..\..\include\utils\double_utils.h" />
