@@ -23,13 +23,16 @@ class CarPositionsGraph {
 
   void AddPosition(bool final, const Car& position,
                    const geometry::RectangleObject* object);
+  void GetNeighbourhoodList(std::vector<std::vector<int> >& neighbour_list);
   void ConstructGraph();
+
 
   const std::vector<int>& GetFinalPositions() const;
   const std::vector<std::vector<GraphEdge> >& GetGraph() const;
 
  private:
   void GetPositionNeighbours(int position_index,
+      const std::vector<std::vector<int> >& neighbourhood_list,
       std::vector<std::pair<int, CarManuever> >& neighbours);
 
  private:

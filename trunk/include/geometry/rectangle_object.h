@@ -47,5 +47,7 @@ class RectangleObject {
   bool isObstacle_;
 };
 
+bool AreTouching(const RectangleObject& a, const RectangleObject& b);
+
 }  // namespace geometry
 #endif  // INCLUDE_GEOMETRY_RECTANGLE_OBJECT_H_
