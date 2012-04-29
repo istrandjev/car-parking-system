@@ -40,6 +40,11 @@ class CarPositionsContainer {
 
   int GetNumberOfPositions() const;
 
+  unsigned GetNumberOfObjects() const;
+  const geometry::RectangleObject* GetObject(int index) const;
+  unsigned GetObjectIndexForPosition(int position_index);
+  const std::vector<int>& GetCarPositionsForObject(int object_index) const;
+
  private:
   void GetCellCoordinates(const geometry::Point& point, int& i, int& j) const;
 
@@ -48,7 +53,7 @@ class CarPositionsContainer {
   std::vector<unsigned> positionObjectMap_;
   std::map<const geometry::RectangleObject*, unsigned> objectsMap_;
   std::vector<const geometry::RectangleObject*> objects_;
-
+  std::vector<std::vector<int> > positionsForObjects_;
   std::vector<std::vector<CarPosition> > positionsGrid_;
 
 

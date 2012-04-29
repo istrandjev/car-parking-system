@@ -4,6 +4,7 @@
 #include "geometry/geometry_utils.h"
 #include "geometry/point.h"
 #include "geometry/polygon.h"
+#include "geometry/segment.h"
 #include "geometry/vector.h"
 #include "utils/double_utils.h"
 
@@ -135,6 +136,18 @@ void RectangleObject::TranslateByNormal(double value) {
   Vector translation = Vector(from_, to_).GetOrthogonal().Unit() * value;
   from_ = from_ + translation;
   to_ = to_ + translation;
+}
+
+bool AreTouching(const RectangleObject& a, const RectangleObject& b) {
+  geometry::Polygon a_bounds = a.GetBounds();
+  geometry::Polygon b_bounds = b.GetBounds();
+  for (unsigned i = 0; i < a_bounds.NumberOfSides(); ++i) {
+    if (geometry::Intersect(b_bounds, a_bounds.GetSide(i), NULL)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 }  // namespace geometry

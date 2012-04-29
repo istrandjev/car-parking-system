@@ -44,9 +44,13 @@ void CarPositionsContainer::AddCarPosition(
     object_index = objects_.size();
     objectsMap_.insert(std::make_pair(object, object_index));
     objects_.push_back(object);
+    positionsForObjects_.push_back(std::vector<int>());
   } else {
     object_index = it->second;
   }
+ 
+  positionsForObjects_[object_index].push_back(
+      static_cast<int>(positions_.size()));
   positionObjectMap_.push_back(object_index);
   positions_.push_back(new Car(position));
 }
@@ -89,6 +93,24 @@ const Car* CarPositionsContainer::GetPosition(int position_index) const {
 
 int CarPositionsContainer::GetNumberOfPositions() const {
   return static_cast<int>(positions_.size());
+}
+
+unsigned CarPositionsContainer::GetNumberOfObjects() const {
+  return objects_.size();
+}
+
+const geometry::RectangleObject *CarPositionsContainer::GetObject(
+    int index) const {
+  return objects_[index];
+}
+
+unsigned CarPositionsContainer::GetObjectIndexForPosition(int position_index) {
+  return positionObjectMap_[position_index];
+}
+
+const std::vector<int>& CarPositionsContainer::GetCarPositionsForObject(
+    int object_index) const {
+  return positionsForObjects_[object_index];
 }
 
 void CarPositionsContainer::GetCellCoordinates(
