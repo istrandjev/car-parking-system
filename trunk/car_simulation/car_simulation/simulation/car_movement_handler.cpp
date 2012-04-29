@@ -12,12 +12,14 @@
 #include "geometry/vector.h"
 #include "simulation/car.h"
 #include "simulation/car_manuever.h"
+#include "utils/benchmark.h"
 #include "utils/current_state.h"
 #include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
 
 #include <cmath>
 #include <stdexcept>
+#include <string>
 
 namespace simulation {
 
@@ -259,6 +261,8 @@ static const double ROTATION_RADIUS_LIMIT = 2000;
 bool CarMovementHandler::SingleManueverBetweenStates(
         const Car& car1, const Car& car2,
         CarManuever& manuever) const {
+
+  utils::Benchmark bm(__FUNCTION__);
   const geometry::Vector& dir1 = car1.GetDirection().Unit();
   const geometry::Vector& dir2 = car2.GetDirection().Unit();
 
@@ -267,7 +271,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
 
   if (DoubleIsZero(dir1.CrossProduct(dir2))) {
     geometry::Vector vector(center1, center2);
-
+    utils::Benchmark bm1(std::string(__FUNCTION__) + "Case 1");
     // All four points lie on the same line
     if (DoubleIsZero(vector.CrossProduct(dir1))) {
       // Opposite directions - no solution
@@ -296,7 +300,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
     l.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
     return ConstructManuever(car1, car2, rotation_center, manuever);
   }
-
+  utils::Benchmark bm2(std::string(__FUNCTION__) + "Case 2");
   geometry::Line l1(center1, dir1);
   geometry::Line l2(center2, dir2);
 
@@ -326,6 +330,7 @@ bool CarMovementHandler::ConstructManuever(
     const Car &car1, const Car &car2,
     const geometry::Point &rotation_center,
     CarManuever &manuever) const {
+  utils::Benchmark bm(__FUNCTION__);
   if (!car1.CanBeRotationCenter(rotation_center)) {
     return false;
   }

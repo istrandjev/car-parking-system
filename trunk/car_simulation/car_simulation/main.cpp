@@ -8,6 +8,7 @@
 #include "simulation/car_movement_handler.h"
 #include "simulation/car_positions_graph.h"
 #include "simulation/car_positions_graph_router.h"
+#include "utils/benchmark.h"
 #include "utils/boundary_line_holder.h"
 #include "utils/car_positions_graph_builder.h"
 #include "utils/intersection_handler.h"
@@ -93,12 +94,12 @@ int main(int argc, char ** argv)
 
   simulation::CarManueverHandler manuever_handler(route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
+  utils::Benchmark::DumpBenchmarkingInfo();
 
   utils::InitializeHandlers();
   visualize::initGlut(argc, argv);
 
   // Run GLUT main loop.
   glutMainLoop();
-
   return 0;
 }

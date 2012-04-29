@@ -2,6 +2,7 @@
 
 #include "geometry/rectangle_object.h"
 #include "simulation/car_movement_handler.h"
+#include "utils/benchmark.h"
 #include "utils/delay.h"
 
 #include <iomanip>
@@ -65,6 +66,7 @@ void CarPositionsGraph::ConstructGraph() {
       std::cerr << "Total edges: " << num << "\n";
       std::cerr << "Time consumed so far:" << std::setprecision(8)
                 << get_time() - start_time << std::endl;
+      utils::Benchmark::DumpBenchmarkingInfo();
     }
     GetPositionNeighbours(i, neighbourhood_list, graph_[i]);
   }
