@@ -78,8 +78,20 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
         simulation::Car car_position(car_);
         car_position.SetCenter(center);
         car_position.SetDirection(ox.Rotate(angle));
+
+        bool is_final = final;
+        if (final) {
+          geometry::Polygon bounds = car_position.GetBounds();
+          for (unsigned vert = 0; vert < bounds.NumberOfVertices(); ++vert) {
+            if (!object->ContainsPoint(bounds.GetPoint(vert))) {
+              is_final = false;
+              break;
+            }
+          }
+        }
+
         if (CarPositionIsPossible(car_position)) {
-          graph->AddPosition(final, car_position, object);
+          graph->AddPosition(is_final, car_position, object);
         }
       }
     }
