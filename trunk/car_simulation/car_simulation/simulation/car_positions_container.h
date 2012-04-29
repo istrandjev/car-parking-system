@@ -6,6 +6,7 @@
 namespace geometry {
 class BoundingBox;
 class Point;
+class RectangleObject;
 }  // namespace geometry
 
 namespace simulation {
@@ -26,7 +27,8 @@ class CarPositionsContainer {
   CarPositionsContainer(double minx, double maxx, double miny, double maxy);
   ~CarPositionsContainer();
 
-  void AddCarPosition(const Car& position);
+  void AddCarPosition(
+      const Car& position, const geometry::RectangleObject* object);
 
   std::vector<int> GetPositions(
       const geometry::BoundingBox& bounding_box) const;
@@ -42,6 +44,7 @@ class CarPositionsContainer {
 
  private:
   std::vector<Car*> positions_;
+  std::vector<const geometry::RectangleObject*> positionObjectMap_;
   std::vector<std::vector<CarPosition> > positionsGrid_;
   double minx_, maxx_;
   double miny_, maxy_;

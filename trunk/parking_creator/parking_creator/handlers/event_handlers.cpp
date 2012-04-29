@@ -33,23 +33,23 @@ void InitializeHandlers() {
 }
 
 void HandleMouseClick(double x, double y) {
-  visualize::Scene::GetObjectHolder()->Select(geometry::Point(x, y));
+  visualize::Scene::GetObjectHandler()->Select(geometry::Point(x, y));
 }
 
 void HandleMousePress(double x, double y) {
   geometry::Point point(x, y);
-  ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
-  if (obj_holder->HasSelected()) {
-    if (!obj_holder->IsSelectedFinalized()) {
+  ObjectHandler* obj_handler = visualize::Scene::GetObjectHandler();
+  if (obj_handler->HasSelected()) {
+    if (!obj_handler->IsSelectedFinalized()) {
      return;
     }
 
-    geometry::RectangleObject* object = obj_holder->GetSelected();
+    geometry::RectangleObject* object = obj_handler->GetSelected();
     if (Near(object->GetFrom(), point)) {
       CurrentState::movingFrom = true;
     } else if (Near(object->GetTo(), point)) {
       CurrentState::movingTo = true;
-    } else if (!obj_holder->GetSelected()->ContainsPoint(point)) {
+    } else if (!obj_handler->GetSelected()->ContainsPoint(point)) {
       CurrentState::addingNewLine = true;
     }
   } else {
@@ -58,9 +58,9 @@ void HandleMousePress(double x, double y) {
 }
 
 void HandleMouseRelease(double x, double y) {
-  ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
-  if (obj_holder->HasSelected()) {
-    obj_holder->FinalizeSelected();
+  ObjectHandler* obj_handler = visualize::Scene::GetObjectHandler();
+  if (obj_handler->HasSelected()) {
+    obj_handler->FinalizeSelected();
   }
   CurrentState::movingFrom = false;
   CurrentState::movingTo = false;
@@ -68,17 +68,17 @@ void HandleMouseRelease(double x, double y) {
 }
 
 void HandleMouseDrag(double fx, double fy, double tx, double ty) {
-  ObjectHolder* obj_holder = visualize::Scene::GetObjectHolder();
+  ObjectHandler* obj_handler = visualize::Scene::GetObjectHandler();
   geometry::Point from(fx, fy);
   geometry::Point to(tx, ty);
 
-  if (obj_holder->HasSelected()) {
-    geometry::RectangleObject* object = obj_holder->GetSelected();
+  if (obj_handler->HasSelected()) {
+    geometry::RectangleObject* object = obj_handler->GetSelected();
     if (CurrentState::movingFrom) {
       object->SetFrom(to);
     } else if (CurrentState::movingTo || CurrentState::addingNewLine) {
       if (CurrentState::addingNewLine && !Near(from, object->GetFrom())) {
-        obj_holder->AddObjectOfCurrentType(from, to);
+        obj_handler->AddObjectOfCurrentType(from, to);
       } else {
         object->SetTo(to);
       }
@@ -89,7 +89,7 @@ void HandleMouseDrag(double fx, double fy, double tx, double ty) {
     }
 
   } else {
-    obj_holder->AddObjectOfCurrentType(from, to);
+    obj_handler->AddObjectOfCurrentType(from, to);
   }
 }
 
@@ -139,32 +139,32 @@ void MouseMoveFunc(int x, int y) {
 
 void HandleKeyboardEvents() {
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_LEFT)) {
-    visualize::Scene::GetObjectHolder()->TranslatedSelectedLeft();
+    visualize::Scene::GetObjectHandler()->TranslatedSelectedLeft();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_RIGHT)) {
-    visualize::Scene::GetObjectHolder()->TranslatedSelectedRight();
+    visualize::Scene::GetObjectHandler()->TranslatedSelectedRight();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_UP)) {
-    visualize::Scene::GetObjectHolder()->TranslatedSelectedUp();
+    visualize::Scene::GetObjectHandler()->TranslatedSelectedUp();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_DOWN)) {
-    visualize::Scene::GetObjectHolder()->TranslatedSelectedDown();
+    visualize::Scene::GetObjectHandler()->TranslatedSelectedDown();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_PAGE_DOWN)) {
-    visualize::Scene::GetObjectHolder()->SelectPrevious();
+    visualize::Scene::GetObjectHandler()->SelectPrevious();
   }
   if (UserInputHandler::IsSpecialKeyPressed(GLUT_KEY_PAGE_UP)) {
-    visualize::Scene::GetObjectHolder()->SelectNext();
+    visualize::Scene::GetObjectHandler()->SelectNext();
   }
 
   if (UserInputHandler::IsRegularKeyPressed(127)) {
-    visualize::Scene::GetObjectHolder()->DeleteSelected();
+    visualize::Scene::GetObjectHandler()->DeleteSelected();
   }
   if (UserInputHandler::IsRegularKeyPressed(',')) {
-    visualize::Scene::GetObjectHolder()->DecreaseSelectedWidth();
+    visualize::Scene::GetObjectHandler()->DecreaseSelectedWidth();
   }
   if (UserInputHandler::IsRegularKeyPressed('.')) {
-    visualize::Scene::GetObjectHolder()->IncreaseSelectedWidth();
+    visualize::Scene::GetObjectHandler()->IncreaseSelectedWidth();
   }
   if (UserInputHandler::IsRegularKeyPressed('a')) {
     visualize::Scene::TranslateLeft();

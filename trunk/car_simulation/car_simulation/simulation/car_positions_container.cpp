@@ -31,10 +31,12 @@ CarPositionsContainer::~CarPositionsContainer() {
   }
 }
 
-void CarPositionsContainer::AddCarPosition(const Car &position) {
+void CarPositionsContainer::AddCarPosition(
+    const Car &position, const geometry::RectangleObject* object) {
   int i, j;
   GetCellCoordinates(position.GetCenter(), i, j);
   positionsGrid_[i][j].AddCarPosition(positions_.size());
+  positionObjectMap_[positions_.size()] = object;
   positions_.push_back(new Car(position));
 }
 

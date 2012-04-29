@@ -67,7 +67,6 @@ C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/delay.cpp
 C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/double_utils.cpp
 C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/object_holder.cpp
 C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/object_holder_serialization.cpp
-C:/Documents and Settings/bs/Desktop/projects/diplomna/utils/user_input_handler.cpp
 resources/input.in
 car_simulation/car_simulation/simulation/car_positions_container.h
 car_simulation/car_simulation/simulation/car_positions_container.cpp
@@ -81,3 +80,5 @@ car_simulation/car_simulation/simulation/car_manuever_handler.h
 car_simulation/car_simulation/simulation/car_manuever_handler.cpp
 car_simulation/car_simulation/utils/car_positions_graph_builder.h
 car_simulation/car_simulation/utils/car_positions_graph_builder.cpp
+utils/object_handler.cpp
+include/utils/object_handler.h

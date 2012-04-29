@@ -108,6 +108,9 @@
     <ClCompile Include="utils\user_input_handler.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="utils\object_handler.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\geometry\vector.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\geometry\segment.h">
       <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\object_handler.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,8 +23,11 @@
 
 using namespace std;
 
-static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
-static const char* DEFAULT_INPUT_LOCATION = "../../resources/input.in";
+// static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
+// static const char* DEFAULT_INPUT_LOCATION = "../../resources/input.in";
+
+static const char* DEFAULT_SAVE_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/parking_serialized.txt";
+static const char* DEFAULT_INPUT_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/input.in";
 
 static const double MIN_X_COORDINATE = -250.0;
 static const double MAX_X_COORDINATE = 250.0;
@@ -57,8 +60,9 @@ void ReadInput(utils::ObjectHolder* object_holder) {
 int main(int argc, char ** argv)
 {
   utils::ObjectHolder object_holder;
-  visualize::Scene::SetObjectHolder(&object_holder);
   ReadInput(&object_holder);
+  visualize::Scene::SetObjectHolder(&object_holder);
+  
   utils::BoundaryLinesHolder boundary_lines_holder;
   utils::IntersectionHandler intersection_handler(
       MIN_X_COORDINATE, MAX_X_COORDINATE,
@@ -69,7 +73,16 @@ int main(int argc, char ** argv)
   visualize::Scene::SetCarMovementHandler(&movement_handler);
   
   simulation::CarPositionsGraph graph(&movement_handler);
-  graph.AddPosition(false, *car);
+
+  utils::RectangleObjectContainer car_objects;
+  object_holder.GetObectsForLocation(car->GetCenter(), &car_objects);
+
+  if (car_objects.empty()) {
+    cerr << "The car should be located within a passable area.\n";
+    return 0;
+  }
+  graph.AddPosition(false, *car, car_objects.front());
+
   utils::CarPositionsGraphBuilder builder(object_holder, intersection_handler, *car);
   builder.CreateCarPositionsGraph(&graph);
   cout << "The graph is constructed now\n";

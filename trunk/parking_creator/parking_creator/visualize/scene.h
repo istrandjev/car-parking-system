@@ -1,7 +1,7 @@
 #ifndef PARKING_CREATOR_PARKING_CREATOR_SCENE_H_
 #define PARKING_CREATOR_PARKING_CREATOR_SCENE_H_
 
-#include "utils/object_holder.h"
+#include "utils/object_handler.h"
 
 #include <vector>
 
@@ -37,7 +37,8 @@ class Scene {
   static void Resize(int width, int height);
   static int Width();
   static int Height();
-  static utils::ObjectHolder* GetObjectHolder();
+  static utils::ObjectHandler* GetObjectHandler();
+  static void SetObjectHandler(utils::ObjectHandler* object_handler);
 
   static void TransformDrawingPane();
 
@@ -51,7 +52,7 @@ class Scene {
       const geometry::DirectedRectangleObject& directed_object);
 
  private:
-  static utils::ObjectHolder objectHolder_;
+  static utils::ObjectHandler* objectHandler_;
 
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;

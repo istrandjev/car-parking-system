@@ -4,6 +4,7 @@
 #include "geometry/polygon.h"
 #include "geometry/rectangle_object.h"
 #include "geometry/vector.h"
+#include "utils/object_handler.h"
 #include "utils/object_holder.h"
 
 #include <glut.h>
@@ -22,7 +23,7 @@ static const int DEFAULT_HEIGHT = 600;
 static const double SCALE_FACTOR = 10;
 
 // static declarations
-utils::ObjectHolder Scene::objectHolder_;
+utils::ObjectHandler* Scene::objectHandler_ = NULL;
 
 int Scene::width_ = DEFAULT_WIDTH;
 int Scene::height_ = DEFAULT_HEIGHT;
@@ -88,8 +89,13 @@ int Scene::Height() {
 }
 
 // static
-utils::ObjectHolder* Scene::GetObjectHolder() {
-  return &objectHolder_;
+utils::ObjectHandler* Scene::GetObjectHandler() {
+  return objectHandler_;
+}
+
+// static
+void Scene::SetObjectHandler(utils::ObjectHandler* object_handler) {
+  objectHandler_ = object_handler;
 }
 
 // static
@@ -111,16 +117,17 @@ void Scene::TransformDrawingPane() {
 // static
 void Scene::DrawObjects() {
   glColor4f(1.0, 0.8, 0.6, 0.5);
-  DrawObjectsFromContainer(objectHolder_.GetRoadSegments());
+  utils::ObjectHolder* object_holder = objectHandler_->GetObjectHolder();
+  DrawObjectsFromContainer(object_holder->GetRoadSegments());
 
   glColor4f(0.5, 0.5, 0.5, 0.5);
-  DrawObjectsFromContainer(objectHolder_.GetParkingLots());
+  DrawObjectsFromContainer(object_holder->GetParkingLots());
 
   glColor4f(0.0, 0.0, 0.0, 0.5);
-  DrawObjectsFromContainer(objectHolder_.GetObstacles());
+  DrawObjectsFromContainer(object_holder->GetObstacles());
 
-  if (objectHolder_.HasSelected()) {
-    DrawSelected(objectHolder_.GetSelected()->GetBounds());
+  if (objectHandler_->HasSelected()) {
+    DrawSelected(objectHandler_->GetSelected()->GetBounds());
   }
 }
 

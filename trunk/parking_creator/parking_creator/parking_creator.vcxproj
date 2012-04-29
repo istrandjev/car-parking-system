@@ -83,6 +83,7 @@
     <ClCompile Include="handlers\event_handlers.cpp" />
     <ClCompile Include="handlers\tw_handler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="utils\object_handler.cpp" />
     <ClCompile Include="utils\user_input_handler.cpp" />
     <ClCompile Include="visualize\glut_utils.cpp" />
     <ClCompile Include="visualize\scene.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\..\include\utils\user_input_handler.h" />
     <ClInclude Include="handlers\event_handlers.h" />
     <ClInclude Include="handlers\tw_handler.h" />
+    <ClInclude Include="utils\object_handler.h" />
     <ClInclude Include="visualize\glut_utils.h" />
     <ClInclude Include="visualize\scene.h" />
   </ItemGroup>
