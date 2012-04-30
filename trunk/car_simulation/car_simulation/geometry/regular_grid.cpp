@@ -149,8 +149,8 @@ std::vector<const RectangleObject*> RegularGrid::GetRectangleObjects() const {
 
 
 void RegularGrid::GetBoundaryLines(const BoundingBox& bounding_box,
-    std::vector<const BoundaryLine*>& result) const {
-  result.clear();
+    std::vector<const BoundaryLine*>* result) const {
+  result->clear();
   int mini, maxi;
   int minj, maxj;
   GetCellCoordinates(bounding_box.GetMinX(), bounding_box.GetMinY(),
@@ -163,17 +163,18 @@ void RegularGrid::GetBoundaryLines(const BoundingBox& bounding_box,
       if (i == mini || j == minj) {
         const std::vector<const BoundaryLine*>& lines =
           grid_[i][j].GetAllBoudnaryLines();
-        result.insert(result.end(), lines.begin(), lines.end());
+        result->insert(result->end(), lines.begin(), lines.end());
       } else {
         const std::vector<const BoundaryLine*>& lines =
           grid_[i][j].GetOriginatingBoudnaryLines();
-        result.insert(result.end(), lines.begin(), lines.end());
+        result->insert(result->end(), lines.begin(), lines.end());
       }
     }
   }
 }
 
-void RegularGrid::GetBoundaryLines(std::vector<const BoundaryLine*>& result) const {
+void RegularGrid::GetBoundaryLines(
+    std::vector<const BoundaryLine*>* result) const {
   geometry::BoundingBox bounding_box(minx_, maxx_, miny_, maxy_);
   GetBoundaryLines(bounding_box, result);
 }

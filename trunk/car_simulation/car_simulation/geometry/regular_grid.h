@@ -38,8 +38,8 @@ class RegularGrid {
   std::vector<const RectangleObject*> GetRectangleObjects() const;
 
   void GetBoundaryLines(const BoundingBox& bounding_box,
-                        std::vector<const BoundaryLine*>& result) const;
-  void GetBoundaryLines(std::vector<const BoundaryLine*>& result) const;
+                        std::vector<const BoundaryLine*>* result) const;
+  void GetBoundaryLines(std::vector<const BoundaryLine*>* result) const;
   
  private:
   void GetCellCoordinates(double x, double y, int& i, int& j) const;

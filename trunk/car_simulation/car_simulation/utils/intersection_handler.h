@@ -22,9 +22,9 @@ class IntersectionHandler {
   void Init(const ObjectHolder& object_holder);
 
    void GetBoundaryLines(const geometry::BoundingBox& bounding_box, 
-      std::vector<const geometry::BoundaryLine*>& result) const;
+      std::vector<const geometry::BoundaryLine*>* result) const;
   
-   void GetBoundaryLines(std::vector<const geometry::BoundaryLine*>& result) const;
+   void GetBoundaryLines(std::vector<const geometry::BoundaryLine*>* result) const;
 
  private: 
   void AddBoundaryLinesForObject(const geometry::RectangleObject* object);

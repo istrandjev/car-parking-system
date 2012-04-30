@@ -19,6 +19,8 @@ Arc::Arc(const Circle& circle, double start_angle, double end_angle)
     : circle_(circle) {
   startAngle_ = GeometryUtils::NormalizeAngle(start_angle);
   endAngle_ = GeometryUtils::NormalizeAngle(end_angle);
+  startPoint_ = circle_.GetPoint(startAngle_);
+  endPoint_ = circle_.GetPoint(endAngle_);
 }
 
 Arc::Arc(const geometry::Point& center, const geometry::Point& from,
@@ -29,6 +31,8 @@ Arc::Arc(const geometry::Point& center, const geometry::Point& from,
 
   startAngle_ = circle_.GetAngle(from);
   endAngle_ = circle_.GetAngle(to);
+  startPoint_ = circle_.GetPoint(startAngle_);
+  endPoint_ = circle_.GetPoint(endAngle_);
 }
 
 Arc::Arc(const geometry::Point& center, const geometry::Point& from,
@@ -44,6 +48,8 @@ Arc::Arc(const geometry::Point& center, const geometry::Point& from,
     endAngle_ = circle_.GetAngle(from);
     startAngle_ = GeometryUtils::NormalizeAngle(endAngle_ + angle);
   }
+  startPoint_ = circle_.GetPoint(startAngle_);
+  endPoint_ = circle_.GetPoint(endAngle_);
 }
 
 std::vector<Point> Arc::Intersect(const Line& line) const {
@@ -70,6 +76,36 @@ bool Arc::Intersect(const Segment& segment) const {
   return false;
 }
 
+bool Arc::IntersectFast(const Segment& segment) const {
+  const Point& A = segment.A();
+  const Point& B = segment.B();
+  const Point& C = circle_.GetCenter();
+  double R = circle_.GetRadius();
+  double a = segment.SquaredLength();
+  double b = (A.x - B.x) * (B.x - C.x) + (A.y - B.y)* (B.y - C.y);
+  double c = (B.x - C.x) * (B.x - C.x) + (B.y - C.y) * (B.y - C.y) - R * R;
+  double D = b * b - a * c;
+  if (DoubleIsGreater(0.0, D)) {
+    return false;
+  } else if (DoubleIsZero(D)) {
+    double u = (-b) / a;
+    if (DoubleIsBetween(u, 0, 1)) {
+      geometry::Point temp(A.x * u + B.x * (u - 1), A.y * u + B.y * (u - 1));
+      return Contains(temp);
+    } else {
+      return false;
+    }
+  } else {
+    double d = sqrt(D);
+    double u1 = (-b - d) / a;
+    if (DoubleIsBetween(u1, 0, 1) && Contains(segment.GetPoint(1.0 - u1))) {
+      return true;
+    }
+    double u2 = (-b + d) / a;
+    return DoubleIsBetween(u2, 0, 1) && Contains(segment.GetPoint(1.0 - u2));
+  }
+}
+
 bool Arc::Contains(const Point& point) const {
   double angle = circle_.GetAngle(point);
   return ContainsAngle(angle);
@@ -92,12 +128,12 @@ double Arc::GetEndAngle() const {
   return endAngle_;
 }
 
-geometry::Point Arc::GetStartPoint() const {
-  return circle_.GetPoint(startAngle_);
+const geometry::Point& Arc::GetStartPoint() const {
+  return startPoint_;
 }
   
-geometry::Point Arc::GetEndPoint() const {
-  return circle_.GetPoint(endAngle_);
+const geometry::Point& Arc::GetEndPoint() const {
+  return endPoint_;
 }
 
 double Arc::GetRadius() const {

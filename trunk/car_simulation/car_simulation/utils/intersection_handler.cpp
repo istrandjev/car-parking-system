@@ -67,12 +67,12 @@ void IntersectionHandler::Init(const ObjectHolder& object_holder) {
 
 void IntersectionHandler::GetBoundaryLines(
     const geometry::BoundingBox& bounding_box,
-    std::vector<const geometry::BoundaryLine*>& result) const {
+    std::vector<const geometry::BoundaryLine*>* result) const {
   grid_.GetBoundaryLines(bounding_box, result);
 }
 
 void IntersectionHandler::GetBoundaryLines(
-    std::vector<const geometry::BoundaryLine*>& result) const {
+    std::vector<const geometry::BoundaryLine*>* result) const {
   grid_.GetBoundaryLines(result);
 }
 
@@ -129,7 +129,7 @@ void IntersectionHandler::AddBoundaryLinesForObject(
 
 void IntersectionHandler::RemoveSmallBoundaryLines() {
   std::vector<const geometry::BoundaryLine*> boundary_lines;
-  grid_.GetBoundaryLines(boundary_lines);
+  grid_.GetBoundaryLines(&boundary_lines);
   for (unsigned index = 0; index < boundary_lines.size(); ++index) {
     if (DoubleIsGreater(boundary_lines[index]->GetLength(), GAP_TOLERANCE)) {
       continue;
@@ -138,7 +138,7 @@ void IntersectionHandler::RemoveSmallBoundaryLines() {
         boundary_lines[index]->GetBoundingBox();
     std::vector<const geometry::BoundaryLine*> neighbouring_lines;
     grid_.GetBoundaryLines(bounding_box.GetExpanded(GAP_TOLERANCE), 
-        neighbouring_lines);
+        &neighbouring_lines);
 
     bool has_long_neighbour = false;
     for (unsigned neighbour_index = 0; neighbour_index <

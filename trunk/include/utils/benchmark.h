@@ -9,6 +9,14 @@
 namespace utils {
 class Benchmark {
  public:
+  struct BenchmarkItem {
+    BenchmarkItem() : totalTime(0.0), numberOfTimes(0) {}
+    BenchmarkItem(double total_time, int number_of_times) 
+        : totalTime(total_time), numberOfTimes(number_of_times) {}
+
+    double totalTime;
+    int numberOfTimes;
+  };
   Benchmark(const std::string& function_name);
   ~Benchmark();
 
@@ -17,12 +25,21 @@ class Benchmark {
  private:
   std::string functionName_;
   double startTime_;
-  static std::map<std::string, double> timeMap_;
+  static std::map<std::string, BenchmarkItem> timeMap_;
 };
 
+#define CONCATENATE_DIRECT(s1, s2) s1##s2
+#define CONCATENATE(s1, s2) CONCATENATE_DIRECT(s1, s2)
+#define ANONYMOUS_VARIABLE(str) CONCATENATE(str, __LINE__)
+
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
 #ifdef DO_BENCHMARK
-#define BENCHMARK(name) utils::Benchmark name(std::string(__FUNCTION__))
-#define BENCHMARK_STR(name, x) utils::Benchmark name(std::string(__FUNCTION__)  + " [" + x + "]")
+#define BENCHMARK_SCOPE utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
+    std::string(__FUNCTION__) + "("TOSTRING(__LINE__)")")
+#define BENCHMARK_STR(x) utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
+    std::string(__FUNCTION__)  + "("TOSTRING(__LINE__)") [" + x + "]")
 #else
 #define BENCHMARK(name)
 #define BENCHMARK_STR(name, x)
