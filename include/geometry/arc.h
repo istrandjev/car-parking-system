@@ -20,12 +20,13 @@ class Arc {
 
   std::vector<Point> Intersect(const Line& line) const;
   bool Intersect(const Segment& segment) const;
- 
+  bool IntersectFast(const Segment& segment) const;
+
   double GetStartAngle() const;
   double GetEndAngle() const;
 
-  Point GetStartPoint() const;
-  Point GetEndPoint() const;
+  const Point& GetStartPoint() const;
+  const Point& GetEndPoint() const;
 
   double GetRadius() const;
   Point GetCenter() const;
@@ -40,6 +41,7 @@ class Arc {
 
  private:
   Circle circle_;
+  Point startPoint_, endPoint_;
   double startAngle_, endAngle_;
 };
 

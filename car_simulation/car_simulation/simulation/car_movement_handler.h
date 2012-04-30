@@ -1,7 +1,10 @@
 #ifndef SIMUALTION_CAR_MOVEMENT_HANDLER_H_
 #define SIMUALTION_CAR_MOVEMENT_HANDLER_H_
 
+#include "geometry/segment.h"
 #include "utils/intersection_handler.h"
+
+#include <vector>
 
 namespace geometry {
 class Point;
@@ -31,6 +34,7 @@ class CarMovementHandler {
                          const geometry::Point& rotation_center,
                          CarManuever& manuever) const;
  private:
+  mutable std::vector<geometry::Segment> intersectedCache_;
   const utils::IntersectionHandler* intersectionHandler_;
 };
 

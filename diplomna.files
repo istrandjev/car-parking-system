@@ -80,7 +80,6 @@ car_simulation/car_simulation/simulation/car_manuever_handler.h
 car_simulation/car_simulation/simulation/car_manuever_handler.cpp
 car_simulation/car_simulation/utils/car_positions_graph_builder.h
 car_simulation/car_simulation/utils/car_positions_graph_builder.cpp
-include/utils/object_handler.h
 parking_creator/parking_creator/utils/object_handler.h
 parking_creator/parking_creator/utils/user_input_handler.cpp
 parking_creator/parking_creator/utils/object_handler.cpp

@@ -102,7 +102,7 @@ bool CarPositionsGraphBuilder::CarPositionIsPossible(
     const simulation::Car& car) const {
   geometry::Polygon bounds = car.GetBounds();
   std::vector<const geometry::BoundaryLine*> lines;
-  intersectionHandler_.GetBoundaryLines(bounds.GetBoundingBox(), lines);
+  intersectionHandler_.GetBoundaryLines(bounds.GetBoundingBox(), &lines);
 
   for (unsigned i = 0; i < lines.size(); ++i) {
     const geometry::StraightBoundaryLine* straight_line =

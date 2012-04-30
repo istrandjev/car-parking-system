@@ -10,6 +10,7 @@ class Line;
 
 class Segment {
  public:
+  Segment() {}
   Segment(const Point& A, const Point& B);
   
   const Point& A() const;
@@ -31,6 +32,7 @@ class Segment {
   Segment SubSegment(double start_fraction, double end_fraction) const;
 
   double Length() const;
+  double SquaredLength() const;
 
  public:
   geometry::Point A_, B_;

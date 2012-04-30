@@ -96,4 +96,8 @@ double Segment::Length() const {
   return A_.GetDistance(B_);
 }
 
+double Segment::SquaredLength() const {
+  return A_.GetSquaredDistance(B_);
+}
+
 }  // namespace geometry
