@@ -13,65 +13,56 @@
 namespace simulation {
 
 static const double TURN_STEP_RADIANS = 0.01;
-static const double WHEEL_AXIS_FRACTION = 0.62;
 static const double WHEEL_WIDTH = 0.195;
 static const double WHEEL_LENGTH = 0.8128;
 
-Car::Car(double width, double length, double max_steering_angle)  
-      : width_(width), length_(length), current_steering_angle_(0),
-      max_steering_angle_(max_steering_angle) {
-  center_ = geometry::Point(0, 0);
-  direction_ = geometry::Vector(0, 1);      
+Car::Car(const CarDescription& description)  
+      : description_(description),
+        currentSteeringAngle_(0) {
 }
 
-void Car::SetCenter(const geometry::Point& center) {
-  center_ = center;
+const CarPosition& Car::GetPosition() const {
+  return position_;
 }
 
-const geometry::Point& Car::GetCenter() const {
-  return center_;
+void Car::SetPosition(const CarPosition &position) {
+  position_ = position;
 }
 
-void Car::SetDirection(const geometry::Vector& direction) {
-  direction_ = direction.Unit();
+const CarDescription& Car::GetDescription() const {
+  return description_;
 }
 
-const geometry::Vector& Car::GetDirection() const {
-  return direction_;
+void Car::SetDescription(const CarDescription& description) {
+  description_ = description;
 }
 
 double Car::GetCurrentSteeringAngle() const {
-  return current_steering_angle_;
-}
-
-double Car::GetWidth() const {
-  return width_;
-}
-double Car::GetLength() const {
-  return length_;
+  return currentSteeringAngle_;
 }
 
 geometry::Point Car::GetRotationCenter() const {
-  int angle_sign = DoubleSign(current_steering_angle_);
+  int angle_sign = DoubleSign(currentSteeringAngle_);
   
   if (angle_sign == 0) {
-    return center_;
+    return position_.GetCenter();
   }
 
   geometry::Point fw_center, rw_center;
   if (angle_sign > 0) {
-    fw_center = GetFrontLeftWheelCenter();
-    rw_center = GetRearLeftWheelCenter();
+    fw_center = description_.GetFrontLeftWheelCenter(position_);
+    rw_center = description_.GetRearLeftWheelCenter(position_);
   } else {
-    fw_center = GetFrontRightWheelCenter();  
-    rw_center = GetRearRightWheelCenter();
+    fw_center = description_.GetFrontRightWheelCenter(position_);  
+    rw_center = description_.GetRearRightWheelCenter(position_);
   }
 
-  double fw_angle = current_steering_angle_ + 
+  const geometry::Vector& direction = position_.GetDirection();
+  double fw_angle = currentSteeringAngle_ +
       geometry::GeometryUtils::PI * angle_sign * 0.5;
 
-  geometry::Vector fw_axis_vector = direction_.Rotate(fw_angle);
-  geometry::Vector rw_axis_vector = direction_.GetOrthogonal();
+  geometry::Vector fw_axis_vector = direction.Rotate(fw_angle);
+  geometry::Vector rw_axis_vector = direction.GetOrthogonal();
 
   geometry::Line fw_axis(fw_center, fw_axis_vector);
   geometry::Line rw_axis(rw_center, rw_axis_vector);
@@ -83,104 +74,50 @@ geometry::Point Car::GetRotationCenter() const {
   return rotation_center;
 }
 
-bool Car::CanBeRotationCenter(const geometry::Point &center) const {
-  geometry::Line rear_axis = GetRearWheelsAxis();
-  if(!DoubleIsZero(rear_axis.GetDistanceFromPoint(center))) {
-    return false;
-  }
-
-  const geometry::Point& fl = GetFrontLeftWheelCenter();
-  const geometry::Point& fr = GetFrontRightWheelCenter();
-  const geometry::Point& rl = GetRearLeftWheelCenter();
-  const geometry::Point& rr = GetRearRightWheelCenter();
-
-  const double pi = geometry::GeometryUtils::PI;
-  if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
-      rl, fl, rr, center, true)) {
-    geometry::Vector turn_vector(center, fl);
-    geometry::Vector rear_axis_vector(center, rl);
-    double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
-        rear_axis_vector, turn_vector);
-    if (DoubleIsGreater(angle, pi)) {
-      angle = pi * 2.0 -  angle;
-    }
-    return DoubleIsBetween(angle, 0, max_steering_angle_);
-  } else if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
-                rr, fr, rl, center, true)) {
-    geometry::Vector turn_vector(center, fr);
-    geometry::Vector rear_axis_vector(center, rr);
-    double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
-        turn_vector, rear_axis_vector);
-    if (DoubleIsGreater(angle, pi)) {
-      angle = pi * 2.0 -  angle;
-    }
-    return DoubleIsBetween(angle, 0, max_steering_angle_);
-  } else {
-    return false;
-  }
-}
-
 void Car::Move(double meters_step) {
-  int angle_sign = DoubleSign(current_steering_angle_);
+  int angle_sign = DoubleSign(currentSteeringAngle_);
   if (angle_sign == 0) {
-    center_ = center_ + direction_.Unit() * meters_step;
+    geometry::Point center = position_.GetCenter();
+    position_.SetCenter(
+        center + position_.GetDirection().Unit() * meters_step);
     return;
   }
 
   geometry::Point rotation_center = GetRotationCenter();
 
-  double rotation_angle = meters_step / rotation_center.GetDistance(center_) ;
-  center_ = center_.Rotate(rotation_center, rotation_angle * angle_sign);
-  direction_ = direction_.Rotate(rotation_angle * angle_sign);
+  const geometry::Point& center = position_.GetCenter();
+  const geometry::Vector& direction = position_.GetDirection();
+  double rotation_angle = meters_step / rotation_center.GetDistance(center) ;
+  position_.SetCenter(
+      center.Rotate(rotation_center, rotation_angle * angle_sign));
+  position_.SetDirection(direction.Rotate(rotation_angle * angle_sign));
 }
 
 void Car::TurnLeft() {
-  if (DoubleIsGreaterOrEqual(max_steering_angle_, 
-      current_steering_angle_ + TURN_STEP_RADIANS)) {
-    current_steering_angle_ += TURN_STEP_RADIANS;    
+  if (DoubleIsGreaterOrEqual(description_.GetMaxSteeringAngle(),
+      currentSteeringAngle_ + TURN_STEP_RADIANS)) {
+    currentSteeringAngle_ += TURN_STEP_RADIANS;
   }
 }
 
 void Car::TurnRight() {
-  if (DoubleIsGreaterOrEqual(max_steering_angle_, 
-       TURN_STEP_RADIANS - current_steering_angle_)) {
-    current_steering_angle_ -= TURN_STEP_RADIANS;    
+  if (DoubleIsGreaterOrEqual(description_.GetMaxSteeringAngle(),
+       TURN_STEP_RADIANS - currentSteeringAngle_)) {
+    currentSteeringAngle_ -= TURN_STEP_RADIANS;
   }
 }
 
-geometry::Point Car::GetFrontLeftWheelCenter() const {
-  return center_ + direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION +
-      direction_.GetOrthogonal() * width_ * 0.5;
-}
-
-geometry::Point Car::GetFrontRightWheelCenter() const {
-  return center_ + direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION -
-      direction_.GetOrthogonal() * width_ * 0.5;
-}
-
-geometry::Point Car::GetRearLeftWheelCenter() const {
-  return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION +
-      direction_.GetOrthogonal() * width_ * 0.5;
-}
-
-geometry::Point Car::GetRearRightWheelCenter() const {
-  return center_ - direction_.Unit() * length_ * 0.5 * WHEEL_AXIS_FRACTION -
-      direction_.GetOrthogonal() * width_ * 0.5;
-}
-
-geometry::Line Car::GetRearWheelsAxis() const {
-  return geometry::Line(GetRearLeftWheelCenter(), GetRearRightWheelCenter());
-}
-
 geometry::Polygon Car::GetBounds() const {
-  geometry::Vector to_front = direction_.Unit() * length_ * 0.5;
-  geometry::Vector to_side = direction_.GetOrthogonal().Unit() * width_ * 0.5;
+  geometry::Vector to_front = position_.GetDirection().Unit() *
+      description_.GetLength() * 0.5;
+  geometry::Vector to_side = position_.GetDirection().GetOrthogonal().Unit() *
+      description_.GetWidth() * 0.5;
   geometry::Polygon result;
 
-  result.AddPointDropDuplicates(center_ + to_front + to_side);
-  result.AddPointDropDuplicates(center_ + to_front - to_side);
-  result.AddPointDropDuplicates(center_ - to_front - to_side);
-  result.AddPointDropDuplicates(center_ - to_front + to_side);
+  result.AddPointDropDuplicates(position_.GetCenter() + to_front + to_side);
+  result.AddPointDropDuplicates(position_.GetCenter() + to_front - to_side);
+  result.AddPointDropDuplicates(position_.GetCenter() - to_front - to_side);
+  result.AddPointDropDuplicates(position_.GetCenter() - to_front + to_side);
   result.Normalize();
   return result;
 }
@@ -201,47 +138,53 @@ geometry::Polygon Car::GetWheel(const geometry::Point& center,
 }
 
 geometry::Polygon Car::GetRearLeftWheel() const {
-  return GetWheel(GetRearLeftWheelCenter(), direction_);
+  return GetWheel(description_.GetRearLeftWheelCenter(position_),
+      position_.GetDirection());
 }
 
 geometry::Polygon Car::GetRearRightWheel() const {
-  return GetWheel(GetRearRightWheelCenter(), direction_);
+  return GetWheel(description_.GetRearRightWheelCenter(position_),
+      position_.GetDirection());
 }
 
 geometry::Polygon Car::GetFrontLeftWheel() const {
-  int sign = DoubleSign(current_steering_angle_);
-  geometry::Point wheel_center = GetFrontLeftWheelCenter();
+  int sign = DoubleSign(currentSteeringAngle_);
+  geometry::Point wheel_center =
+      description_.GetFrontLeftWheelCenter(position_);
   if (sign == 0) {
-    return GetWheel(wheel_center, direction_);
+    return GetWheel(wheel_center, position_.GetDirection());
   }
   
   if (sign > 0) {
-      geometry::Vector wheel_direction = direction_.Rotate(current_steering_angle_);
+      geometry::Vector wheel_direction = 
+          position_.GetDirection().Rotate(currentSteeringAngle_);
       return GetWheel(wheel_center, wheel_direction);
   } else {
-    double x = length_ * WHEEL_AXIS_FRACTION;
-    double tn = tan(-current_steering_angle_);
-    double angle = atan((x * tn) / (x + width_ * tn));
-    geometry::Vector wheel_direction = direction_.Rotate(-angle);
+    double x = description_.GetLength() * description_.GetWheelAxisFraction();
+    double tn = tan(-currentSteeringAngle_);
+    double angle = atan((x * tn) / (x + description_.GetWidth() * tn));
+    geometry::Vector wheel_direction = position_.GetDirection().Rotate(-angle);
     return GetWheel(wheel_center, wheel_direction);
   }
 }
 
 geometry::Polygon Car::GetFrontRightWheel() const {
-  int sign = DoubleSign(current_steering_angle_);
-  geometry::Point wheel_center = GetFrontRightWheelCenter();
+  int sign = DoubleSign(currentSteeringAngle_);
+  geometry::Point wheel_center =
+      description_.GetFrontRightWheelCenter(position_);
   if (sign == 0) {
-    return GetWheel(wheel_center, direction_);
+    return GetWheel(wheel_center, position_.GetDirection());
   }
   
   if (sign < 0) {
-      geometry::Vector wheel_direction = direction_.Rotate(current_steering_angle_);
+      geometry::Vector wheel_direction =
+          position_.GetDirection().Rotate(currentSteeringAngle_);
       return GetWheel(wheel_center, wheel_direction);
   } else {
-    double x = length_ * WHEEL_AXIS_FRACTION;
-    double tn = tan(current_steering_angle_);
-    double angle = atan((x * tn) / (x + width_ * tn));
-    geometry::Vector wheel_direction = direction_.Rotate(angle);
+    double x = description_.GetLength() * description_.GetWheelAxisFraction();
+    double tn = tan(currentSteeringAngle_);
+    double angle = atan((x * tn) / (x + description_.GetWidth() * tn));
+    geometry::Vector wheel_direction = position_.GetDirection().Rotate(angle);
     return GetWheel(wheel_center, wheel_direction);
   }
 }
@@ -258,17 +201,19 @@ std::vector<geometry::Polygon> Car::GetWheels() const {
 std::vector<geometry::Polygon> Car::GetRotationGraphicsByDistance(
     double distance_limit) const {
   std::vector<geometry::Polygon> res;
-  if (DoubleSign(current_steering_angle_) == 0) {
+  if (DoubleSign(currentSteeringAngle_) == 0) {
 
-    geometry::Point from = center_ + direction_.Unit() * (length_ * -0.5);
-    geometry::Point to =  from + direction_.Unit() * (distance_limit + length_);
+    geometry::Point from = position_.GetCenter() +
+        position_.GetDirection().Unit() * (description_.GetLength() * -0.5);
+    geometry::Point to =  from + position_.GetDirection().Unit() *
+        (distance_limit + description_.GetLength());
 
     geometry::RectangleObject rectangle_object(from, to);
     res.push_back(rectangle_object.GetBounds());
     return res;
   } else {
     geometry::Point rotation_center = GetRotationCenter();
-    double radius = rotation_center.GetDistance(center_);
+    double radius = rotation_center.GetDistance(position_.GetCenter());
     double angle = distance_limit / radius;
     return GetRotationGraphicsByAngle(angle);
   }
@@ -280,13 +225,17 @@ std::vector<geometry::Polygon> Car::GetRotationGraphicsByAngle(
 
   const double step = 3e-2;
   Car temp(*this);
-  int angle_sign = DoubleSign(current_steering_angle_);
+  int angle_sign = DoubleSign(currentSteeringAngle_);
   if (angle_sign != 0) {  
     for (double c = 0.0; c <= 1.0; c += step) {
       res.push_back(temp.GetBounds());
-      geometry::Point rotation_center = temp.GetRotationCenter();
-      temp.SetCenter(temp.GetCenter().Rotate(rotation_center, step * rotation_limit * angle_sign));
-      temp.SetDirection(temp.GetDirection().Rotate(step * rotation_limit * angle_sign));
+      geometry::Point rotation_center = temp.GetRotationCenter();\
+      CarPosition position;
+      position.SetCenter(temp.GetPosition().GetCenter().Rotate(
+          rotation_center, step * rotation_limit * angle_sign));
+      position.SetDirection(temp.GetPosition().GetDirection().Rotate(
+          step * rotation_limit * angle_sign));
+      temp.SetPosition(position);
     }
   } else {
     const double default_distance = 20.0;
@@ -296,16 +245,14 @@ std::vector<geometry::Polygon> Car::GetRotationGraphicsByAngle(
 }
 
 void  Car::Reset() {
-  center_ = geometry::Point(0, 0);
-  direction_ = geometry::Vector(0, 1);
-  current_steering_angle_ = 0;
+  position_.SetCenter(geometry::Point(0, 0));
+  position_.SetDirection(geometry::Vector(0, 1));
+  currentSteeringAngle_ = 0;
 }
 
 std::ostream& operator <<(std::ostream &out, const Car &car) {
-  out << "Center: " << car.center_ << "direction: " << car.direction_ << "\n";
-  out << "current steering angle(maximum steering angle): "
-      << car.current_steering_angle_ << "(" << car.max_steering_angle_ << ")\n";
-  out << "width:" << car.width_ << " length: " << car.length_ << "\n";
+  out << car.description_ << car.position_;
+  out << "Current steering angle: " << car.currentSteeringAngle_ << "\n";
   return out;
 }
 

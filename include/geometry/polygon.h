@@ -62,6 +62,9 @@ class Polygon {
   // Translates the plygon by the supplied "translation_vector".
   void Translate(const Vector& translation_vector);
 
+  // Clears all the points of the polygon.
+  void Reset();
+
   friend std::istream& operator>>(std::istream& in, Polygon& polygon);
   friend std::ostream& operator<<(std::ostream& out, const Polygon& polygon);
 

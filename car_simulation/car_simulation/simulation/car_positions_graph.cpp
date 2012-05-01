@@ -1,9 +1,11 @@
 #include "simulation/car_positions_graph.h"
 
 #include "geometry/rectangle_object.h"
+#include "simulation/car.h"
 #include "simulation/car_movement_handler.h"
 #include "utils/benchmark.h"
 #include "utils/delay.h"
+#include "utils/double_utils.h"
 
 #include <iomanip>
 
@@ -20,11 +22,8 @@ CarPositionsGraph::CarPositionsGraph(const CarMovementHandler *movement_handler)
   positionsContainer_(MIN_X_COORDINATE, MAX_X_COORDINATE,
                       MIN_Y_COORDINATE, MAX_Y_COORDINATE) {}
 
-void CarPositionsGraph::AddPosition(bool final, const Car &position,
+void CarPositionsGraph::AddPosition(const CarPosition &position,
                                     const geometry::RectangleObject* object) {
-  if (final) {
-    final_.push_back(positionsContainer_.GetNumberOfPositions());
-  }
   positionsContainer_.AddCarPosition(position, object);
   if (positionsContainer_.GetNumberOfPositions() % 1000 == 0) {
     std::cerr << "The size of the graph is now:"
@@ -38,6 +37,7 @@ void CarPositionsGraph::GetNeighbourhoodList(
   neighbour_list.clear();
   neighbour_list.resize(number_of_objects);
   for (unsigned i = 0; i < number_of_objects; ++i) {
+    neighbour_list[i].push_back(i);
     for (unsigned j = i + 1; j < number_of_objects; ++j) {
       if (geometry::AreTouching(*positionsContainer_.GetObject(i),
                                 *positionsContainer_.GetObject(j))) {
@@ -72,8 +72,8 @@ void CarPositionsGraph::ConstructGraph() {
   }
 }
 
-const std::vector<int>& CarPositionsGraph::GetFinalPositions() const {
-  return final_;
+const CarDescription& CarPositionsGraph::GetCarDescription() const {
+  return movementHandler_->GetCarDescription();
 }
 
 const std::vector<std::vector<GraphEdge> >&
@@ -81,19 +81,27 @@ const std::vector<std::vector<GraphEdge> >&
   return graph_;
 }
 
+bool CarPositionsGraph::IsPositionFinal(int position_index) const {
+  return positionsContainer_.GetPosition(position_index)->IsFinal();
+}
+
 void CarPositionsGraph::GetPositionNeighbours(int position_index,
       const std::vector<std::vector<int> >& neighbourhood_list,
       std::vector<std::pair<int, CarManuever> >& neighbours) {
   int object_index = positionsContainer_.
       GetObjectIndexForPosition(position_index);
-  const Car* car = positionsContainer_.GetPosition(position_index);
+  const CarPosition* car = positionsContainer_.GetPosition(position_index);
+  const geometry::RectangleObject* object =
+      positionsContainer_.GetObject(object_index);
+  geometry::Vector direction(object->GetFrom(), object->GetTo());
   for (unsigned ne_idx = 0; ne_idx < neighbourhood_list[object_index].size();
        ++ne_idx) {
     const std::vector<int>& positions = positionsContainer_.
         GetCarPositionsForObject(neighbourhood_list[object_index][ne_idx]);
     for (unsigned pos_index = 0; pos_index < positions.size(); ++pos_index) {
       CarManuever manuever;
-      const Car* car2 = positionsContainer_.GetPosition(positions[pos_index]);
+      const CarPosition* car2 =
+          positionsContainer_.GetPosition(positions[pos_index]);
       if (movementHandler_->SingleManueverBetweenStates(
           *car, *car2, manuever)) {
         neighbours.push_back(std::make_pair(positions[pos_index], manuever));

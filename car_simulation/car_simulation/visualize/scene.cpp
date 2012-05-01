@@ -33,6 +33,7 @@ std::vector<simulation::Car> Scene::cars_;
 utils::ObjectHolder* Scene::objectHolder_ = NULL;
 simulation::CarMovementHandler* Scene::carMovementHandler_ = NULL;
 simulation::CarManueverHandler* Scene::carManueverHandler_ = NULL;
+std::vector<std::pair<geometry::Point, geometry::Point> > Scene::positions_;
 
 bool Scene::showTurnTip_ = false;
 
@@ -180,6 +181,7 @@ void Scene::Draw() {
     DrawCar(carManueverHandler_->GetCurrentPosition());
   }
   DrawBorderLines();
+  DrawPositions();
 }
 
 // static 
@@ -341,6 +343,23 @@ void Scene::DrawBorderLines() {
 void Scene::RestartAnimation() {
   if (carManueverHandler_ != NULL) {
     carManueverHandler_->MoveTo(0.0);
+  }
+}
+
+void Scene::AddPosition(const geometry::Point &point,
+                        const geometry::Vector &direction) {
+  positions_.push_back(std::make_pair(point, point + direction.Unit() * 0.3));
+}
+
+void Scene::DrawPositions() {
+  for (unsigned i = 0; i < positions_.size(); ++i) {
+    glEnable(GL_LINE_STIPPLE);
+
+    glBegin(GL_LINE_STRIP);
+      glVertex2d(positions_[i].first.x, positions_[i].first.y);
+      glVertex2d(positions_[i].second.x, positions_[i].second.y);
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
   }
 }
 

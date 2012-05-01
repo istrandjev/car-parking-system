@@ -12,6 +12,7 @@
 #include "geometry/vector.h"
 #include "simulation/car.h"
 #include "simulation/car_manuever.h"
+#include "utils/car_positions_graph_builder.h"
 #include "utils/benchmark.h"
 #include "utils/current_state.h"
 #include "utils/double_utils.h"
@@ -36,33 +37,48 @@ bool SectionBetweenConcentricArcsContains(
     const geometry::Point& point);
 
 CarMovementHandler::CarMovementHandler(
-    const utils::IntersectionHandler* intersection_handler)
-    : intersectionHandler_(intersection_handler) {}
+    const utils::IntersectionHandler* intersection_handler,
+    const CarDescription &car_description)
+    : intersectionHandler_(intersection_handler),
+     carDescription_(car_description) {}
 
 const utils::IntersectionHandler* 
     CarMovementHandler::GetIntersectionHandler() const {
   return intersectionHandler_;
 }
 
+const CarDescription &CarMovementHandler::GetCarDescription() const {
+  return carDescription_;
+}
+
 // static
 bool CarMovementHandler::CarMovementPossibleByDistance(
     const Car& car, double distance) const {
-  BENCHMARK_STR("place1");
   if (!DoubleIsZero(car.GetCurrentSteeringAngle())) {
     geometry::Point rotation_center = car.GetRotationCenter();
-    geometry::Point center = car.GetCenter();
+    geometry::Point center = car.GetPosition().GetCenter();
     double radius = rotation_center.GetDistance(center);
 
     double angle = distance / radius;
     return CarMovementPossibleByAngle(car, angle);
+  } else {
+    return CarMovementPossibleByDistance(car.GetPosition(), distance);
   }
-  BENCHMARK_STR("place2");
-  geometry::Vector direction = car.GetDirection().Unit();
-  geometry::Point from = car.GetCenter() - direction * car.GetLength() * 0.5;
-  geometry::Point to = from + direction * (distance + car.GetLength());
+}
 
-  geometry::RectangleObject ro(from, to, car.GetWidth());
+// static
+bool CarMovementHandler::CarMovementPossibleByDistance(
+    const CarPosition& car_position, double distance) const {
+  geometry::Vector direction = car_position.GetDirection().Unit();
+
+  geometry::Point from = car_position.GetCenter() -
+      direction * carDescription_.GetLength() * 0.5;
+  geometry::Point to = from +
+      direction * (distance + carDescription_.GetLength());
+  geometry::RectangleObject ro(from, to, carDescription_.GetWidth());
+
   geometry::Polygon bounds = ro.GetBounds();
+
   for (unsigned i = 0; i < intersectedCache_.size(); ++i) {
     if (geometry::Intersect(bounds, intersectedCache_[i], NULL)) {
       return false;
@@ -97,11 +113,12 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
     return true;
   }
 
-  return CarMovementPossibleByAngle(car, angle, car.GetRotationCenter());
+  return CarMovementPossibleByAngle(car.GetPosition(), angle,
+      car.GetRotationCenter());
 }
 
 bool CarMovementHandler::CarMovementPossibleByAngle(
-    const Car &car, double angle,
+    const CarPosition &car_position, double angle,
     const geometry::Point &rotation_center) const {
   if (DoubleIsGreater(angle, geometry::GeometryUtils::PI * 2.0)) {
     angle = geometry::GeometryUtils::PI * 2.0;
@@ -109,8 +126,9 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
 
   geometry::BoundingBox bounding_box;
   BENCHMARK_SCOPE;
-  geometry::Polygon bounds = car.GetBounds();
-  geometry::Vector direction = car.GetDirection();
+  geometry::Polygon bounds;
+  carDescription_.GetBounds(car_position, bounds);
+  geometry::Vector direction = car_position.GetDirection();
   std::vector<geometry::Arc> arcs;
   for (unsigned index = 0; index < bounds.NumberOfVertices(); ++index) {
     const geometry::Point& point = bounds.GetPoint(index);
@@ -281,7 +299,7 @@ static const double ROTATION_RADIUS_LIMIT = 2000;
 
 // static
 bool CarMovementHandler::SingleManueverBetweenStates(
-        const Car& car1, const Car& car2,
+        const CarPosition& car1, const CarPosition& car2,
         CarManuever& manuever) const {
   BENCHMARK_SCOPE;
   const geometry::Vector& dir1 = car1.GetDirection().Unit();
@@ -302,6 +320,9 @@ bool CarMovementHandler::SingleManueverBetweenStates(
       }
 
       double temp_distance = center1.GetDistance(center2);
+      if (car2.IsAlongBaseLine() && DoubleIsGreater(temp_distance, 1.0)) {
+        return false;
+      }
       if (!CarMovementPossibleByDistance(car1, temp_distance)) {
           return false;
       } else {
@@ -319,7 +340,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
     geometry::Segment central(center1, center2);
     geometry::Line l(central.GetMiddle(), dir1);
     geometry::Point rotation_center;
-    l.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
+    l.Intersect(carDescription_.GetRearWheelsAxis(car1), &rotation_center);
     return ConstructManuever(car1, car2, rotation_center, manuever);
   }
   BENCHMARK_STR("Case 2");
@@ -338,22 +359,23 @@ bool CarMovementHandler::SingleManueverBetweenStates(
         intersection - dir1, intersection, intersection + dir2);
 
   geometry::Point rotation_center;
-  bisectrics.Intersect(car1.GetRearWheelsAxis(), &rotation_center);
-
+  bisectrics.Intersect(carDescription_.GetRearWheelsAxis(car1),
+      &rotation_center);
+  BENCHMARK_STR("After intersection");
   if (DoubleIsGreater(rotation_center.GetDistance(center1),
                       ROTATION_RADIUS_LIMIT)) {
     return false;
   }
-
+  BENCHMARK_STR("After the centers");
   return ConstructManuever(car1, car2, rotation_center, manuever);
 }
 
 bool CarMovementHandler::ConstructManuever(
-    const Car &car1, const Car &car2,
+    const CarPosition &car1, const CarPosition &car2,
     const geometry::Point &rotation_center,
     CarManuever &manuever) const {
   BENCHMARK_SCOPE;
-  if (!car1.CanBeRotationCenter(rotation_center)) {
+  if (!carDescription_.CanBeRotationCenter(car1, rotation_center)) {
     return false;
   }
 
@@ -371,7 +393,7 @@ bool CarMovementHandler::ConstructManuever(
     angle = angle - 2*pi;
   }
 
-  Car after_turn = car1;
+  CarPosition after_turn = car1;
   after_turn.SetDirection(dir2);
  
   geometry::Point center = center1.Rotate(rotation_center, angle);
@@ -383,6 +405,9 @@ bool CarMovementHandler::ConstructManuever(
   BENCHMARK_STR("Case 3");
   after_turn.SetCenter(center);
   double distance = center.GetDistance(center2);
+  if (car2.IsAlongBaseLine() && DoubleIsGreater(distance, 1.0)) {
+    return false;
+  }
   if (!CarMovementPossibleByDistance(after_turn, distance)) {
     return false;
   }
@@ -396,6 +421,7 @@ bool CarMovementHandler::ConstructManuever(
   manuever.SetTurnAngle(angle);
   manuever.SetRotationCenter(rotation_center);
   manuever.SetFinalStraightSectionDistance(distance);
+  BENCHMARK_STR("Manuever constructed");
   return true;
 }
 

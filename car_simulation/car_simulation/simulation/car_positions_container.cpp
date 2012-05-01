@@ -8,11 +8,11 @@ namespace simulation {
 static const int VERTICAL_CELL_NUM = 200;
 static const int HORIZONTAL_CELL_NUM = 300;
 
-void CarPosition::AddCarPosition(int position_index) {
+void CarPositionEntry::AddCarPosition(int position_index) {
   carPositions_.push_back(position_index);
 }
 
-const std::vector<int> &CarPosition::GetPositions() const {
+const std::vector<int>& CarPositionEntry::GetPositions() const {
   return carPositions_;
 }
 
@@ -32,7 +32,7 @@ CarPositionsContainer::~CarPositionsContainer() {
 }
 
 void CarPositionsContainer::AddCarPosition(
-    const Car &position, const geometry::RectangleObject* object) {
+    const CarPosition& position, const geometry::RectangleObject* object) {
   int i, j;
   GetCellCoordinates(position.GetCenter(), i, j);
   positionsGrid_[i][j].AddCarPosition(positions_.size());
@@ -52,7 +52,7 @@ void CarPositionsContainer::AddCarPosition(
   positionsForObjects_[object_index].push_back(
       static_cast<int>(positions_.size()));
   positionObjectMap_.push_back(object_index);
-  positions_.push_back(new Car(position));
+  positions_.push_back(new CarPosition(position));
 }
 
 std::vector<int> CarPositionsContainer::GetPositions(
@@ -68,8 +68,8 @@ std::vector<int> CarPositionsContainer::GetPositions(
       const std::vector<int>& positions =
           positionsGrid_[i][j].GetPositions();
       for (unsigned k = 0; k < positions.size(); ++k) {
-        const Car* car = positions_[positions[k]];
-        if (bounding_box.Contains(car->GetCenter())) {
+        const CarPosition* car_position = positions_[positions[k]];
+        if (bounding_box.Contains(car_position->GetCenter())) {
           result.push_back(positions[k]);
         }
       }
@@ -87,7 +87,8 @@ std::vector<int> CarPositionsContainer::GetPositions() const {
   return res;
 }
 
-const Car* CarPositionsContainer::GetPosition(int position_index) const {
+const CarPosition* CarPositionsContainer::GetPosition(
+    int position_index) const {
   return positions_[position_index];
 }
 

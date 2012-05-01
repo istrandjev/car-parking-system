@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "geometry/point.h"
 #include "simulation/car.h"
 #include "utils/object_holder.h"
 
@@ -73,6 +74,11 @@ public:
 
   static void RestartAnimation();
 
+  static void AddPosition(const geometry::Point& point,
+                          const geometry::Vector& direction);
+
+  static void DrawPositions();
+
  private:
   static void DrawCar(const simulation::Car& car);
   static void DrawObjects();
@@ -92,7 +98,7 @@ public:
   static utils::ObjectHolder* objectHolder_;
   static simulation::CarManueverHandler* carManueverHandler_;
   static std::vector<simulation::Car> cars_;
-
+  static std::vector<std::pair<geometry::Point, geometry::Point> > positions_;
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;
   static bool showTurnTip_;

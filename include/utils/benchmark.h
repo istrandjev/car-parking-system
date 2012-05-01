@@ -1,7 +1,7 @@
 #ifndef UTILS_BENCHMARK_H
 #define UTILS_BENCHMARK_H
 
-#define DO_BENCHMARK
+// #define DO_BENCHMARK
 
 #include <map>
 #include <string>
@@ -41,8 +41,8 @@ class Benchmark {
 #define BENCHMARK_STR(x) utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
     std::string(__FUNCTION__)  + "("TOSTRING(__LINE__)") [" + x + "]")
 #else
-#define BENCHMARK(name)
-#define BENCHMARK_STR(name, x)
+#define BENCHMARK_SCOPE
+#define BENCHMARK_STR(x)
 #endif
 }  // namespace utils
 #endif // UTILS_BENCHMARK_H

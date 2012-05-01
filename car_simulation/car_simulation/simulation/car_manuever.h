@@ -2,7 +2,7 @@
 #define SIMULATION_CAR_MANUEVER_H
 
 #include "geometry/point.h"
-#include "simulation/car.h"
+#include "simulation/car_position.h"
 
 #include <iostream>
 
@@ -10,7 +10,7 @@ namespace simulation {
 
 class CarManuever {
  public:
-  CarManuever(const simulation::Car& begin_position);
+  CarManuever(const simulation::CarPosition& begin_position);
   CarManuever();
 
   void SetInitialStraightSectionDistance(double distance);
@@ -25,10 +25,10 @@ class CarManuever {
   void SetRotationCenter(const geometry::Point& center);
   const geometry::Point& GetRotationCenter() const;
 
-  void SetBeginPosition(const simulation::Car& begin_position);
-  simulation::Car GetBeginPosition() const;
+  void SetBeginPosition(const simulation::CarPosition& begin_position);
+  simulation::CarPosition GetBeginPosition() const;
 
-  simulation::Car GetPosition(double distance) const;
+  CarPosition GetPosition(double distance) const;
 
   double GetTurnDistance() const;
   double GetTotalDistance() const;
@@ -43,7 +43,7 @@ class CarManuever {
   double turnRadius_;
   geometry::Point rotationCenter_;
   
-  simulation::Car beginPosition_;
+  simulation::CarPosition beginPosition_;
 };
 
 }  // namespace simulation

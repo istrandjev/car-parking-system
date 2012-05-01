@@ -4,6 +4,9 @@
 #include "geometry/point.h"
 #include "geometry/vector.h"
 
+#include "simulation/car_description.h"
+#include "simulation/car_position.h"
+
 #include <iostream>
 #include <vector>
 
@@ -16,16 +19,16 @@ namespace simulation {
 
 class Car {
  public:
-  Car(double width, double length, double max_steering_angle);
+  Car(const simulation::CarDescription& description);
 
-  void SetCenter(const geometry::Point& center);
-  const geometry::Point& GetCenter() const;
-  void SetDirection(const geometry::Vector& direction);
-  const geometry::Vector& GetDirection() const;
+  const CarPosition& GetPosition() const ;
+  void SetPosition(const CarPosition& position);
+
+  const CarDescription& GetDescription() const;
+  void SetDescription(const CarDescription& description);
 
   double GetCurrentSteeringAngle() const;
-  double GetWidth() const;
-  double GetLength() const;
+
 
   geometry::Point GetRotationCenter() const;
 
@@ -45,17 +48,8 @@ class Car {
       double rotation_limit) const;
   std::vector<geometry::Polygon> GetRotationGraphicsByDistance(
       double distance_limit) const;
- 
-  geometry::Line GetRearWheelsAxis() const;
 
  private:
-  geometry::Point GetFrontLeftWheelCenter() const;
-  geometry::Point GetFrontRightWheelCenter() const;
-  geometry::Point GetRearLeftWheelCenter() const;
-  geometry::Point GetRearRightWheelCenter() const;
-
-  
-
   geometry::Polygon GetFrontLeftWheel() const;
   geometry::Polygon GetFrontRightWheel() const;
   geometry::Polygon GetRearLeftWheel() const;
@@ -66,11 +60,9 @@ class Car {
   friend std::ostream& operator<<(std::ostream& out, const Car& car);
 
  private:
-  geometry::Point center_;
-  geometry::Vector direction_;
-  double width_, length_;   
-  double current_steering_angle_; 
-  double max_steering_angle_;
+  simulation::CarDescription description_;
+  simulation::CarPosition position_;
+  double currentSteeringAngle_;
 };
 
 }  // namespace simulation
