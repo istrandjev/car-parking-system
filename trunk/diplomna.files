@@ -85,3 +85,7 @@ parking_creator/parking_creator/utils/user_input_handler.cpp
 parking_creator/parking_creator/utils/object_handler.cpp
 include/utils/benchmark.h
 utils/benchmark.cpp
+simulation/car_poisition.cpp
+include/simulation/car_position.h
+include/simulation/car_description.h
+simulation/car_description.cpp

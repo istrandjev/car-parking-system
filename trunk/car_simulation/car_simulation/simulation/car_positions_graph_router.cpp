@@ -20,12 +20,6 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
   const vector<vector<GraphEdge> >& graph = graph_->GetGraph();
   int n = static_cast<int>(graph.size());
 
-  const vector<int>& end_indices = graph_->GetFinalPositions();
-  vector<bool> end_position(n, false);
-  for (unsigned i = 0 ; i < end_indices.size(); ++i) {
-    end_position[end_indices[i]] = true;
-  }
-
   vector<double> dist(n, -1.0);
   dist[from_index] = 0.0;
 
@@ -49,7 +43,7 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
     visited[index] = true;
 
     // Found an end position - no need to continue searching.
-    if (end_position[index]) {
+    if (graph_->IsPositionFinal(index)) {
       end_index = index;
       break;
     }

@@ -138,6 +138,10 @@ void Polygon::Translate(const Vector& translation_vector) {
   }
 }
 
+void Polygon::Reset() {
+  points_.clear();
+}
+
 std::istream& operator>>(std::istream& in, Polygon& polygon) {
   int number_of_points;
   in >> number_of_points;

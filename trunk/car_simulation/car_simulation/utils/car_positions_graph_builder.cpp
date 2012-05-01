@@ -8,7 +8,7 @@
 #include "geometry/rectangle_object.h"
 #include "geometry/straight_boundary_line.h"
 #include "geometry/vector.h"
-#include "simulation/car.h"
+#include "simulation/car_description.h"
 #include "simulation/car_positions_graph.h"
 #include "utils/double_utils.h"
 #include "utils/intersection_handler.h"
@@ -16,13 +16,14 @@
 
 namespace utils {
 
+// Static declaration
+const double CarPositionsGraphBuilder::SAMPLING_STEP = 1.0;
+
 CarPositionsGraphBuilder::CarPositionsGraphBuilder(
     const ObjectHolder &object_holder,
-    const IntersectionHandler &intersection_handler,
-    const simulation::Car& car)
+    const IntersectionHandler &intersection_handler)
   : intersectionHandler_(intersection_handler),
-    objectHolder_(object_holder),
-    car_(car) {}
+    objectHolder_(object_holder) {}
 
 void CarPositionsGraphBuilder::CreateCarPositionsGraph(
     simulation::CarPositionsGraph *graph) const {
@@ -39,7 +40,9 @@ void CarPositionsGraphBuilder::CreateCarPositionsGraph(
   graph->ConstructGraph();
 }
 
-static const double METERS_STEP = 1.0;
+double CarPositionsGraphBuilder::GetSamplingStep() {
+  return SAMPLING_STEP;
+}
 
 void CarPositionsGraphBuilder::AddPositionsForObject(
     const geometry::RectangleObject* object, bool final,
@@ -54,44 +57,47 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
 
   geometry::Point origin = from - oy * width * 0.5;
   std::vector<double> y_fractions;
-  for (double u = 0; u < width; u += METERS_STEP) {
+  for (double u = 0; u < width; u += SAMPLING_STEP) {
     y_fractions.push_back(u);
   }
-  if (DoubleIsGreater(width, y_fractions.back() + METERS_STEP * 0.5)) {
+  if (DoubleIsGreater(width, y_fractions.back() + SAMPLING_STEP * 0.5)) {
     y_fractions.push_back(width);
   }
   std::vector<double> x_fractions;
-  for (double u = 0; u < length; u += METERS_STEP) {
+  for (double u = 0; u < length; u += SAMPLING_STEP) {
     x_fractions.push_back(u);
   }
-  if (DoubleIsGreater(length, x_fractions.back() + METERS_STEP * 0.5)) {
+  if (DoubleIsGreater(length, x_fractions.back() + SAMPLING_STEP * 0.5)) {
     x_fractions.push_back(length);
   }
-
+  const simulation::CarDescription& description = graph->GetCarDescription();
   const double pi = geometry::GeometryUtils::PI;
   const double angle_step = pi / 10;
   for (unsigned i = 0; i < y_fractions.size();++i) {
     for (unsigned j = 0; j < x_fractions.size();++j) {
       geometry::Point center = origin + ox * x_fractions[j] +
            oy * y_fractions[i];
-      for (double angle = 0; angle < 1.9 * pi; angle += angle_step) {
-        simulation::Car car_position(car_);
+      for (double angle = 0; angle < 1.999 * pi; angle += angle_step) {
+        simulation::CarPosition car_position;
         car_position.SetCenter(center);
         car_position.SetDirection(ox.Rotate(angle));
-
-        bool is_final = final;
+        car_position.SetIsFinal(final);
         if (final) {
-          geometry::Polygon bounds = car_position.GetBounds();
+          geometry::Polygon bounds;
+          description.GetBounds(car_position, bounds);
           for (unsigned vert = 0; vert < bounds.NumberOfVertices(); ++vert) {
             if (!object->ContainsPoint(bounds.GetPoint(vert))) {
-              is_final = false;
+              car_position.SetIsFinal(false);
               break;
             }
           }
         }
 
-        if (CarPositionIsPossible(car_position)) {
-          graph->AddPosition(is_final, car_position, object);
+        if (CarPositionIsPossible(description, car_position)) {
+          if (DoubleIsZero(angle) || DoubleEquals(angle, pi)) {
+            car_position.SetIsAlongBaseLine(true);
+          }
+          graph->AddPosition(car_position, object);
         }
       }
     }
@@ -99,8 +105,10 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
 }
 
 bool CarPositionsGraphBuilder::CarPositionIsPossible(
-    const simulation::Car& car) const {
-  geometry::Polygon bounds = car.GetBounds();
+    const simulation::CarDescription& car_description,
+    const simulation::CarPosition& car_position) const {
+  geometry::Polygon bounds;
+  car_description.GetBounds(car_position, bounds);
   std::vector<const geometry::BoundaryLine*> lines;
   intersectionHandler_.GetBoundaryLines(bounds.GetBoundingBox(), &lines);
 

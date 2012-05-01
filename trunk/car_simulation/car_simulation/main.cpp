@@ -3,9 +3,11 @@
 #include "geometry/vector.h"
 #include "handlers/event_handlers.h"
 #include "simulation/car.h"
+#include "simulation/car_description.h"
 #include "simulation/car_manuever.h"
 #include "simulation/car_manuever_handler.h"
 #include "simulation/car_movement_handler.h"
+#include "simulation/car_position.h"
 #include "simulation/car_positions_graph.h"
 #include "simulation/car_positions_graph_router.h"
 #include "utils/benchmark.h"
@@ -24,8 +26,11 @@
 
 using namespace std;
 
-static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
-static const char* DEFAULT_INPUT_LOCATION = "../../resources/input.in";
+static const char* DEFAULT_SAVE_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/parking_serialized.txt";
+static const char* DEFAULT_INPUT_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/input.in";
+
+//static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
+//static const char* DEFAULT_INPUT_LOCATION = "../../resources/input.in";
 
 static const double MIN_X_COORDINATE = -250.0;
 static const double MAX_X_COORDINATE = 250.0;
@@ -46,9 +51,12 @@ void ReadInput(utils::ObjectHolder* object_holder) {
   max_steering_angle = geometry::GeometryUtils::DegreesToRadians(max_steering_angle);
 
   geometry::Vector vector(car_center, second_point);
-  car = new simulation::Car(width, length, max_steering_angle);
-  car->SetCenter(car_center);
-  car->SetDirection(vector);
+  car = new simulation::Car(simulation::CarDescription(
+      width, length, max_steering_angle));
+  simulation::CarPosition position; 
+  position.SetCenter(car_center);
+  position.SetDirection(vector);
+  car->SetPosition(position);
   
   visualize::Scene::AddCar(*car);
 
@@ -67,21 +75,23 @@ int main(int argc, char ** argv)
       MIN_Y_COORDINATE, MAX_Y_COORDINATE,
       &boundary_lines_holder);
   intersection_handler.Init(object_holder);
-  simulation::CarMovementHandler movement_handler(&intersection_handler);
+  simulation::CarMovementHandler movement_handler(
+      &intersection_handler, car->GetDescription());
   visualize::Scene::SetCarMovementHandler(&movement_handler);
   
   simulation::CarPositionsGraph graph(&movement_handler);
-
+  cout << *car << endl;
   utils::RectangleObjectContainer car_objects;
-  object_holder.GetObectsForLocation(car->GetCenter(), &car_objects);
+  object_holder.GetObectsForLocation(
+      car->GetPosition().GetCenter(), &car_objects);
 
   if (car_objects.empty()) {
     cerr << "The car should be located within a passable area.\n";
     return 0;
   }
-  graph.AddPosition(false, *car, car_objects.front());
+  graph.AddPosition(car->GetPosition(), car_objects.front());
 
-  utils::CarPositionsGraphBuilder builder(object_holder, intersection_handler, *car);
+  utils::CarPositionsGraphBuilder builder(object_holder, intersection_handler);
   builder.CreateCarPositionsGraph(&graph);
   cout << "The graph is constructed now\n";
   simulation::CarPositionsGraphRouter router(&graph);
@@ -92,7 +102,7 @@ int main(int argc, char ** argv)
     cerr << route[i] << endl;
   }
 
-  simulation::CarManueverHandler manuever_handler(route);
+  simulation::CarManueverHandler manuever_handler(car->GetDescription(), route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
   utils::Benchmark::DumpBenchmarkingInfo();
   

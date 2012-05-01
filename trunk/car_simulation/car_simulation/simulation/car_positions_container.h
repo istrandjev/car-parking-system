@@ -12,9 +12,9 @@ class RectangleObject;
 
 namespace simulation {
 
-class Car;
+class CarPosition;
 
-class CarPosition {
+class CarPositionEntry {
  public:
   void AddCarPosition(int position_index);
   const std::vector<int>& GetPositions() const;
@@ -29,14 +29,14 @@ class CarPositionsContainer {
   ~CarPositionsContainer();
 
   void AddCarPosition(
-      const Car& position, const geometry::RectangleObject* object);
+      const CarPosition& position, const geometry::RectangleObject* object);
 
   std::vector<int> GetPositions(
       const geometry::BoundingBox& bounding_box) const;
 
   std::vector<int> GetPositions() const;
 
-  const Car* GetPosition(int position_index) const;
+  const CarPosition* GetPosition(int position_index) const;
 
   int GetNumberOfPositions() const;
 
@@ -49,12 +49,12 @@ class CarPositionsContainer {
   void GetCellCoordinates(const geometry::Point& point, int& i, int& j) const;
 
  private:
-  std::vector<Car*> positions_;
+  std::vector<CarPosition*> positions_;
   std::vector<unsigned> positionObjectMap_;
   std::map<const geometry::RectangleObject*, unsigned> objectsMap_;
   std::vector<const geometry::RectangleObject*> objects_;
   std::vector<std::vector<int> > positionsForObjects_;
-  std::vector<std::vector<CarPosition> > positionsGrid_;
+  std::vector<std::vector<CarPositionEntry> > positionsGrid_;
 
 
   double minx_, maxx_;

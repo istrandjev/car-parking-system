@@ -6,12 +6,16 @@
 
 namespace simulation {
 
-CarManueverHandler::CarManueverHandler(
+CarManueverHandler::CarManueverHandler(const CarDescription& car_description,
     const std::vector<CarManuever>& manuevers)
-    : manuevers_(manuevers), currentManueverIndex_(0), currentDistance_(0) {}
+    : carDescription_(car_description), manuevers_(manuevers), 
+      currentManueverIndex_(0), currentDistance_(0) {}
 
 simulation::Car CarManueverHandler::GetCurrentPosition() const {
-  return manuevers_[currentManueverIndex_].GetPosition(currentDistance_);
+  simulation::Car result(carDescription_);
+  result.SetPosition(manuevers_[currentManueverIndex_]
+      .GetPosition(currentDistance_));
+  return result;
 }
 
 void CarManueverHandler::MoveForward(double distance) {

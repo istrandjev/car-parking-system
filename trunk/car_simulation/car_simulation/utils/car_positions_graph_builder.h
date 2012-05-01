@@ -9,7 +9,8 @@ class RectangleObject;
 }  // namespace geometry
 
 namespace simulation {
-class Car;
+class CarDescription;
+class CarPosition;
 class CarPositionsGraph;
 }  // namespace simulation
 
@@ -17,21 +18,23 @@ namespace utils {
 class CarPositionsGraphBuilder {
  public:
   CarPositionsGraphBuilder(const ObjectHolder& object_holder,
-                           const IntersectionHandler& intersection_handler,
-                           const simulation::Car& car);
+                           const IntersectionHandler& intersection_handler);
 
   void CreateCarPositionsGraph(simulation::CarPositionsGraph* graph) const;
+
+  static double GetSamplingStep();
 
  private:
   void AddPositionsForObject(
       const geometry::RectangleObject* object, bool final,
       simulation::CarPositionsGraph* graph) const;
-  bool CarPositionIsPossible(const simulation::Car& car) const;
+  bool CarPositionIsPossible(const simulation::CarDescription& car_description,
+                             const simulation::CarPosition& car_position) const;
 
  private:
+  static const double SAMPLING_STEP;
   const ObjectHolder& objectHolder_;
   const IntersectionHandler& intersectionHandler_;
-  const simulation::Car& car_;
 };
 
 }  // namespace utils

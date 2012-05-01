@@ -8,7 +8,7 @@
 namespace simulation {
 
 CarManuever::CarManuever(
-    const simulation::Car& begin_position)
+    const CarPosition& begin_position)
         : beginPosition_(begin_position),
           turnAngle_(0.0),
           turnRadius_(0.0),
@@ -16,8 +16,7 @@ CarManuever::CarManuever(
           finalStraightSectionLength_(0.0) {}
 
 CarManuever::CarManuever()
-  : beginPosition_(0.0, 0.0, 0.0),
-    turnAngle_(0.0),
+  : turnAngle_(0.0),
     turnRadius_(0.0),
     initialStraightSectionLength_(0.0),
     finalStraightSectionLength_(0.0) {}
@@ -55,15 +54,16 @@ const geometry::Point& CarManuever::GetRotationCenter() const {
   return rotationCenter_;
 }
 
-void CarManuever::SetBeginPosition(const simulation::Car& begin_position) {
+void CarManuever::SetBeginPosition(
+    const simulation::CarPosition& begin_position) {
   beginPosition_ = begin_position;
 }
 
-simulation::Car CarManuever::GetBeginPosition() const {
+simulation::CarPosition CarManuever::GetBeginPosition() const {
   return beginPosition_;
 }
 
-simulation::Car CarManuever::GetPosition(double distance) const {
+simulation::CarPosition CarManuever::GetPosition(double distance) const {
   double turn_distance = GetTurnDistance();
   double total_distance = initialStraightSectionLength_ + turn_distance +
       finalStraightSectionLength_;
@@ -75,7 +75,7 @@ simulation::Car CarManuever::GetPosition(double distance) const {
     return beginPosition_;
   }
 
-  simulation::Car result = beginPosition_;
+  simulation::CarPosition result = beginPosition_;
 
   geometry::Point center = result.GetCenter();
   geometry::Vector direction = result.GetDirection().Unit();
