@@ -321,7 +321,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
 
       double temp_distance = center1.GetDistance(center2);
       if (car2.IsAlongBaseLine() && DoubleIsGreater(temp_distance, 
-          utils::CarPositionsGraphBuilder::SAMPLING_STEP)) {
+          utils::CarPositionsGraphBuilder::GetSamplingStep())) {
         return false;
       }
       if (!CarMovementPossibleByDistance(car1, temp_distance)) {
@@ -407,7 +407,7 @@ bool CarMovementHandler::ConstructManuever(
   after_turn.SetCenter(center);
   double distance = center.GetDistance(center2);
   if (car2.IsAlongBaseLine() && DoubleIsGreater(distance, 
-      utils::CarPositionsGraphBuilder::SAMPLING_STEP)) {
+      utils::CarPositionsGraphBuilder::GetSamplingStep())) {
     return false;
   }
   if (!CarMovementPossibleByDistance(after_turn, distance)) {
