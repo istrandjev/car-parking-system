@@ -1,7 +1,7 @@
 #ifndef UTILS_BENCHMARK_H
 #define UTILS_BENCHMARK_H
 
-// #define DO_BENCHMARK
+#define DO_BENCHMARK
 
 #include <map>
 #include <string>

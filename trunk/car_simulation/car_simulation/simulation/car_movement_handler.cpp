@@ -318,7 +318,9 @@ bool CarMovementHandler::SingleManueverBetweenStates(
       if (DoubleIsGreaterOrEqual(0, dir1.DotProduct(dir2))) {
         return false;
       }
-
+      if (DoubleIsGreaterOrEqual(0, vector.DotProduct(dir2))) {
+        return false;
+      }
       double temp_distance = center1.GetDistance(center2);
       if (car2.IsAlongBaseLine() && DoubleIsGreater(temp_distance, 
           utils::CarPositionsGraphBuilder::GetSamplingStep())) {

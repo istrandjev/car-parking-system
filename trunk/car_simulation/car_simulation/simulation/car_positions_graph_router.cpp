@@ -3,6 +3,7 @@
 #include "simulation/car.h"
 #include "simulation/car_manuever.h"
 #include "simulation/car_positions_graph.h"
+#include "utils/benchmark.h"
 #include "utils/double_utils.h"
 
 #include <algorithm>
@@ -16,7 +17,7 @@ CarPositionsGraphRouter::CarPositionsGraphRouter(
 
 std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
     int from_index) const {
-
+  BENCHMARK_STR("Dijkstra time");
   // const vector<vector<GraphEdge> >& graph = graph_->GetGraph();
   int n = static_cast<int>(graph_->GetNumberOfVertices());
 
@@ -35,11 +36,14 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
   while (!q.empty()) {
     int index = q.top().second;
     double d = -q.top().first;
-
+    std::cout << "Q size now: " << q.size() << endl;
     q.pop();
     if (visited[index]) {
       continue;
     }
+    const CarPosition* cp = graph_->GetPosition(index);
+    std::cout << "Position: " << *cp << " distance: " << d << endl;
+
     visited[index] = true;
 
     // Found an end position - no need to continue searching.
