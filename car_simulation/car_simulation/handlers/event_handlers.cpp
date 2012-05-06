@@ -115,6 +115,13 @@ void HandleKeyboardEvents() {
   if (UserInputHandler::IsRegularKeyPressed(' ')) {
     visualize::Scene::RestartAnimation();
   }
+
+  if (UserInputHandler::IsRegularKeyPressed('v')) {
+    visualize::Scene::MoveCurrentPositionForward();
+  }
+  if (UserInputHandler::IsRegularKeyPressed('b')) {
+    visualize::Scene::MoveCurrentPositionBackward();
+  }
 }
 
 }  // namespace utils

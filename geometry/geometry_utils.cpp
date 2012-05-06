@@ -96,8 +96,16 @@ double GeometryUtils::GetAngleBetweenVectors(const Vector &v1,
   }
 
   double dot_product = v1.DotProduct(v2);
+
   double cosine = dot_product / (len1 * len2);
-  double angle = acos(cosine);
+  double angle;
+  if (DoubleIsGreaterOrEqual(-1.0, cosine)) {
+    angle = PI;
+  } else if (DoubleIsGreaterOrEqual(cosine, 1.0)) {
+    angle = 0.0;
+  } else {
+    angle = acos(cosine);
+  }
 
   if (DoubleIsGreater(0, v1.CrossProduct(v2))) {
     angle = 2.0 * PI - angle;

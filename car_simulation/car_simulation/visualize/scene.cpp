@@ -28,12 +28,15 @@ static const int DEFAULT_HEIGHT = 600;
 
 static const double SCALE_FACTOR = 10;
 
+const bool DRAW_ONLY_CURRENT_POSITION = true;
+
 // static declarations
 std::vector<simulation::Car> Scene::cars_;
 utils::ObjectHolder* Scene::objectHolder_ = NULL;
 simulation::CarMovementHandler* Scene::carMovementHandler_ = NULL;
 simulation::CarManueverHandler* Scene::carManueverHandler_ = NULL;
 std::vector<std::pair<geometry::Point, geometry::Point> > Scene::positions_;
+int Scene::currentPosition_ = 0;
 
 bool Scene::showTurnTip_ = false;
 
@@ -348,11 +351,15 @@ void Scene::RestartAnimation() {
 
 void Scene::AddPosition(const geometry::Point &point,
                         const geometry::Vector &direction) {
-  positions_.push_back(std::make_pair(point, point + direction.Unit() * 0.3));
+  positions_.push_back(std::make_pair(point, point + direction.Unit() * 0.5));
 }
 
 void Scene::DrawPositions() {
   for (unsigned i = 0; i < positions_.size(); ++i) {
+    if (DRAW_ONLY_CURRENT_POSITION && i != currentPosition_ && i != currentPosition_+ 1) {
+      continue;
+    }
+
     glEnable(GL_LINE_STIPPLE);
 
     glBegin(GL_LINE_STRIP);
@@ -360,6 +367,18 @@ void Scene::DrawPositions() {
       glVertex2d(positions_[i].second.x, positions_[i].second.y);
     glEnd();
     glDisable(GL_LINE_STIPPLE);
+  }
+}
+
+void Scene::MoveCurrentPositionForward() {
+  if (currentPosition_ + 2 < positions_.size()) {
+    currentPosition_+= 2;
+  }
+}
+
+void Scene::MoveCurrentPositionBackward() {
+  if (currentPosition_ > 1 ) {
+    currentPosition_-=2;
   }
 }
 
