@@ -14,6 +14,10 @@
 #include "utils/intersection_handler.h"
 #include "utils/object_holder.h"
 
+#include "visualize/scene.h"
+
+const bool ADD_POSITIONS_TO_SCENE = false;
+
 namespace utils {
 
 // Static declaration
@@ -37,7 +41,7 @@ void CarPositionsGraphBuilder::CreateCarPositionsGraph(
     AddPositionsForObject(parking_lots[i], true, graph);
   }
 
-  graph->ConstructGraph();
+  graph->FinalizeGraph();
 }
 
 double CarPositionsGraphBuilder::GetSamplingStep() {
@@ -50,7 +54,6 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
   const geometry::Point& from = object->GetFrom();
   const geometry::Point& to = object->GetTo();
   double length = from.GetDistance(to);
-
   double width = object->GetWidth();
   geometry::Vector ox = geometry::Vector(from, to).Unit();
   geometry::Vector oy = ox.GetOrthogonal().Unit();
@@ -78,10 +81,16 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
       geometry::Point center = origin + ox * x_fractions[j] +
            oy * y_fractions[i];
       for (double angle = 0; angle < 1.999 * pi; angle += angle_step) {
+        // Do not allow going back on one way segments.
+        if (object->IsDirected() && 
+            DoubleIsStrictlyBetween(angle, pi * 0.5, pi * 1.5)) {
+          continue;
+        }
         simulation::CarPosition car_position;
         car_position.SetCenter(center);
         car_position.SetDirection(ox.Rotate(angle));
         car_position.SetIsFinal(final);
+                
         if (final) {
           geometry::Polygon bounds;
           description.GetBounds(car_position, bounds);
@@ -96,6 +105,10 @@ void CarPositionsGraphBuilder::AddPositionsForObject(
         if (CarPositionIsPossible(description, car_position)) {
           if (DoubleIsZero(angle) || DoubleEquals(angle, pi)) {
             car_position.SetIsAlongBaseLine(true);
+          }
+          if (ADD_POSITIONS_TO_SCENE) {
+            visualize::Scene::AddPosition(car_position.GetCenter(),
+                                          car_position.GetDirection().Unit());
           }
           graph->AddPosition(car_position, object);
         }

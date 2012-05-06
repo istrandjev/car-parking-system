@@ -24,6 +24,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#define USE_AI
+
 using namespace std;
 
 static const char* DEFAULT_SAVE_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/parking_serialized.txt";
@@ -36,6 +38,8 @@ static const double MIN_X_COORDINATE = -250.0;
 static const double MAX_X_COORDINATE = 250.0;
 static const double MIN_Y_COORDINATE = -150.0;
 static const double MAX_Y_COORDINATE = 150.0;
+
+const bool USE_AI_TO_PARK = true;
 
 simulation::Car* car;
 
@@ -79,6 +83,7 @@ int main(int argc, char ** argv)
       &intersection_handler, car->GetDescription());
   visualize::Scene::SetCarMovementHandler(&movement_handler);
   
+#ifdef USE_AI
   simulation::CarPositionsGraph graph(&movement_handler);
   cout << *car << endl;
   utils::RectangleObjectContainer car_objects;
@@ -104,6 +109,8 @@ int main(int argc, char ** argv)
 
   simulation::CarManueverHandler manuever_handler(car->GetDescription(), route);
   visualize::Scene::SetCarManueverHandler(&manuever_handler);
+#endif  
+  
   utils::Benchmark::DumpBenchmarkingInfo();
   
   utils::InitializeHandlers();

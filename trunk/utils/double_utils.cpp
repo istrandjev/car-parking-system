@@ -24,7 +24,7 @@ bool DoubleIntervalsOverlap(double min1, double max1,
   double minv = std::max(min1, min2);
   double maxv = std::min(max1, max2);
   
-  return DoubleIsGreaterOrEqual(maxv, minv);                            
+  return DoubleIsGreaterOrEqual(maxv, minv);
 }
 
 bool DoubleEquals(double lhs, double rhs) {

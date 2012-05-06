@@ -11,12 +11,12 @@ class Car;
 
 class CarPositionsGraphRouter {
  public:
-  CarPositionsGraphRouter(const CarPositionsGraph* graph);
+  CarPositionsGraphRouter(CarPositionsGraph* graph);
 
   std::vector<CarManuever> GetRoute(int from_index) const;
 
  private:
-  const CarPositionsGraph* graph_;
+  CarPositionsGraph* graph_;
 };
 
 }  // namespace simulation

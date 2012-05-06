@@ -79,6 +79,9 @@ public:
 
   static void DrawPositions();
 
+  static void MoveCurrentPositionForward();
+  static void MoveCurrentPositionBackward();
+
  private:
   static void DrawCar(const simulation::Car& car);
   static void DrawObjects();
@@ -99,6 +102,8 @@ public:
   static simulation::CarManueverHandler* carManueverHandler_;
   static std::vector<simulation::Car> cars_;
   static std::vector<std::pair<geometry::Point, geometry::Point> > positions_;
+  static int currentPosition_;
+
   static double xTranslation, yTranslation, zTranslation;
   static int width_, height_;
   static bool showTurnTip_;

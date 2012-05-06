@@ -74,7 +74,7 @@ bool RectangleObject::ContainsPoint(const Point& p) const {
     return false;
   }
 
-  return DoubleIsGreaterOrEqual(width_ * segment.Length(),
+  return DoubleIsGreaterOrEqual(width_ * segment.Length() * 0.5,
       fabs(segment.CrossProduct(from_p)));
 }
 
@@ -93,10 +93,10 @@ Polygon RectangleObject::GetExpandedBounds(double expand) const {
   Vector ox = Vector(from_, to_).Unit() * expand;
   Vector oy = ox.GetOrthogonal().Unit() * (width_ * 0.5 + expand);
   Polygon result;
-  result.AddPointDropDuplicates(from_ + ox + oy);
-  result.AddPointDropDuplicates(from_ + ox - oy);
-  result.AddPointDropDuplicates(to_ - ox - oy);
-  result.AddPointDropDuplicates(to_ - ox + oy);
+  result.AddPointDropDuplicates(from_ - ox + oy);
+  result.AddPointDropDuplicates(from_ - ox - oy);
+  result.AddPointDropDuplicates(to_ + ox - oy);
+  result.AddPointDropDuplicates(to_ + ox + oy);
   return result;
 }
 // virtual
@@ -151,6 +151,8 @@ void RectangleObject::TranslateByNormal(double value) {
 bool AreTouching(const RectangleObject& a, const RectangleObject& b) {
   geometry::Polygon a_bounds = a.GetExpandedBounds(0.3);
   geometry::Polygon b_bounds = b.GetExpandedBounds(0.3);
+  // geometry::Polygon a_bounds = a.GetBounds();
+  // geometry::Polygon b_bounds = b.GetBounds();
   for (unsigned i = 0; i < a_bounds.NumberOfSides(); ++i) {
     if (geometry::Intersect(b_bounds, a_bounds.GetSide(i), NULL)) {
       return true;

@@ -307,7 +307,7 @@ bool CarMovementHandler::SingleManueverBetweenStates(
 
   const geometry::Point& center1 = car1.GetCenter();
   const geometry::Point& center2 = car2.GetCenter();
-
+  BENCHMARK_SCOPE;
   if (DoubleIsZero(dir1.CrossProduct(dir2))) {
     geometry::Vector vector(center1, center2);
     BENCHMARK_STR("Case 1");

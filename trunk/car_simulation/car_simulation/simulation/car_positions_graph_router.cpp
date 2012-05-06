@@ -12,13 +12,13 @@ using namespace std;
 
 namespace simulation {
 CarPositionsGraphRouter::CarPositionsGraphRouter(
-    const CarPositionsGraph *graph) : graph_(graph) {}
+    CarPositionsGraph *graph) : graph_(graph) {}
 
 std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
     int from_index) const {
 
-  const vector<vector<GraphEdge> >& graph = graph_->GetGraph();
-  int n = static_cast<int>(graph.size());
+  // const vector<vector<GraphEdge> >& graph = graph_->GetGraph();
+  int n = static_cast<int>(graph_->GetNumberOfVertices());
 
   vector<double> dist(n, -1.0);
   dist[from_index] = 0.0;
@@ -48,9 +48,10 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
       break;
     }
 
-    for (unsigned i = 0; i < graph[index].size(); ++i) {
-      double new_dist = d + graph[index][i].second.GetTotalDistance();
-      int neighbour_index = graph[index][i].first;
+    const vector<GraphEdge>& neighbours = graph_->GetNeighbours(index);
+    for (unsigned i = 0; i < neighbours.size(); ++i) {
+      double new_dist = d + neighbours[i].second.GetTotalDistance();
+      int neighbour_index = neighbours[i].first;
       if (visited[neighbour_index]) {
         continue;
       }
@@ -71,7 +72,7 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
   int current = end_index;
   while (parent[current].first != current) {
     const GraphEdge& edge =
-        graph[parent[current].first][parent[current].second];
+        graph_->GetNeighbours(parent[current].first)[parent[current].second];
     result.push_back(edge.second);
     current = parent[current].first;
   }
