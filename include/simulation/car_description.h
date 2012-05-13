@@ -36,9 +36,13 @@ class CarDescription {
   friend std::ostream& operator<<(std::ostream& out,
                                   const CarDescription& car_description);
  private:
+  void CalculateMinDistFromMainAxis();
+
+ private:
   double width_, length_;
   double maxSteeringAngle_;
   double wheelAxisFraction_;
+  double minDistFromMainAxis_;
 };
 }
 #endif // SIMULATION_CAR_DESCRIPTION_H

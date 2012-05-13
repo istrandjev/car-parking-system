@@ -302,8 +302,8 @@ bool CarMovementHandler::SingleManueverBetweenStates(
         const CarPosition& car1, const CarPosition& car2,
         CarManuever& manuever) const {
   BENCHMARK_SCOPE;
-  const geometry::Vector& dir1 = car1.GetDirection().Unit();
-  const geometry::Vector& dir2 = car2.GetDirection().Unit();
+  const geometry::Vector& dir1 = car1.GetDirection();
+  const geometry::Vector& dir2 = car2.GetDirection();
 
   const geometry::Point& center1 = car1.GetCenter();
   const geometry::Point& center2 = car2.GetCenter();
@@ -389,7 +389,7 @@ bool CarMovementHandler::ConstructManuever(
 
   BENCHMARK_STR("Case 1");
 
- double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
+  double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
         dir1, dir2);
   const double pi = geometry::GeometryUtils::PI;
   if (DoubleIsGreater(angle, pi)) {
@@ -412,6 +412,7 @@ bool CarMovementHandler::ConstructManuever(
       utils::CarPositionsGraphBuilder::GetSamplingStep())) {
     return false;
   }
+  BENCHMARK_STR("Case 4");
   if (!CarMovementPossibleByDistance(after_turn, distance)) {
     return false;
   }
@@ -421,11 +422,11 @@ bool CarMovementHandler::ConstructManuever(
     return false;
   }
 
+  BENCHMARK_STR("Manuever constructed");
   manuever.SetBeginPosition(car1);
   manuever.SetTurnAngle(angle);
   manuever.SetRotationCenter(rotation_center);
   manuever.SetFinalStraightSectionDistance(distance);
-  BENCHMARK_STR("Manuever constructed");
   return true;
 }
 

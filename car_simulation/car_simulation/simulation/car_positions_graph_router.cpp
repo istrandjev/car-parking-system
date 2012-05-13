@@ -36,13 +36,13 @@ std::vector<CarManuever> CarPositionsGraphRouter::GetRoute(
   while (!q.empty()) {
     int index = q.top().second;
     double d = -q.top().first;
-    std::cout << "Q size now: " << q.size() << endl;
+    // std::cout << "Q size now: " << q.size() << endl;
     q.pop();
     if (visited[index]) {
       continue;
     }
     const CarPosition* cp = graph_->GetPosition(index);
-    std::cout << "Position: " << *cp << " distance: " << d << endl;
+    // std::cout << "Position: " << *cp << " distance: " << d << endl;
 
     visited[index] = true;
 
