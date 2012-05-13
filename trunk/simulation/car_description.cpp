@@ -14,7 +14,9 @@ static const double WHEEL_AXIS_FRACTION = 0.62;
 CarDescription::CarDescription(double width, double length,
     double max_steering_angle) : width_(width), length_(length),
     maxSteeringAngle_(max_steering_angle),
-    wheelAxisFraction_(WHEEL_AXIS_FRACTION) {}
+    wheelAxisFraction_(WHEEL_AXIS_FRACTION) {
+  CalculateMinDistFromMainAxis();
+}
 
 double CarDescription::GetMaxSteeringAngle() const {
   return maxSteeringAngle_;
@@ -82,40 +84,16 @@ geometry::Point CarDescription::GetRearRightWheelCenter(
 
 bool CarDescription::CanBeRotationCenter(const CarPosition &car_position,
                                          const geometry::Point &center) const {
+  geometry::Line main_axis(car_position.GetCenter(),
+                           car_position.GetDirection());
+
+  double dist = main_axis.GetDistanceFromPoint(center);
+  double min_dist = minDistFromMainAxis_;
+  if (DoubleIsGreater(min_dist, dist)) {
+    return false;
+  }
   geometry::Line rear_axis = GetRearWheelsAxis(car_position);
-  if(!DoubleIsZero(rear_axis.GetDistanceFromPoint(center))) {
-    return false;
-  }
-
-  const geometry::Point& fl = GetFrontLeftWheelCenter(car_position);
-  const geometry::Point& fr = GetFrontRightWheelCenter(car_position);
-  const geometry::Point& rl = GetRearLeftWheelCenter(car_position);
-  const geometry::Point& rr = GetRearRightWheelCenter(car_position);
-
-  const double pi = geometry::GeometryUtils::PI;
-  if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
-      rl, fl, rr, center, true)) {
-    geometry::Vector turn_vector(center, fl);
-    geometry::Vector rear_axis_vector(center, rl);
-    double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
-        rear_axis_vector, turn_vector);
-    if (DoubleIsGreater(angle, pi)) {
-      angle = pi * 2.0 -  angle;
-    }
-    return DoubleIsBetween(angle, 0, maxSteeringAngle_);
-  } else if (!geometry::GeometryUtils::PointsAreInSameSemiPlane(
-                rr, fr, rl, center, true)) {
-    geometry::Vector turn_vector(center, fr);
-    geometry::Vector rear_axis_vector(center, rr);
-    double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
-        turn_vector, rear_axis_vector);
-    if (DoubleIsGreater(angle, pi)) {
-      angle = pi * 2.0 -  angle;
-    }
-    return DoubleIsBetween(angle, 0, maxSteeringAngle_);
-  } else {
-    return false;
-  }
+  return DoubleIsZero(rear_axis.GetDistanceFromPoint(center));
 }
 
 std::ostream& operator<<(
@@ -124,6 +102,24 @@ std::ostream& operator<<(
       << " Length: " << car_description.length_
       << " Max steering angle: " << car_description.maxSteeringAngle_ << "\n";
   return out;
+}
+
+void CarDescription::CalculateMinDistFromMainAxis() {
+  CarPosition basic;
+  basic.SetCenter(geometry::Point(0,0));
+  basic.SetDirection(geometry::Vector(1, 0));
+
+  geometry::Line rw_axis = GetRearWheelsAxis(basic);
+  geometry::Line main_axis(basic.GetCenter(), basic.GetDirection());
+
+  const double pi = geometry::GeometryUtils::PI;
+  geometry::Point flw = GetFrontLeftWheelCenter(basic);
+  geometry::Vector dir = basic.GetDirection().Rotate(maxSteeringAngle_ + pi * 0.5);
+  geometry::Line l1(flw, dir);
+  geometry::Point intersection;
+  l1.Intersect(rw_axis, &intersection);
+
+  minDistFromMainAxis_ = fabs(main_axis.GetDistanceFromPoint(intersection));
 }
 
 }  // namespace simulation

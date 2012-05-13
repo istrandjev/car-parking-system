@@ -371,7 +371,7 @@ void Scene::DrawPositions() {
 }
 
 void Scene::MoveCurrentPositionForward() {
-  if (currentPosition_ + 2 < positions_.size()) {
+  if (currentPosition_ + 2 < static_cast<int>(positions_.size())) {
     currentPosition_+= 2;
   }
 }

@@ -21,7 +21,7 @@ const bool ADD_POSITIONS_TO_SCENE = false;
 namespace utils {
 
 // Static declaration
-const double CarPositionsGraphBuilder::SAMPLING_STEP = 0.25;
+const double CarPositionsGraphBuilder::SAMPLING_STEP = 0.6;
 
 CarPositionsGraphBuilder::CarPositionsGraphBuilder(
     const ObjectHolder &object_holder,

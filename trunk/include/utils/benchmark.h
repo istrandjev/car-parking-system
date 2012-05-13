@@ -37,9 +37,11 @@ class Benchmark {
 
 #ifdef DO_BENCHMARK
 #define BENCHMARK_SCOPE utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
-    std::string(__FUNCTION__) + "("TOSTRING(__LINE__)")")
+    std::string(__FILE__) + ":"  + std::string(__FUNCTION__) +\
+    "("TOSTRING(__LINE__)")")
 #define BENCHMARK_STR(x) utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
-    std::string(__FUNCTION__)  + "("TOSTRING(__LINE__)") [" + x + "]")
+    std::string(__FILE__) + ":"  + std::string(__FUNCTION__)  +\
+    "("TOSTRING(__LINE__)") [" + x + "]")
 #else
 #define BENCHMARK_SCOPE
 #define BENCHMARK_STR(x)
