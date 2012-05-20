@@ -3,7 +3,7 @@
 
 #define DO_BENCHMARK
 
-#include <map>
+#include <vector>
 #include <string>
 
 namespace utils {
@@ -16,16 +16,17 @@ class Benchmark {
 
     double totalTime;
     int numberOfTimes;
+    std::string name;
   };
-  Benchmark(const std::string& function_name);
+  Benchmark(const std::string& function_name, int index);
   ~Benchmark();
 
   static void DumpBenchmarkingInfo();
 
  private:
-  std::string functionName_;
   double startTime_;
-  static std::map<std::string, BenchmarkItem> timeMap_;
+  int index_;
+  static std::vector<BenchmarkItem> timeTable_;
 };
 
 #define CONCATENATE_DIRECT(s1, s2) s1##s2
@@ -38,10 +39,10 @@ class Benchmark {
 #ifdef DO_BENCHMARK
 #define BENCHMARK_SCOPE utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
     std::string(__FILE__) + ":"  + std::string(__FUNCTION__) +\
-    "("TOSTRING(__LINE__)")")
+    "("TOSTRING(__LINE__)")", __COUNTER__)
 #define BENCHMARK_STR(x) utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
     std::string(__FILE__) + ":"  + std::string(__FUNCTION__)  +\
-    "("TOSTRING(__LINE__)") [" + x + "]")
+    "("TOSTRING(__LINE__)") [" + x + "]", __COUNTER__)
 #else
 #define BENCHMARK_SCOPE
 #define BENCHMARK_STR(x)

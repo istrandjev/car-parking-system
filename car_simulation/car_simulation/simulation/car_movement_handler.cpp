@@ -223,6 +223,7 @@ bool IntersectsSectionBetweenConcentricArcs(
 bool SectionBetweenConcentricArcsContains(
     const geometry::Arc& arc1, const geometry::Arc& arc2,
     const geometry::Point& point) {
+  BENCHMARK_STR("begin");
   geometry::Point center = arc1.GetCenter();
   if (center != arc2.GetCenter()) {
     throw std::invalid_argument("The arcs are not concentric!");
@@ -235,7 +236,7 @@ bool SectionBetweenConcentricArcsContains(
   if (!DoubleIsBetween(distance, r1, r2)) {
     return false;
   }
-
+  BENCHMARK_STR("after distance check");
   const double pi = geometry::GeometryUtils::PI;
 
   double start1 = arc1.GetStartAngle();
@@ -254,7 +255,7 @@ bool SectionBetweenConcentricArcsContains(
   if (DoubleIsGreaterOrEqual(begin_angle, end_angle)) {
     return false;
   }
-  
+  BENCHMARK_STR("after angle check");
   double angle = atan2(point.y - center.y, point.x - center.x);
   angle = geometry::GeometryUtils::NormalizeAngle(angle);
 
@@ -278,7 +279,7 @@ bool SectionBetweenConcentricArcsContains(
   if (geometry::GeometryUtils::TriangleContains(A1, B1, C1, point)) {
     return true;
   }
-
+    BENCHMARK_STR("after first triangle check");
   // Check if the triangle at the end of the two arcs contains the point.
   geometry::Point A2 = arc1.GetEndPoint();
   geometry::Point B2 = arc2.GetEndPoint();
@@ -391,13 +392,6 @@ bool CarMovementHandler::ConstructManuever(
 
   double angle = geometry::GeometryUtils::GetAngleBetweenVectors(
         dir1, dir2);
-  const double pi = geometry::GeometryUtils::PI;
-  if (DoubleIsGreater(angle, pi)) {
-    angle = angle - 2*pi;
-  }
-
-  CarPosition after_turn = car1;
-  after_turn.SetDirection(dir2);
  
   geometry::Point center = center1.Rotate(rotation_center, angle);
   geometry::Vector vec(center, center2);
@@ -405,19 +399,31 @@ bool CarMovementHandler::ConstructManuever(
   if (DoubleIsGreaterOrEqual(0, vec.DotProduct(dir2))) {
     return false;
   }
+
   BENCHMARK_STR("Case 3");
-  after_turn.SetCenter(center);
+
   double distance = center.GetDistance(center2);
   if (car2.IsAlongBaseLine() && DoubleIsGreater(distance, 
       utils::CarPositionsGraphBuilder::GetSamplingStep())) {
     return false;
   }
+
   BENCHMARK_STR("Case 4");
+  CarPosition after_turn = car1;
+  after_turn.SetDirection(dir2);
+  after_turn.SetCenter(center);
+
   if (!CarMovementPossibleByDistance(after_turn, distance)) {
     return false;
   }
 
   BENCHMARK_STR("Case 2");
+
+  const double pi = geometry::GeometryUtils::PI;
+  if (DoubleIsGreater(angle, pi)) {
+    angle = angle - 2.0 * pi;
+  }
+
   if (!CarMovementPossibleByAngle(car1, angle, rotation_center)) {
     return false;
   }
