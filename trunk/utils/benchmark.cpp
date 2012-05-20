@@ -5,44 +5,47 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
-#include <map>
+#include <vector>
 #include <string>
 
 namespace utils {
 // static declarations
-std::map<std::string, Benchmark::BenchmarkItem> Benchmark::timeMap_;
+std::vector<Benchmark::BenchmarkItem> Benchmark::timeTable_;
 
-Benchmark::Benchmark(const std::string& function_name) : functionName_(function_name){
+Benchmark::Benchmark(const std::string& function_name, int index)
+  : index_(index) {
   startTime_ =  get_time();
+  if(index_ >= timeTable_.size()) {
+    timeTable_.resize(index_ + 1);
+  }
+  if (timeTable_[index_].name.empty()) {
+    timeTable_[index_].name = function_name;
+  }
 }
 
 Benchmark::~Benchmark() {
   double duration = get_time() - startTime_;
-  std::map<std::string, BenchmarkItem>::iterator it = timeMap_.find(functionName_);
-  if (it == timeMap_.end()) {
-    timeMap_[functionName_] = BenchmarkItem(duration, 1);
-  } else {
-    it->second.numberOfTimes++;
-    it->second.totalTime += duration;
-  }
+  timeTable_[index_].numberOfTimes++;
+  timeTable_[index_].totalTime += duration;
 }
 
 // static
 void Benchmark::DumpBenchmarkingInfo() {
-  if (timeMap_.empty()) {
+  if (timeTable_.empty()) {
     return;
   }
   std::ofstream dump_file("../../resources/dump.txt", std::ios::app);
   std::cerr << "### Dumping benchmark info ###\n";
   dump_file << "### Dumping benchmark info ###\n";
-  for (std::map<std::string, BenchmarkItem>::iterator it = timeMap_.begin();
-       it != timeMap_.end(); ++it) {
-    std::cerr << it->first << ": " << std::setprecision(9) 
-        << it->second.totalTime << " (" << it->second.numberOfTimes << ")"
+  for (unsigned index = 0; index < timeTable_.size(); ++index) {
+    std::cerr << timeTable_[index].name << ": " << std::setprecision(9)
+        << timeTable_[index].totalTime << " ("
+        << timeTable_[index].numberOfTimes << ")"
         << std::endl;
-    dump_file << it->first << ": " << std::setprecision(9) 
-        << it->second.totalTime << " (" << it->second.numberOfTimes << ")"
-        << std::endl;;
+    dump_file << timeTable_[index].name << ": " << std::setprecision(9)
+        << timeTable_[index].totalTime << " ("
+        << timeTable_[index].numberOfTimes << ")"
+        << std::endl;
   }
 }
 
