@@ -23,11 +23,25 @@ class Benchmark {
 
   static void DumpBenchmarkingInfo();
 
+	static int gCounter_;
+  static int currentCounter_;
  private:
   double startTime_;
   int index_;
   static std::vector<BenchmarkItem> timeTable_;
 };
+
+#define UPDATE_COUNTER()   {\
+                        static int _this_counter_ = 0;\
+                        static int _cur_counter = 0;\
+                        if (_this_counter_ == 0) {\
+                           _cur_counter = utils::Benchmark::gCounter_;\
+                           utils::Benchmark::gCounter_++;\
+                           _this_counter_ = 1;\
+                        }\
+                        utils::Benchmark::currentCounter_ = _cur_counter;\
+                     }
+
 
 #define CONCATENATE_DIRECT(s1, s2) s1##s2
 #define CONCATENATE(s1, s2) CONCATENATE_DIRECT(s1, s2)
@@ -37,12 +51,17 @@ class Benchmark {
 #define TOSTRING(x) STRINGIFY(x)
 
 #ifdef DO_BENCHMARK
-#define BENCHMARK_SCOPE utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
+
+#define BENCHMARK_SCOPE UPDATE_COUNTER();\
+  utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
     std::string(__FILE__) + ":"  + std::string(__FUNCTION__) +\
-    "("TOSTRING(__LINE__)")", __COUNTER__)
-#define BENCHMARK_STR(x) utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
+    "("TOSTRING(__LINE__)")", utils::Benchmark::currentCounter_)
+
+#define BENCHMARK_STR(x) UPDATE_COUNTER();\
+  utils::Benchmark ANONYMOUS_VARIABLE(bm)(\
     std::string(__FILE__) + ":"  + std::string(__FUNCTION__)  +\
-    "("TOSTRING(__LINE__)") [" + x + "]", __COUNTER__)
+    "("TOSTRING(__LINE__)") [" + x + "]", utils::Benchmark::currentCounter_)
+
 #else
 #define BENCHMARK_SCOPE
 #define BENCHMARK_STR(x)

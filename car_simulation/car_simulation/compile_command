@@ -1,1 +1,1 @@
-g++ main.cpp -I"../../include" -I"./" -I"/usr/include/GL/" ../../geometry/*.cpp ../../utils/*.cpp ../../simulation/*.cpp  */*.cpp -lglut -lGLU -lGL -o try
+g++ main.cpp -I"../../include" -I"./" -I"/usr/include/GL/" ../../geometry/*.cpp ../../utils/*.cpp ../../simulation/*.cpp  */*.cpp -lglut -lGLU -lGL -O2 -o try

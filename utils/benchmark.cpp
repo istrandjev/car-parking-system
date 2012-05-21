@@ -11,6 +11,8 @@
 namespace utils {
 // static declarations
 std::vector<Benchmark::BenchmarkItem> Benchmark::timeTable_;
+int Benchmark::gCounter_ = 0;
+int Benchmark::currentCounter_ = 0;
 
 Benchmark::Benchmark(const std::string& function_name, int index)
   : index_(index) {

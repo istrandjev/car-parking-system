@@ -50,11 +50,11 @@ unsigned Polygon::NumberOfSides() const {
   return points_.size();
 }
 
-inline const Point& Polygon::GetPoint(unsigned index) const {
+const Point& Polygon::GetPoint(unsigned index) const {
   return points_[index];
 }
 
-inline const Point& Polygon::GetPointCyclic(int index) const {
+const Point& Polygon::GetPointCyclic(int index) const {
   index = index % static_cast<int>(points_.size());
   if (index <  0) {
     index += static_cast<int>(points_.size());

@@ -7,6 +7,8 @@
 #include "simulation/car_position.h"
 #include "utils/double_utils.h"
 
+#include <cmath> 
+
 namespace simulation {
 
 static const double WHEEL_AXIS_FRACTION = 0.62;
