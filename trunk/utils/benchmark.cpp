@@ -16,8 +16,8 @@ int Benchmark::currentCounter_ = 0;
 
 Benchmark::Benchmark(const std::string& function_name, int index)
   : index_(index) {
-  startTime_ =  get_time();
-  if(index_ >= timeTable_.size()) {
+  startTime_ = get_time();
+  if(index_ >= static_cast<int>(timeTable_.size())) {
     timeTable_.resize(index_ + 1);
   }
   if (timeTable_[index_].name.empty()) {
