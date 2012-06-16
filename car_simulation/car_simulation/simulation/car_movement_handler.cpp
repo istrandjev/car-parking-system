@@ -130,8 +130,31 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
   carDescription_.GetBounds(car_position, bounds);
   geometry::Vector direction = car_position.GetDirection();
   std::vector<geometry::Arc> arcs;
-  for (unsigned index = 0; index < bounds.NumberOfVertices(); ++index) {
-    const geometry::Point& point = bounds.GetPoint(index);
+  std::vector<geometry::Point> points;
+
+  geometry::Point rlw = carDescription_.GetRearLeftWheelCenter(car_position);
+  geometry::Point rrw = carDescription_.GetRearRightWheelCenter(car_position);
+  geometry::Point rw_center;
+  if (DoubleIsGreater(rotation_center.GetDistance(rlw),
+      rotation_center.GetDistance(rrw))) {
+    rw_center = rrw;
+  } else {
+    rw_center = rlw;
+  }
+
+  geometry::Point opposite = bounds.GetPoint(0);
+  for (unsigned index = 1; index < bounds.NumberOfVertices(); ++index) {
+    geometry::Point temp = bounds.GetPoint(index);
+    if (DoubleIsGreater(temp.GetSquaredDistance(rw_center),
+        opposite.GetSquaredDistance(rw_center))){
+      opposite = temp;
+    }
+  }
+  points.push_back(rw_center);
+  points.push_back(opposite);
+
+  for (unsigned index = 0; index < points.size(); ++index) {
+    const geometry::Point& point = points[index];
     geometry::Vector temp(rotation_center, point);
     double actual_angle = angle;
     if (DoubleIsGreater(0, temp.CrossProduct(direction)) &&
@@ -140,6 +163,22 @@ bool CarMovementHandler::CarMovementPossibleByAngle(
     }
     arcs.push_back(geometry::Arc(rotation_center, point, actual_angle));
     bounding_box.UnionWith(arcs[index].GetBoundingBox());
+  }
+
+  CarPosition end_position;
+  end_position.SetDirection(car_position.GetDirection().Rotate(angle));
+  end_position.SetCenter(car_position.GetCenter().
+                         Rotate(rotation_center, angle));
+  carDescription_.GetBounds(end_position, bounds);
+
+  std::vector<const geometry::BoundaryLine*> temp_lines;
+  intersectionHandler_->GetBoundaryLines(bounds.GetBoundingBox(), &temp_lines);
+  for (unsigned index = 0; index < temp_lines.size(); ++index) {
+    const geometry::StraightBoundaryLine* line =
+        dynamic_cast<const geometry::StraightBoundaryLine*>(temp_lines[index]);
+    if (geometry::Intersect(bounds, line->GetSegment(), NULL)) {
+      return false;
+    }
   }
 
   BENCHMARK_SCOPE;

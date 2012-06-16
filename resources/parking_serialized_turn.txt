@@ -1,5 +1,5 @@
 2
-DirectedRectangleObject 0 (10.9, 0) (10.9, -8.3) 4
+DirectedRectangleObject 0 (11, 0) (11, -8.3) 4
 DirectedRectangleObject 0 (12.9, -8.1) (-3.6, -8.1) 6
 1
 (-3.6, -8.1) (-17.8, -8.1) 4

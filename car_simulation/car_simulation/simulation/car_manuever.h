@@ -36,13 +36,17 @@ class CarManuever {
   friend std::ostream& operator<<(
       std::ostream& out, const CarManuever& manuever);
 
+  void SetReversed(bool reversed);
+  bool IsReversed() const;
+
  private:
   double initialStraightSectionLength_;
   double finalStraightSectionLength_;
   double turnAngle_;
   double turnRadius_;
   geometry::Point rotationCenter_;
-  
+  bool reversed_;
+
   simulation::CarPosition beginPosition_;
 };
 

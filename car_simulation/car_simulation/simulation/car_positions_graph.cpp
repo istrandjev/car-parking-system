@@ -16,7 +16,6 @@ static const double MAX_X_COORDINATE = 1000.0;
 static const double MIN_Y_COORDINATE = -1000.0;
 static const double MAX_Y_COORDINATE = 1000.0;
 
-int num = 0;
 CarPositionsGraph::CarPositionsGraph(const CarMovementHandler *movement_handler)
   : movementHandler_(movement_handler),
   positionsContainer_(MIN_X_COORDINATE, MAX_X_COORDINATE,
@@ -99,18 +98,17 @@ const CarPosition* CarPositionsGraph::GetPosition(int position_index) const {
 const std::vector<GraphEdge>&
     CarPositionsGraph::GetNeighbours(int position_index) {
   if (!neighboursComputed_[position_index]) {
-    GetPositionNeighbours(position_index, graph_[position_index]);
+    GetPositionNeighbours(position_index);
     neighboursComputed_[position_index] = true;
   }
   return graph_[position_index];
 }
 
-void CarPositionsGraph::GetPositionNeighbours(int position_index,
-      std::vector<GraphEdge>& neighbours) {
+void CarPositionsGraph::GetPositionNeighbours(int position_index) {
   int object_index = positionsContainer_.
       GetObjectIndexForPosition(position_index);
   const CarPosition* car = positionsContainer_.GetPosition(position_index);
-      positionsContainer_.GetObject(object_index);
+  positionsContainer_.GetObject(object_index);
   for (unsigned ne_idx = 0; ne_idx < neighbourhoodList_[object_index].size();
        ++ne_idx) {
     const std::vector<int>& positions = positionsContainer_.
@@ -122,10 +120,29 @@ void CarPositionsGraph::GetPositionNeighbours(int position_index,
       CarManuever manuever;
       const CarPosition* car2 =
           positionsContainer_.GetPosition(positions[pos_index]);
+
+      if (neighboursComputed_[positions[pos_index]]) {
+        continue;
+      }
+
       if (movementHandler_->SingleManueverBetweenStates(
           *car, *car2, manuever)) {
-        neighbours.push_back(std::make_pair(positions[pos_index], manuever));
-        num++;
+        graph_[position_index].push_back(
+              std::make_pair(positions[pos_index], manuever));
+
+        // Add the reversed manuever.
+        manuever.SetReversed(true);
+        graph_[positions[pos_index]].push_back(
+              std::make_pair(position_index, manuever));
+      } else if (movementHandler_->SingleManueverBetweenStates(
+          *car2, *car, manuever)) {
+        graph_[positions[pos_index]].push_back(
+              std::make_pair(position_index, manuever));
+
+        // Add the reversed manuever.
+        manuever.SetReversed(true);
+        graph_[position_index].push_back(
+              std::make_pair(positions[pos_index], manuever));
       }
     }
   }

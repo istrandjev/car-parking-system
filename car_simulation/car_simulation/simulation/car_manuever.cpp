@@ -13,13 +13,15 @@ CarManuever::CarManuever(
           turnAngle_(0.0),
           turnRadius_(0.0),
           initialStraightSectionLength_(0.0),
-          finalStraightSectionLength_(0.0) {}
+          finalStraightSectionLength_(0.0),
+          reversed_(false) {}
 
 CarManuever::CarManuever()
   : turnAngle_(0.0),
     turnRadius_(0.0),
     initialStraightSectionLength_(0.0),
-    finalStraightSectionLength_(0.0) {}
+    finalStraightSectionLength_(0.0),
+    reversed_(false) {}
 
 void CarManuever::SetInitialStraightSectionDistance(double distance) {
   initialStraightSectionLength_ = distance;
@@ -67,6 +69,11 @@ simulation::CarPosition CarManuever::GetPosition(double distance) const {
   double turn_distance = GetTurnDistance();
   double total_distance = initialStraightSectionLength_ + turn_distance +
       finalStraightSectionLength_;
+
+  if (reversed_) {
+    distance = total_distance - distance;
+  }
+
   if (DoubleIsGreater(distance, total_distance)) {
     distance = total_distance;
   }
@@ -115,6 +122,14 @@ double CarManuever::GetTotalDistance() const {
       finalStraightSectionLength_;
 }
 
+void CarManuever::SetReversed(bool reversed) {
+  reversed_ = reversed;
+}
+
+bool CarManuever::IsReversed() const {
+  return reversed_;
+}
+
 std::ostream& operator<<(std::ostream& out, const CarManuever& manuever) {
   out << "Initial position: " << manuever.beginPosition_ << "\n";
   out << "Initial straight segment length: "
@@ -126,6 +141,8 @@ std::ostream& operator<<(std::ostream& out, const CarManuever& manuever) {
   out << "Rotation center: " << manuever.rotationCenter_ << "\n";
   out << "Final straight segment length: "
       << manuever.finalStraightSectionLength_;
+  out << "Manuever is reversed: " << manuever.reversed_;
   return out;
 }
+
 }  // namespace simulation

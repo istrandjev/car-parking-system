@@ -38,7 +38,7 @@ void ObjectHolder::DeleteObjects() {
 geometry::RectangleObject* ObjectHolder::AddTwoWayRoadSegment(
     const geometry::Point& from, const geometry::Point& to) {
   geometry::RectangleObject* object =
-      new geometry::RectangleObject(from, to, DEFAULT_ROAD_WIDTH);
+      new geometry::DirectedRectangleObject(from, to, DEFAULT_ROAD_WIDTH);
   roadSegments_.push_back(object);
   return object;
 }
