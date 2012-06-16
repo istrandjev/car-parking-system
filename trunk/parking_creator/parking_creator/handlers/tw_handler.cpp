@@ -68,24 +68,25 @@ void TwHandler::ModifyAccordingToState() {
     return;
   }
 
-  if (obj_handler->GetCurrentType() != utils::ObjectHandler::ROAD_SEGMENT) {
+  geometry::RectangleObject* object = NULL;
+  if (obj_handler->HasSelected()) {
+    object = obj_handler->GetSelected();
+  }
+  if (object == NULL || object->IsDirected() == false) {
     TwDefine(" 'Line options'/Direction  visible=false ");
     TwDefine(" 'Line options'/ReverseDirection  visible=false ");
   } else {
-    geometry::RectangleObject* object = obj_handler->GetSelected();
-    if (object->IsDirected()) {
-      geometry::DirectedRectangleObject* directed =
-        dynamic_cast<geometry::DirectedRectangleObject*>(object);
-      TwDefine(" 'Line options'/Direction  visible=true ");
-      if (directed->IsOneWay()) {
-        TwDefine(" 'Line options'/Direction  label='Make two directional' ");
-        TwDefine(" 'Line options'/ReverseDirection  visible=true ");
-        TwDefine(" 'Line options'/CreateSibling  visible=true ");
-      } else  {
-        TwDefine(" 'Line options'/Direction  label='Make one way' ");
-        TwDefine(" 'Line options'/ReverseDirection  visible=false ");
-        TwDefine(" 'Line options'/CreateSibling  visible=false ");
-      }
+    geometry::DirectedRectangleObject* directed =
+      dynamic_cast<geometry::DirectedRectangleObject*>(object);
+    TwDefine(" 'Line options'/Direction  visible=true ");
+    if (directed->IsOneWay()) {
+      TwDefine(" 'Line options'/Direction  label='Make two directional' ");
+      TwDefine(" 'Line options'/ReverseDirection  visible=true ");
+      TwDefine(" 'Line options'/CreateSibling  visible=true ");
+    } else  {
+      TwDefine(" 'Line options'/Direction  label='Make one way' ");
+      TwDefine(" 'Line options'/ReverseDirection  visible=false ");
+      TwDefine(" 'Line options'/CreateSibling  visible=false ");
     }
   }
 }

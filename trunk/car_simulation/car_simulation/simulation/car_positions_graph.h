@@ -41,8 +41,7 @@ class CarPositionsGraph {
   const std::vector<GraphEdge>& GetNeighbours(int position_index);
 
  private:
-  void GetPositionNeighbours(int position_index,
-                             std::vector<GraphEdge>& neighbours);
+  void GetPositionNeighbours(int position_index);
 
  private:
   std::vector<std::vector<std::pair<int, CarManuever> > > graph_;
