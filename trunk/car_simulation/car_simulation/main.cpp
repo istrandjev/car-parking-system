@@ -24,7 +24,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define USE_AI
+// #define USE_AI
 
 using namespace std;
 
