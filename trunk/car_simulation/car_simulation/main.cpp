@@ -24,12 +24,9 @@
 #include <iostream>
 #include <stdexcept>
 
-// #define USE_AI
+#define USE_AI
 
 using namespace std;
-
-// static const char* DEFAULT_SAVE_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/parking_serialized.txt";
-// static const char* DEFAULT_INPUT_LOCATION = "C:/Documents and Settings/bs/Desktop/projects/diplomna/resources/input.in";
 
 static const char* DEFAULT_SAVE_LOCATION = "../../resources/parking_serialized.txt";
 static const char* DEFAULT_INPUT_LOCATION = "../../resources/input.in";
